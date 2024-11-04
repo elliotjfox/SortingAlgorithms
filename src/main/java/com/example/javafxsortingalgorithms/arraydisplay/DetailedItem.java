@@ -4,4 +4,7 @@ import javafx.scene.Group;
 
 public class DetailedItem extends Group {
 
+    public DetailedItem() {
+
+    }
 }

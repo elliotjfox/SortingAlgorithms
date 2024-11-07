@@ -63,17 +63,19 @@ public class OddEvenSort extends SortingAlgorithm {
 
     @Override
     public void startDetailed(ArrayDetailedDisplay display) {
-        leftArrow = new DetailedArrow(25, true);
+        leftArrow = new DetailedArrow(display, true);
         display.addItem(leftArrow, 0, ARROW_HEIGHT);
 
-        rightArrow = new DetailedArrow(25, true);
+        rightArrow = new DetailedArrow(display, true);
         display.addItem(rightArrow, 1, ARROW_HEIGHT);
 
         sections = new ArrayList<>();
         for (int i = 0; i < list.size() / 2; i++) {
-            DetailedSection section = new DetailedSection(25, true);
+            DetailedSection section = new DetailedSection(display, 25.0, true);
             sections.add(section);
-            display.addItem(section, display.getX(i * 2 + (currentPos % 2 == 0 ? 0 : 1)) + 12.5, SECTION_HEIGHT);
+            display.addItem(section);
+//            display.addItem(section, display.getX(i * 2 + (currentPos % 2 == 0 ? 0 : 1)) + 12.5, SECTION_HEIGHT);
+            section.setPosition(i * 2 + (currentPos % 2 == 0 ? 0 : 1) + 12.5, SECTION_HEIGHT);
         }
 
         display.setCurrentTask("Checking evens");
@@ -108,10 +110,13 @@ public class OddEvenSort extends SortingAlgorithm {
             return;
         }
 
-        display.moveItem(leftArrow, currentPos, ARROW_HEIGHT);
-        display.moveItem(rightArrow, currentPos + 1, ARROW_HEIGHT);
+        leftArrow.moveToIndex(currentPos, ARROW_HEIGHT);
+        rightArrow.moveToIndex(currentPos + 1, ARROW_HEIGHT);
         for (int i = 0; i < sections.size(); i++) {
-            display.moveItemTo(sections.get(i), display.getX(i * 2 + (currentPos % 2 == 0 ? 0 : 1)) + 12.5, SECTION_HEIGHT);
+            double xPos = display.getElementWidth() * 2 * i;
+            if (currentPos % 2 == 0) xPos += display.getElementWidth();
+            xPos += display.getElementWidth() / 2;
+            sections.get(i).moveToPosition(xPos, SECTION_HEIGHT);
         }
         updateInfoWhenDone(display);
         display.newGroup();

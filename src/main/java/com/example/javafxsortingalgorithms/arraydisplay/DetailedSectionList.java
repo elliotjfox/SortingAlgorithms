@@ -16,7 +16,8 @@ public class DetailedSectionList extends DetailedItem {
     private final List<DetailedSection> sections;
     private final VBox vBox;
 
-    public DetailedSectionList() {
+    public DetailedSectionList(ArrayDetailedDisplay display) {
+        super(display);
         sections = new ArrayList<>();
         vBox = new VBox(10);
 

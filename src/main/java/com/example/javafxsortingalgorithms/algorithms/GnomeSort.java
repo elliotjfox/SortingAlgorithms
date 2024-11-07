@@ -70,10 +70,10 @@ public class GnomeSort extends SortingAlgorithm {
 
     @Override
     public void startDetailed(ArrayDetailedDisplay display) {
-        leftArrow = new DetailedArrow(25, true);
+        leftArrow = new DetailedArrow(display, true);
         display.addItem(leftArrow, 0, 0);
 
-        rightArrow = new DetailedArrow(25, true);
+        rightArrow = new DetailedArrow(display, true);
         display.addItem(rightArrow, 1, 0);
 
         display.setCurrentTask("Sorting...");
@@ -85,8 +85,8 @@ public class GnomeSort extends SortingAlgorithm {
 
     @Override
     public void iterateDetailed(ArrayDetailedDisplay display) {
-        display.moveItem(leftArrow, currentSpot, 0);
-        display.moveItem(rightArrow, currentSpot + 1, 0);
+        leftArrow.moveToIndex(currentSpot, 0);
+        rightArrow.moveToIndex(currentSpot + 1, 0);
 
         if (currentSpot + 1 >= list.size()) {
             isDone = true;
@@ -108,8 +108,7 @@ public class GnomeSort extends SortingAlgorithm {
         display.updateInfoWhenDone("Right index", currentSpot + 1);
         display.updateInfoWhenDone("Right value", list.get(currentSpot + 1));
         display.newGroup();
-        display.reading(currentSpot);
-        display.reading(currentSpot + 1);
+        display.comparing(currentSpot, currentSpot + 1);
 
         if (list.get(currentSpot) <= list.get(currentSpot + 1)) {
             currentSpot++;

@@ -15,8 +15,9 @@ public class DetailedElement extends DetailedItem {
     private int index;
     private final Rectangle rectangle;
 
-    public DetailedElement(SettingsPane settingsPane, int index) {
-        this.settingsPane = settingsPane;
+    public DetailedElement(ArrayDetailedDisplay display, int index) {
+        super(display);
+        this.settingsPane = display.getSettings();
         this.index = index;
 
         rectangle = new Rectangle();

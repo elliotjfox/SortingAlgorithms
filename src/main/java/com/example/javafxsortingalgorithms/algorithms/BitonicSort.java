@@ -159,7 +159,7 @@ public class BitonicSort extends ActionSortingAlgorithm {
 
     @Override
     public void startDetailed(ArrayDetailedDisplay display) {
-        sortingNetwork = new DetailedSortingNetwork(list);
+        sortingNetwork = new DetailedSortingNetwork(display, list);
         display.addItem(sortingNetwork, 0, 0);
 
         // Buffer for the first one
@@ -170,12 +170,12 @@ public class BitonicSort extends ActionSortingAlgorithm {
             }
         }
 
-        display.addAnimations(new AnimationGroup(sortingNetwork.moveUp()));
+        display.animate(sortingNetwork.moveUp());
     }
 
     @Override
     public String getName() {
-        return null;
+        return "Bitonic Sort";
     }
 
 //    protected static class BitonicSection extends AlgorithmAction {
@@ -269,26 +269,32 @@ public class BitonicSort extends ActionSortingAlgorithm {
         @Override
         public void performDetailed(ActionSortingAlgorithm algorithm, ArrayDetailedDisplay display) {
             if (algorithm instanceof BitonicSort bitonicSort) {
-                AnimationGroup group = new AnimationGroup();
+                display.animate(
+                        bitonicSort.sortingNetwork.moveUp(),
+                        bitonicSort.sortingNetwork.removeFirst()
+                );
+                display.newGroup();
+//                AnimationGroup group = new AnimationGroup();
                 for (int i = 0; i < comparisons.size() - 1; i += 2) {
                     if (comparisons.get(i) < 0 || comparisons.get(i + 1) >= algorithm.list.size()) continue;
-                    group.addTimelines(
-                            display.readAnimation(comparisons.get(i)),
-                            display.readAnimation(comparisons.get(i + 1))
-                    );
+                    display.comparing(comparisons.get(i), comparisons.get(i + 1));
+//                    group.addTimelines(
+//                            display.readAnimation(comparisons.get(i)),
+//                            display.readAnimation(comparisons.get(i + 1))
+//                    );
                 }
 
-                display.addAnimations(
-                        new AnimationGroup(
-                                bitonicSort.sortingNetwork.moveUp(),
-                                bitonicSort.sortingNetwork.removeFirst()
-                        ),
-                        group
-                );
+//                display.addAnimations(
+//                        new AnimationGroup(
+//                                bitonicSort.sortingNetwork.moveUp(),
+//                                bitonicSort.sortingNetwork.removeFirst()
+//                        ),
+//                        group
+//                );
                 for (int i = 0; i < comparisons.size() - 1; i += 2) {
                     if (comparisons.get(i) < 0 || comparisons.get(i + 1) >= algorithm.list.size()) continue;
                     if (algorithm.list.get(comparisons.get(i)) > algorithm.list.get(comparisons.get(i + 1))) {
-                        if (((BitonicSort) algorithm).fastMode) {
+                        if (bitonicSort.fastMode) {
                             algorithm.swap(comparisons.get(i), comparisons.get(i + 1));
                             display.swap(comparisons.get(i), comparisons.get(i + 1));
                         } else {

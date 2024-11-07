@@ -22,7 +22,7 @@ public class MergeSort extends ActionSortingAlgorithm {
 
     @Override
     public void startDetailed(ArrayDetailedDisplay display) {
-        DetailedSection section = new DetailedSection(list.size() * 25, true);
+        DetailedSection section = new DetailedSection(display, list.size(), true);
         display.addItem(section, 0, -SECTION_OFFSET);
     }
 
@@ -127,8 +127,8 @@ public class MergeSort extends ActionSortingAlgorithm {
         // TODO: Create animations for this
         @Override
         public void performDetailed(ActionSortingAlgorithm algorithm, ArrayDetailedDisplay display) {
-            DetailedArrow leftArrow = new DetailedArrow(25, true);
-            DetailedArrow rightArrow = new DetailedArrow(25, true);
+            DetailedArrow leftArrow = new DetailedArrow(display, true);
+            DetailedArrow rightArrow = new DetailedArrow(display, true);
 
             int finalRight = rightSide;
             int finalLeft = leftSide;

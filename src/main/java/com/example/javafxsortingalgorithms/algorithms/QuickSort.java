@@ -35,7 +35,7 @@ public class QuickSort extends ActionSortingAlgorithm {
 
     @Override
     public void startDetailed(ArrayDetailedDisplay display) {
-        section = new DetailedSection(list.size() * 25, true);
+        section = new DetailedSection(display, list.size(), true);
         display.addItem(section, 0, -SECTION_OFFSET);
         section.setFill(Color.rgb(44, 199, 88));
     }
@@ -78,28 +78,36 @@ public class QuickSort extends ActionSortingAlgorithm {
 
         @Override
         public void performDetailed(ActionSortingAlgorithm algorithm, ArrayDetailedDisplay display) {
-            DetailedArrow kArrow = new DetailedArrow(25, true);
+            DetailedArrow kArrow = new DetailedArrow(display, true);
             display.addItem(kArrow, end, 0);
 
-            DetailedArrow iArrow = new DetailedArrow(25, true);
+            DetailedArrow iArrow = new DetailedArrow(display, true);
             iArrow.setFill(Color.rgb(25, 53, 145));
             display.addItem(iArrow, end, 0);
 
-            DetailedArrow minArrow = new DetailedArrow(25, true);
+            DetailedArrow minArrow = new DetailedArrow(display, true);
             minArrow.setFill(Color.LIGHTGREEN);
             display.addItem(minArrow, start, 0);
 
             int k = end;
             for (int i = end; i > start; i--) {
+                int finalI = i;
+                int finalK = k;
                 algorithm.addToStart(
-                        new AnimationAction(
-                                display.moveItemToElementAnimation(iArrow, i, 0),
-                                display.moveItemToElementAnimation(kArrow, k, 0)
-                        ),
-                        new AnimationAction(
-                                display.readAnimation(i),
-                                display.readAnimation(start)
-                        )
+                        new LaterAction(() -> {
+                            iArrow.moveToIndex(finalI, 0);
+                            kArrow.moveToIndex(finalK, 0);
+                            display.newGroup();
+                            display.comparing(finalI, start);
+                        }, true)
+//                        new AnimationAction(
+//                                iArrow.moveToIndexTimeline(i, 0),
+//                                kArrow.moveToIndexTimeline(k, 0)
+//                        ),
+//                        new AnimationAction(
+//                                display.readAnimation(i),
+//                                display.readAnimation(start)
+//                        )
                 );
                 if (algorithm.list.get(i) > algorithm.list.get(start)) {
                     // Don't swap if i == k
@@ -126,14 +134,14 @@ public class QuickSort extends ActionSortingAlgorithm {
 
             // Initialize
             if (makingLeft) {
-                leftSection = new DetailedSection((end - start + 1) * 25, true);
+                leftSection = new DetailedSection(display, end - start + 1, true);
                 leftSection.setFill(Color.rgb(44, 199, 88));
             } else {
                 leftSection = null;
             }
 
             if (makingRight) {
-                rightSection = new DetailedSection((end - start + 1) * 25, true);
+                rightSection = new DetailedSection(display, end - start + 1, true);
                 rightSection.setFill(Color.rgb(44, 199, 88));
             } else {
                 rightSection = null;
@@ -150,20 +158,20 @@ public class QuickSort extends ActionSortingAlgorithm {
             // Animations
             if (makingLeft && makingRight) {
                 algorithm.addToStart(new AnimationAction(
-                        display.moveItemToElementAnimation(leftSection, start, -(depth + 1) * 15 - SECTION_OFFSET),
-                        display.moveItemToElementAnimation(rightSection, k + 1, -(depth + 1) * 15 - SECTION_OFFSET),
-                        leftSection.resizeAnimation((k - start) * 25),
-                        rightSection.resizeAnimation((end - k) * 25)
+                        leftSection.moveToIndexTimeline(start, -(depth + 1) * 15 - SECTION_OFFSET),
+                        rightSection.moveToIndexTimeline(k + 1, -(depth + 1) * 15 - SECTION_OFFSET),
+                        leftSection.resizeTimeline(k - start),
+                        rightSection.resizeTimeline(end - k)
                 ));
             } else if (makingLeft) {
                 algorithm.addToStart(new AnimationAction(
-                        display.moveItemToElementAnimation(leftSection, start, -(depth + 1) * 15 - SECTION_OFFSET),
-                        leftSection.resizeAnimation((k - start) * 25)
+                        leftSection.moveToIndexTimeline(start, -(depth + 1) * 15 - SECTION_OFFSET),
+                        leftSection.resizeTimeline(k - start)
                 ));
             } else if (makingRight) {
                 algorithm.addToStart(new AnimationAction(
-                        display.moveItemToElementAnimation(rightSection, k + 1, -(depth + 1) * 15 - SECTION_OFFSET),
-                        rightSection.resizeAnimation((end - k) * 25)
+                        rightSection.moveToIndexTimeline(k + 1, -(depth + 1) * 15 - SECTION_OFFSET),
+                        rightSection.resizeTimeline(end - k)
                 ));
             }
 

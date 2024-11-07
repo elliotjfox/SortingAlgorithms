@@ -151,25 +151,21 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
     }
 
     protected static class AnimationAction extends AlgorithmAction {
-        private final AnimationGroup group;
-
-        public AnimationAction(AnimationGroup group) {
-            this.group = group;
-            takesStep = false;
-        }
+        private final Timeline[] timelines;
 
         public AnimationAction(Timeline... timelines) {
-            this(new AnimationGroup(timelines));
+            this.timelines = timelines;
+            takesStep = false;
         }
 
         @Override
         void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
-            System.out.println("An " + getClass().getSimpleName() + " should not be performing normally!");
+            System.out.println("An AnimationAction should not be performing normally!");
         }
 
         @Override
         public void performDetailed(ActionSortingAlgorithm algorithm, ArrayDetailedDisplay display) {
-            display.addAnimations(group);
+            display.animate(timelines);
         }
     }
 
@@ -188,10 +184,11 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
         @Override
         public void performDetailed(ActionSortingAlgorithm algorithm, ArrayDetailedDisplay display) {
             for (int i = 0; i < algorithm.list.size() - 1; i++) {
-                display.addAnimations(new AnimationGroup(
-                        display.readAnimation(i),
-                        display.readAnimation(i + 1)
-                ));
+                display.comparing(i, i + 1);
+//                display.addAnimations(new AnimationGroup(
+//                        display.readAnimation(i),
+//                        display.readAnimation(i + 1)
+//                ));
                 if (algorithm.list.get(i) > algorithm.list.get(i + 1)) {
                     return;
                 }

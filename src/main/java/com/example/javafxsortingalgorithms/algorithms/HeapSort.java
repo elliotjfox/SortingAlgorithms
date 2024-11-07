@@ -65,7 +65,7 @@ public class HeapSort extends ActionSortingAlgorithm {
 
     @Override
     public void startDetailed(ArrayDetailedDisplay display) {
-        tree = new DetailedBinaryTree(list);
+        tree = new DetailedBinaryTree(display, list);
 
         display.addItem(tree, list.size(), 600);
     }
@@ -148,8 +148,7 @@ public class HeapSort extends ActionSortingAlgorithm {
                 display.reading(i);
                 display.animate(heapSort.tree.read(i));
                 display.newGroup();
-                display.reading(i * 2 + 1);
-                display.reading(i * 2 + 2);
+                display.comparing(i * 2 + 1, i * 2 + 2);
                 display.animate(heapSort.tree.read(i * 2 + 1), heapSort.tree.read(i * 2 + 2));
                 // If the current one is less than one of its children
                 if (heapSort.getArray().get(i) < heapSort.getArray().get(i * 2 + 1) || heapSort.getArray().get(i) < heapSort.getArray().get(i * 2 + 2)) {

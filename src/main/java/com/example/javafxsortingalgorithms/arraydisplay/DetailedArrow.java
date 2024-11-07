@@ -10,12 +10,14 @@ public class DetailedArrow extends DetailedItem {
     private boolean pointingUp;
     private double length;
 
-    public DetailedArrow() {
-        this(1, true);
+    public DetailedArrow(ArrayDetailedDisplay display) {
+        this(display, true);
     }
 
-    public DetailedArrow(double length, boolean up) {
-        this.length = length;
+    public DetailedArrow(ArrayDetailedDisplay display, boolean up) {
+        super(display);
+
+        length = display.getElementWidth();
         pointingUp = up;
 
         triangle = new Polygon();

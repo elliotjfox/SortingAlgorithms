@@ -25,7 +25,7 @@ public class StoogeSort extends ActionSortingAlgorithm {
 
     @Override
     public void startDetailed(ArrayDetailedDisplay display) {
-        sectionList = new DetailedSectionList();
+        sectionList = new DetailedSectionList(display);
         display.addItem(sectionList, 0, 0);
     }
 
@@ -92,9 +92,9 @@ public class StoogeSort extends ActionSortingAlgorithm {
                     display.newGroup();
                     display.animate(
                             stoogeSort.sectionList.addSections(
-                                    new DetailedSection((from + third - to + 1) * 25, true),
-                                    new DetailedSection((to - from - third + 1) * 25, true),
-                                    new DetailedSection((from + third - to + 1) * 25, true)
+                                    new DetailedSection(display, from + third - to + 1, true),
+                                    new DetailedSection(display, to - from - third + 1, true),
+                                    new DetailedSection(display, from + third - to + 1, true)
                             )
                     );
                 }

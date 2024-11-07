@@ -87,10 +87,10 @@ public class BubbleSort extends SortingAlgorithm {
     @Override
     public void startDetailed(ArrayDetailedDisplay display) {
         // TODO: Make this linked to the settings (element width)
-        leftArrow = new DetailedArrow(25, true);
+        leftArrow = new DetailedArrow(display, true);
         display.addItem(leftArrow, 0, 0);
 
-        rightArrow = new DetailedArrow(25, true);
+        rightArrow = new DetailedArrow(display, true);
         display.addItem(rightArrow, 1, 0);
 
         display.updateInfo("Number sorted", 0);
@@ -113,23 +113,14 @@ public class BubbleSort extends SortingAlgorithm {
             }
             hasMadeSwap = false;
 
-            display.moveItem(leftArrow, lastPos, 0);
-            display.moveItem(rightArrow, lastPos + 1, 0);
-            // TODO: Surely I don't need the same block of code in three different places
-            display.updateInfoWhenDone("Number sorted", sorted);
-            display.updateInfoWhenDone("Left index", lastPos);
-            display.updateInfoWhenDone("Left value", list.get(lastPos));
-            display.updateInfoWhenDone("Right index", lastPos + 1);
-            display.updateInfoWhenDone("Right value", list.get(lastPos + 1));
+            leftArrow.moveToIndex(lastPos, 0);
+            rightArrow.moveToIndex(lastPos + 1, 0);
+            updateInfo(display);
         }
 
-        display.moveItem(leftArrow, lastPos, 0);
-        display.moveItem(rightArrow, lastPos + 1, 0);
-        display.updateInfoWhenDone("Number sorted", sorted);
-        display.updateInfoWhenDone("Left index", lastPos);
-        display.updateInfoWhenDone("Left value", list.get(lastPos));
-        display.updateInfoWhenDone("Right index", lastPos + 1);
-        display.updateInfoWhenDone("Right value", list.get(lastPos + 1));
+        leftArrow.moveToIndex(lastPos, 0);
+        rightArrow.moveToIndex(lastPos + 1, 0);
+        updateInfo(display);
         display.newGroup();
         display.comparing(lastPos, lastPos + 1);
 
@@ -137,15 +128,19 @@ public class BubbleSort extends SortingAlgorithm {
             hasMadeSwap = true;
             swap(lastPos, lastPos + 1);
             display.swap(lastPos, lastPos + 1);
-            display.updateInfoWhenDone("Number sorted", sorted);
-            display.updateInfoWhenDone("Left index", lastPos);
-            display.updateInfoWhenDone("Left value", list.get(lastPos));
-            display.updateInfoWhenDone("Right index", lastPos + 1);
-            display.updateInfoWhenDone("Right value", list.get(lastPos + 1));
+            updateInfo(display);
         }
 
         // Increase the position
         lastPos++;
+    }
+
+    private void updateInfo(ArrayDetailedDisplay display) {
+        display.updateInfoWhenDone("Number sorted", sorted);
+        display.updateInfoWhenDone("Left index", lastPos);
+        display.updateInfoWhenDone("Left value", list.get(lastPos));
+        display.updateInfoWhenDone("Right index", lastPos + 1);
+        display.updateInfoWhenDone("Right value", list.get(lastPos + 1));
     }
 
     @Override

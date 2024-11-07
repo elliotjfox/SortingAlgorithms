@@ -19,7 +19,8 @@ public class DetailedBinaryTree extends DetailedItem {
     private final List<DetailedBinaryTreeItem> treeItems;
     private final List<Line> lines;
 
-    public DetailedBinaryTree(List<Integer> list) {
+    public DetailedBinaryTree(ArrayDetailedDisplay display, List<Integer> list) {
+        super(display);
         treeItems = new ArrayList<>();
         lines = new ArrayList<>();
 

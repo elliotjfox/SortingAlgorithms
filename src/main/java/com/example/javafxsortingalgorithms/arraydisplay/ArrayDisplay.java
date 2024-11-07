@@ -44,6 +44,10 @@ public abstract class ArrayDisplay extends Pane {
         return maxValue;
     }
 
+    public double getHeightMultiplier() {
+        return heightMultiplier;
+    }
+
     // TODO: Also stop any animations here
     public void setArray(List<Integer> list) {
         this.array = list;

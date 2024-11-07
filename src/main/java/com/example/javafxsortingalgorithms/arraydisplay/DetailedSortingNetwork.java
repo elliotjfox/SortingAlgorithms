@@ -19,7 +19,8 @@ public class DetailedSortingNetwork extends DetailedItem {
     private final List<List<Node>> visuals;
     private final List<Line> lines;
 
-    public DetailedSortingNetwork(List<Integer> list) {
+    public DetailedSortingNetwork(ArrayDetailedDisplay display, List<Integer> list) {
+        super(display);
         this.list = list;
         allComparisons = new ArrayList<>();
         visuals = new ArrayList<>();

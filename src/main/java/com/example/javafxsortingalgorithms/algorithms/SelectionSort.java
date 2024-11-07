@@ -239,7 +239,7 @@ public class SelectionSort extends SortingAlgorithm {
     public void startDetailed(ArrayDetailedDisplay display) {
         curIndex++;
 
-        arrow = new DetailedArrow(25, true);
+        arrow = new DetailedArrow(display, true);
         display.addItem(arrow, curIndex, 0);
 
         display.getDetailedInfo().updateInfo("Sorted", 0);
@@ -248,7 +248,7 @@ public class SelectionSort extends SortingAlgorithm {
 
 
         if (mode != SelectionMode.MAX) {
-            minArrow = new DetailedArrow(25, true);
+            minArrow = new DetailedArrow(display, true);
             minArrow.setFill(Color.LIGHTGREEN);
             display.addItem(minArrow, minIndex, 0);
             display.getDetailedInfo().updateInfo("Min index", minIndex);
@@ -256,7 +256,7 @@ public class SelectionSort extends SortingAlgorithm {
         }
 
         if (mode != SelectionMode.MIN) {
-            maxArrow = new DetailedArrow(25, true);
+            maxArrow = new DetailedArrow(display, true);
             maxArrow.setFill(Color.LIGHTBLUE);
             display.addItem(maxArrow, maxIndex, 0);
             display.getDetailedInfo().updateInfo("Max index", maxIndex);
@@ -302,8 +302,8 @@ public class SelectionSort extends SortingAlgorithm {
 
         int finalCur = curIndex;
         display.setCurrentTask("Searching for smallest");
-        display.moveItem(arrow, curIndex, 0);
-        display.moveItem(minArrow, minIndex, 0);
+        arrow.moveToIndex(curIndex, 0);
+        minArrow.moveToIndex(minIndex, 0);
         display.onPlay(() -> {
             display.getDetailedInfo().updateInfo("Current index", finalCur);
             display.getDetailedInfo().updateInfo("Current value", list.get(finalCur));
@@ -315,7 +315,7 @@ public class SelectionSort extends SortingAlgorithm {
         if (list.get(curIndex) < list.get(minIndex)) {
             minIndex = curIndex;
             display.newGroup();
-            display.moveItem(minArrow, minIndex, 0);
+            minArrow.moveToIndex(minIndex, 0);
             display.onPlay(() -> {
                 display.getDetailedInfo().updateInfo("Min index", Integer.toString(minIndex));
                 display.getDetailedInfo().updateInfo("Min value", Integer.toString(list.get(minIndex)));
@@ -352,8 +352,8 @@ public class SelectionSort extends SortingAlgorithm {
         }
 
         display.setCurrentTask("Searching for biggest");
-        display.moveItem(arrow, curIndex, 0);
-        display.moveItem(maxArrow, maxIndex, 0);
+        arrow.moveToIndex(curIndex, 0);
+        maxArrow.moveToIndex(maxIndex, 0);
         display.newGroup();
         display.comparing(curIndex, maxIndex);
 
@@ -407,16 +407,16 @@ public class SelectionSort extends SortingAlgorithm {
             return;
         }
 
-        display.moveItem(arrow, curIndex, 0);
-        display.moveItem(minArrow, minIndex, 0);
-        display.moveItem(maxArrow, maxIndex, 0);
+        arrow.moveToIndex(curIndex, 0);
+        minArrow.moveToIndex(minIndex, 0);
+        maxArrow.moveToIndex(maxIndex, 0);
         display.newGroup();
         display.comparing(curIndex, minIndex);
 
         if (list.get(curIndex) < list.get(minIndex)) {
             minIndex = curIndex;
             display.newGroup();
-            display.moveItem(minArrow, minIndex, 0);
+            minArrow.moveToIndex(minIndex, 0);
         }
 
         display.newGroup();
@@ -425,7 +425,7 @@ public class SelectionSort extends SortingAlgorithm {
         if (list.get(curIndex) > list.get(maxIndex)) {
             maxIndex = curIndex;
             display.newGroup();
-            display.moveItem(maxArrow, maxIndex, 0);
+            maxArrow.moveToIndex(maxIndex, 0);
         }
 
         curIndex++;

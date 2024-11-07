@@ -72,13 +72,13 @@ public class CombSort extends SortingAlgorithm {
 
     @Override
     public void startDetailed(ArrayDetailedDisplay display) {
-        leftArrow = new DetailedArrow(25, true);
+        leftArrow = new DetailedArrow(display, true);
         display.addItem(leftArrow, 0, arrowHeight);
 
-        rightArrow = new DetailedArrow(25, true);
+        rightArrow = new DetailedArrow(display, true);
         display.addItem(rightArrow, gapSize, arrowHeight);
 
-        section = new DetailedSection((gapSize + 1) * 25, true);
+        section = new DetailedSection(display, gapSize + 1, true);
         display.addItem(section, 0, sectionHeight);
 
         display.updateInfo("Gap size", gapSize);
@@ -101,9 +101,9 @@ public class CombSort extends SortingAlgorithm {
             int oldGapSize = gapSize;
 
             display.onPlay(() -> display.setCurrentTask("Resetting"));
-            display.moveItem(leftArrow, lastPos, arrowHeight);
-            display.moveItem(rightArrow, lastPos + gapSize, arrowHeight);
-            display.moveItem(section, lastPos, sectionHeight);
+            leftArrow.moveToIndex(lastPos, arrowHeight);
+            rightArrow.moveToIndex(lastPos + gapSize, arrowHeight);
+            section.moveToIndex(lastPos, sectionHeight);
             display.updateInfoWhenDone("Left index", lastPos);
             display.updateInfoWhenDone("Left value", list.get(lastPos));
             display.updateInfoWhenDone("Right index", lastPos + gapSize);
@@ -114,17 +114,17 @@ public class CombSort extends SortingAlgorithm {
                 display.onPlay(() -> display.setCurrentTask("Shrinking gap size"));
                 display.updateInfoWhenDone("Gap size", gapSize);
                 // Shouldn't actually need to move, but redundancy is good!
-                display.moveItem(rightArrow, lastPos + gapSize, arrowHeight);
-                display.animate(section.resizeAnimation((gapSize + 1) * 25));
+                rightArrow.moveToIndex(lastPos + gapSize, arrowHeight);
+                display.animate(section.resizeTimeline((gapSize + 1) * 25));
             }
             return;
         }
 
         // A little bit of time saving after we reset
         if (lastPos != 0) {
-            display.moveItem(leftArrow, lastPos, arrowHeight);
-            display.moveItem(rightArrow, lastPos + gapSize, arrowHeight);
-            display.moveItem(section, lastPos, sectionHeight);
+            leftArrow.moveToIndex(lastPos, arrowHeight);
+            rightArrow.moveToIndex(lastPos + gapSize, arrowHeight);
+            section.moveToIndex(lastPos, sectionHeight);
             display.updateInfoWhenDone("Left index", lastPos);
             display.updateInfoWhenDone("Left value", list.get(lastPos));
             display.updateInfoWhenDone("Right index", lastPos + gapSize);

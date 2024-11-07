@@ -3,10 +3,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDetailedDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.DetailedArrow;
-import com.example.javafxsortingalgorithms.arraydisplay.DetailedItem;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ShellSort extends ActionSortingAlgorithm {
@@ -96,7 +93,7 @@ public class ShellSort extends ActionSortingAlgorithm {
                 int finalI = i;
                 for (int j = i; j < shellSort.list.size(); j += gap) {
                     algorithm.addToStart(
-                            new LaterAction(() -> display.highlightElement(pos -> (pos - finalI) % gap == 0)),
+                            new LaterAction(() -> display.highlightElements(pos -> (pos - finalI) % gap == 0)),
                             new ShellSearch(j, gap)
                     );
                 }
@@ -162,8 +159,7 @@ public class ShellSort extends ActionSortingAlgorithm {
             if (index - gapSize < 0) {
                 return;
             }
-            display.reading(index);
-            display.reading(index - gapSize);
+            display.comparing(index, index - gapSize);
             if (shellSort.list.get(index - gapSize) > shellSort.list.get(index)) {
                 shellSort.swap(index - gapSize, index);
                 display.swap(index - gapSize, index);

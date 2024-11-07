@@ -9,6 +9,9 @@ import javafx.util.Duration;
 
 public class DetailedSection extends DetailedItem {
 
+    private static final double SECTION_THICKNESS = 5;
+    private static final Color DEFAULT_COLOUR = Color.BLACK;
+
     private double width;
     private boolean hasEdges;
 
@@ -16,31 +19,39 @@ public class DetailedSection extends DetailedItem {
     private Rectangle left;
     private Rectangle right;
 
-    public DetailedSection(double width, boolean hasEdges) {
-        this.width = width;
+    public DetailedSection(ArrayDetailedDisplay display, int width, boolean hasEdges) {
+        this(display, display.getElementWidth() * width, hasEdges);
+    }
+
+    public DetailedSection(ArrayDetailedDisplay display, double exactWidth, boolean hasEdges) {
+        super(display);
+
+        this.width = exactWidth;
         this.hasEdges = hasEdges;
 
         rectangle = new Rectangle();
-        rectangle.setWidth(width);
-        rectangle.setHeight(5);
+        rectangle.setWidth(exactWidth);
+        rectangle.setHeight(SECTION_THICKNESS);
 
         getChildren().add(rectangle);
 
         if (hasEdges) {
             left = new Rectangle();
-            left.setWidth(5);
-            left.setHeight(10);
+            left.setWidth(SECTION_THICKNESS);
+            left.setHeight(2 * SECTION_THICKNESS);
             left.setLayoutX(0);
-            left.setLayoutY(-5);
+            left.setLayoutY(-SECTION_THICKNESS);
 
             right = new Rectangle();
-            right.setWidth(5);
-            right.setHeight(10);
-            right.setLayoutX(width - 5);
-            right.setLayoutY(-5);
+            right.setWidth(SECTION_THICKNESS);
+            right.setHeight(2 * SECTION_THICKNESS);
+            right.setLayoutX(width - SECTION_THICKNESS);
+            right.setLayoutY(-SECTION_THICKNESS);
 
             getChildren().addAll(left, right);
         }
+
+        setFill(DEFAULT_COLOUR);
     }
 
     public void setFill(Color colour) {
@@ -51,7 +62,7 @@ public class DetailedSection extends DetailedItem {
         }
     }
 
-    public Timeline shrink() {
+    public Timeline shrinkTimeline() {
         return new Timeline(
                 new KeyFrame(
                         Duration.millis(ArrayDetailedDisplay.ANIMATION_LENGTH),
@@ -60,7 +71,7 @@ public class DetailedSection extends DetailedItem {
         );
     }
 
-    public Timeline unshrink() {
+    public Timeline unshrinkTimeline() {
         return new Timeline(
                 new KeyFrame(
                         Duration.millis(ArrayDetailedDisplay.ANIMATION_LENGTH),
@@ -69,31 +80,49 @@ public class DetailedSection extends DetailedItem {
         );
     }
 
-    public Timeline resizeAnimation(double newWidth) {
-        Timeline timeline;
+    public Timeline resizeTimeline(int width) {
+        return resizeTimeline(calculateWidth(width));
+    }
+
+    public Timeline resizeTimeline(double exactWidth) {
+//        KeyFrame keyFrame = new KeyFrame(
+//                Duration.millis(ArrayDetailedDisplay.ANIMATION_LENGTH),
+//                new KeyValue(rectangle.widthProperty(), exactWidth)
+//        );
+//        if (hasEdges) {
+//            keyFrame.getValues().add(new KeyValue(right.layoutXProperty(), exactWidth - SECTION_THICKNESS));
+//        }
+
+        Timeline timeline; //= new Timeline(keyFrame);
         if (hasEdges) {
             timeline = new Timeline(
                     new KeyFrame(
                             Duration.millis(ArrayDetailedDisplay.ANIMATION_LENGTH),
-                            new KeyValue(rectangle.widthProperty(), newWidth),
-                            new KeyValue(right.layoutXProperty(), newWidth - 5)
+                            new KeyValue(rectangle.widthProperty(), exactWidth),
+                            new KeyValue(right.layoutXProperty(), exactWidth - SECTION_THICKNESS)
                     )
             );
         } else {
             timeline = new Timeline(
                     new KeyFrame(
                             Duration.millis(ArrayDetailedDisplay.ANIMATION_LENGTH),
-                            new KeyValue(rectangle.widthProperty(), newWidth)
+                            new KeyValue(rectangle.widthProperty(), exactWidth)
                     )
             );
         }
-        timeline.setOnFinished(event -> width = newWidth);
+        timeline.setOnFinished(event -> width = exactWidth);
         return timeline;
     }
 
     public void setSectionVisible(boolean b) {
         rectangle.setVisible(b);
-        if (left != null) left.setVisible(b);
-        if (right != null) right.setVisible(b);
+        if (hasEdges) {
+            left.setVisible(b);
+            right.setVisible(b);
+        }
+    }
+
+    public double calculateWidth(int width) {
+        return display.getElementWidth() * width;
     }
 }

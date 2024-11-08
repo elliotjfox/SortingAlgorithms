@@ -29,7 +29,7 @@ public class ShellSort extends ActionSortingAlgorithm {
     protected void instantAlgorithm(TestEntry entry) {
         gapSize = list.size();
         do {
-            gapSize = (int) (gapSize / shrinkFactor);
+            shrinkGap();
             // For each up to the gap size (make sure each element is looked at)
             for (int i = 0; i < gapSize; i++) {
                 for (int j = i; j < list.size(); j += gapSize) {
@@ -55,7 +55,7 @@ public class ShellSort extends ActionSortingAlgorithm {
 
     @Override
     public String getName() {
-        return STR."Shell Sort\nShrink Factor:\{shrinkFactor}";
+        return STR."Shell Sort\nShrink Factor: \{shrinkFactor}";
     }
 
     public void shrinkGap() {

@@ -18,9 +18,10 @@ public abstract class BetterAlgorithm {
 
     protected Mode mode;
     protected Wrapper wrapper;
+    private boolean isDone;
 
     public BetterAlgorithm() {
-
+        isDone = false;
     }
 
     public void setMode(Mode mode) {
@@ -86,5 +87,13 @@ public abstract class BetterAlgorithm {
                 normalDisplay.writeIndex(i2);
             }
         }
+    }
+
+    public void finish() {
+        isDone = true;
+    }
+
+    public boolean isDone() {
+        return isDone;
     }
 }

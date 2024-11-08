@@ -70,6 +70,13 @@ public class BetterAlgorithmDisplay extends VBox {
         System.out.println("Step");
         gnomeSort.stepNormal();
         draw();
+        if (gnomeSort.isDone()) {
+            finish();
+        }
+    }
+
+    private void finish() {
+        stepTimeline.pause();
     }
 
     private void draw() {

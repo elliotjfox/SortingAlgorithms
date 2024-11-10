@@ -16,6 +16,7 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class AlgorithmContainer {
 
@@ -98,6 +99,8 @@ public class AlgorithmContainer {
 
     public void createArray(int size) {
         list = Settings.getRandomUniformArray(size);
+//        list = Settings.getArray(size, 0, 25);
+//        list = Settings.getRandom(size);
         if (display != null) display.setArray(list);
     }
 
@@ -279,7 +282,9 @@ public class AlgorithmContainer {
                 createMenuItem("Radix Sort", "Radix"),
                 createMenuItem("Odd Even Sort", "OddEven"),
                 createMenuItem("Exchange Sort", "Exchange"),
-                createMenuItem("Strand Sort", "Strand")
+                createMenuItem("Strand Sort", "Strand"),
+                createMenuItem("Shell Sort 2", "Shell2"),
+                createMenuItem("Cycle Sort", "Cycle")
                 );
 
         Menu jokeAlgorithms = new Menu(

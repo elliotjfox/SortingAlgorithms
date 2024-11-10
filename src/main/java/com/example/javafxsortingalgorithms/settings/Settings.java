@@ -47,6 +47,8 @@ public class Settings {
             case "Shell":       yield new ShellSortSettings();
             case "Stooge":      yield new GenericAlgorithmSettings<>("Stooge Sort", StoogeSort::new);
             case "Strand":      yield new GenericAlgorithmSettings<>("Strand Sort", StrandSort::new);
+            case "Shell2":      yield new GenericAlgorithmSettings<>("Strand Sort", ShellSortV2::new);
+            case "Cycle":       yield new GenericAlgorithmSettings<>("Strand Sort", CycleSort::new);
             default:            yield new GenericAlgorithmSettings<>("Gnome Sort", GnomeSort::new);
         };
     }
@@ -72,10 +74,35 @@ public class Settings {
             array.add(i);
         }
 
-        for (int i = size; i > 1; i--) {
-            array.set(i - 1, array.set(random.nextInt(i), array.get(i - 1)));
+//        for (int i = size; i > 1; i--) {
+//            array.set(i - 1, array.set(random.nextInt(i), array.get(i - 1)));
+//        }
+        Collections.shuffle(array);
+
+        return array;
+    }
+
+    public static ArrayList<Integer> getRandom(int size) {
+        ArrayList<Integer> array = new ArrayList<>();
+
+        for (int i = 0; i < size; i++) {
+            array.add(random.nextInt(size));
         }
 
+        Collections.shuffle(array);
+
+        return array;
+    }
+
+    public static ArrayList<Integer> getArray(int size, int min, int max) {
+        ArrayList<Integer> array = new ArrayList<>();
+
+        for (int i = 0; i < size; i++) {
+            int tmp = random.nextInt(max - min) + min;
+//            System.out.println(tmp);
+            array.add(tmp);
+        }
+        Collections.shuffle(array);
         return array;
     }
 
@@ -122,9 +149,11 @@ public class Settings {
                 tmp.add(i);
             }
 
-            for (int i = 0; i < size; i++) {
-                array.add(tmp.remove(random.nextInt(tmp.size())));
-            }
+//            for (int i = 0; i < size; i++) {
+//                array.add(tmp.remove(random.nextInt(tmp.size())));
+//            }
+
+            Collections.shuffle(array);
 
             whenDone.accept(array);
         }

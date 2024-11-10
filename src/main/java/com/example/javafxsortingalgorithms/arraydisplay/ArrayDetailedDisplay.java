@@ -1,5 +1,6 @@
 package com.example.javafxsortingalgorithms.arraydisplay;
 
+import com.example.javafxsortingalgorithms.settings.DisplaySettings;
 import com.example.javafxsortingalgorithms.settings.SettingsPane;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -148,23 +149,43 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
     }
 
 
-    public void highlightElements(Function<Integer, Boolean> condition) {
+    public Timeline highlightAnimation(Function<Integer, Boolean> condition) {
+        List<KeyValue> keyValues = new ArrayList<>();
         for (int i = 0; i < elements.size(); i++) {
-//            System.out.println(STR."Checking at \{i}: \{condition.apply(i)}");
             if (condition.apply(i)) {
-                elements.get(i).setColour(array.get(i), maxValue);
+                keyValues.add(new KeyValue(elements.get(i).colourProperty(), DetailedElement.calculateColour(array.get(i), maxValue)));
             } else {
-                elements.get(i).setColour(Color.LIGHTGRAY);
+                keyValues.add(new KeyValue(elements.get(i).colourProperty(), Color.LIGHTGRAY));
             }
         }
+
+        return new Timeline(
+                new KeyFrame(
+                        Duration.millis(ANIMATION_LENGTH),
+                        "",
+                        event -> {},
+                        keyValues
+                )
+        );
     }
 
-    public void recolourElements() {
-        highlightElements(i -> true);
+//    public void highlightElements(Function<Integer, Boolean> condition) {
 //        for (int i = 0; i < elements.size(); i++) {
-//            elements.get(i).setColour(array.get(i), maxValue);
+////            System.out.println(STR."Checking at \{i}: \{condition.apply(i)}");
+//            if (condition.apply(i)) {
+//                elements.get(i).setColour(array.get(i), maxValue);
+//            } else {
+//                elements.get(i).setColour(Color.LIGHTGRAY);
+//            }
 //        }
-    }
+//    }
+
+//    public void recolourElements() {
+//        highlightElements(i -> true);
+////        for (int i = 0; i < elements.size(); i++) {
+////            elements.get(i).setColour(array.get(i), maxValue);
+////        }
+//    }
 
 
     /**

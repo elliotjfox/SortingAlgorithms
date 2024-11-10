@@ -4,8 +4,8 @@ import java.util.function.Consumer;
 
 public abstract class LoopStep {
 
-    private final int from;
-    private final int to;
+    protected final int from;
+    protected final int to;
     private int current;
     private boolean done;
 
@@ -35,6 +35,11 @@ public abstract class LoopStep {
         if (current < from) {
             current = from;
         }
+    }
+
+    public void setStep(int stepNumber) {
+        if (stepNumber < from || stepNumber >= to) return;
+        current = stepNumber;
     }
 
     public void finish() {

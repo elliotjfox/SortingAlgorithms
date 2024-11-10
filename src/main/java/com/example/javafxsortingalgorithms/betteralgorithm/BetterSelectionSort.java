@@ -1,27 +1,41 @@
 package com.example.javafxsortingalgorithms.betteralgorithm;
 
+import java.util.List;
+
 public class BetterSelectionSort extends LoopThroughAlgorithm {
 
     @Override
     protected void initializeLoopStep() {
-//        loopStep = new LoopStep(0, list.size()) {
-//            LoopStep subStep;
-//
-//            // Terrible code, why am I doing this?
-//            @Override
-//            public void step(int i) {
-//                if (subStep == null) {
-//                    subStep = new LoopStep(i, list.size()) {
-//                        @Override
-//                        public void step(int i) {
-//
-//                        }
-//                    };
-//                } else {
-//                    subStep.doStep();
-//                }
-//            }
-//        };
+
+        // This is NOT better
+        loopStep = new LoopStep(0, list.size()) {
+            LoopStep subStep;
+            int minIndex;
+
+            @Override
+            public void step(int i) {
+                if (subStep == null) {
+                    minIndex = i;
+                    subStep = new LoopStep(i, list.size()) {
+                        @Override
+                        public void step(int i) {
+                            if (list.get(i) < list.get(minIndex)) {
+                                minIndex = i;
+                            }
+                            increment();
+                        }
+                    };
+                    subStep.setStep(i + 1);
+                } else {
+                    subStep.doStep();
+                    if (subStep.isDone()) {
+                        swap(i, minIndex);
+                        increment();
+                        subStep = null;
+                    }
+                }
+            }
+        };
     }
 
     @Override

@@ -1,35 +1,33 @@
 package com.example.javafxsortingalgorithms;
 
-import com.example.javafxsortingalgorithms.algorithms.GnomeSort;
 import com.example.javafxsortingalgorithms.betteralgorithm.BetterAlgorithm;
 import com.example.javafxsortingalgorithms.betteralgorithm.BetterGnomeSort;
+import com.example.javafxsortingalgorithms.betteralgorithm.BetterSelectionSort;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 public class BetterAlgorithmDisplay extends VBox {
 
-    private BetterGnomeSort gnomeSort;
+    private BetterAlgorithm algorithm;
     private Timeline stepTimeline;
 
     private List<Integer> list;
     private List<Rectangle> rectangles;
 
     public BetterAlgorithmDisplay() {
-        gnomeSort = new BetterGnomeSort();
+        algorithm = new BetterSelectionSort();
         stepTimeline = new Timeline(
                 new KeyFrame(
                         Duration.millis(1),
@@ -56,21 +54,21 @@ public class BetterAlgorithmDisplay extends VBox {
         getChildren().add(pane);
         draw();
 
-        gnomeSort.setMode(BetterAlgorithm.Mode.NORMAL);
-        gnomeSort.setWrapper(new BetterAlgorithm.Wrapper());
-        gnomeSort.setList(list);
+        algorithm.setMode(BetterAlgorithm.Mode.NORMAL);
+        algorithm.setWrapper(new BetterAlgorithm.Wrapper());
+        algorithm.setList(list);
     }
 
     private void start() {
         stepTimeline.play();
-        gnomeSort.initializeNormal();
+        algorithm.initializeNormal();
     }
 
     private void step() {
         System.out.println("Step");
-        gnomeSort.stepNormal();
+        algorithm.stepNormal();
         draw();
-        if (gnomeSort.isDone()) {
+        if (algorithm.isDone()) {
             finish();
         }
     }

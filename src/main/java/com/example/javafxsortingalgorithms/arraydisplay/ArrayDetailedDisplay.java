@@ -169,24 +169,9 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
         );
     }
 
-//    public void highlightElements(Function<Integer, Boolean> condition) {
-//        for (int i = 0; i < elements.size(); i++) {
-////            System.out.println(STR."Checking at \{i}: \{condition.apply(i)}");
-//            if (condition.apply(i)) {
-//                elements.get(i).setColour(array.get(i), maxValue);
-//            } else {
-//                elements.get(i).setColour(Color.LIGHTGRAY);
-//            }
-//        }
-//    }
-
-//    public void recolourElements() {
-//        highlightElements(i -> true);
-////        for (int i = 0; i < elements.size(); i++) {
-////            elements.get(i).setColour(array.get(i), maxValue);
-////        }
-//    }
-
+    public Timeline recolourAnimation() {
+        return highlightAnimation(i -> true);
+    }
 
     /**
      * Adds a read animation at the provided index to the current animation group.

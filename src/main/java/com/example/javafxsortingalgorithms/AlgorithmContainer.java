@@ -1,10 +1,7 @@
 package com.example.javafxsortingalgorithms;
 
 import com.example.javafxsortingalgorithms.algorithms.SortingAlgorithm;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayBarDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDetailedDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayHeatMapDisplay;
+import com.example.javafxsortingalgorithms.arraydisplay.*;
 import com.example.javafxsortingalgorithms.settings.Settings;
 import com.example.javafxsortingalgorithms.settings.SettingsPane;
 import javafx.animation.Animation;
@@ -75,9 +72,7 @@ public class AlgorithmContainer {
         menuBar = new MenuBar(algorithmMenu);
 
         settingsButton = new Button("Settings");
-        settingsButton.setOnAction(event -> {
-            settingsPane.show();
-        });
+        settingsButton.setOnAction(event -> settingsPane.show());
         selectAlgorithm("Bubble Sort", "Bubble");
 //        settingsPane.setAlgorithmSettings(Settings.createSettings(algorithmSelector.getSelectionModel().getSelectedItem()));
 

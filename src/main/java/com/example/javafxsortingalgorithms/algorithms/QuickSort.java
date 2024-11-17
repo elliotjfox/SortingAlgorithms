@@ -38,6 +38,7 @@ public class QuickSort extends ActionSortingAlgorithm {
         section = new DetailedSection(display, list.size(), true);
         display.addItem(section, 0, -SECTION_OFFSET);
         section.setFill(Color.rgb(44, 199, 88));
+        actions.add(new AnimationAction(display.recolourAnimation()));
     }
 
     @Override
@@ -89,6 +90,8 @@ public class QuickSort extends ActionSortingAlgorithm {
             minArrow.setFill(Color.LIGHTGREEN);
             display.addItem(minArrow, start, 0);
 
+            display.animate(display.highlightAnimation(i -> i >= start && i <= end));
+
             int k = end;
             for (int i = end; i > start; i--) {
                 int finalI = i;
@@ -100,20 +103,11 @@ public class QuickSort extends ActionSortingAlgorithm {
                             display.newGroup();
                             display.comparing(finalI, start);
                         }, true)
-//                        new AnimationAction(
-//                                iArrow.moveToIndexTimeline(i, 0),
-//                                kArrow.moveToIndexTimeline(k, 0)
-//                        ),
-//                        new AnimationAction(
-//                                display.readAnimation(i),
-//                                display.readAnimation(start)
-//                        )
                 );
                 if (algorithm.list.get(i) > algorithm.list.get(start)) {
                     // Don't swap if i == k
                     if (i != k) algorithm.addToStart(new Swap(i, k));
                     k--;
-//                    algorithm.addToStart(new AnimationAction(display.moveItemToElementAnimation(kArrow, k, 0)));
                 }
             }
 
@@ -136,6 +130,7 @@ public class QuickSort extends ActionSortingAlgorithm {
             if (makingLeft) {
                 leftSection = new DetailedSection(display, end - start + 1, true);
                 leftSection.setFill(Color.rgb(44, 199, 88));
+                algorithm.addToStart(new LaterAction(() -> display.addItem(leftSection, start, -depth * 15 - SECTION_OFFSET)));
             } else {
                 leftSection = null;
             }
@@ -143,16 +138,9 @@ public class QuickSort extends ActionSortingAlgorithm {
             if (makingRight) {
                 rightSection = new DetailedSection(display, end - start + 1, true);
                 rightSection.setFill(Color.rgb(44, 199, 88));
+                algorithm.addToStart(new LaterAction(() -> display.addItem(rightSection, start, -depth * 15 - SECTION_OFFSET)));
             } else {
                 rightSection = null;
-            }
-
-            // Add to display
-            if (makingLeft) {
-                algorithm.addToStart(new LaterAction(() -> display.addItem(leftSection, start, -depth * 15 - SECTION_OFFSET)));
-            }
-            if (makingRight) {
-                algorithm.addToStart(new LaterAction(() -> display.addItem(rightSection, start, -depth * 15 - SECTION_OFFSET)));
             }
 
             // Animations

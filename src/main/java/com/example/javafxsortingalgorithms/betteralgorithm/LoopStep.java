@@ -14,6 +14,8 @@ public abstract class LoopStep {
         this.from = from;
         this.to = to;
         current = from;
+
+        if (from >= to) done = true;
     }
 
     public void doStep() {

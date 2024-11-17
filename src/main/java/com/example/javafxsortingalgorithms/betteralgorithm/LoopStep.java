@@ -4,51 +4,21 @@ import java.util.function.Consumer;
 
 public abstract class LoopStep {
 
-    protected final int from;
-    protected final int to;
-    private int current;
-    private boolean done;
+    private final LoopStepCounter counter;
 
     // [from, to)
     public LoopStep(int from, int to) {
-        this.from = from;
-        this.to = to;
-        current = from;
-
-        if (from >= to) done = true;
+        counter = new LoopStepCounter(from, to);
     }
 
     public void doStep() {
-        if (done) return;
-        step(current);
+        if (isDone()) return;
+        step(counter);
     }
 
-    public abstract void step(int i);
-
-    public void increment() {
-        current++;
-        if (current >= to) {
-            finish();
-        }
-    }
-
-    public void decrement() {
-        current--;
-        if (current < from) {
-            current = from;
-        }
-    }
-
-    public void setStep(int stepNumber) {
-        if (stepNumber < from || stepNumber >= to) return;
-        current = stepNumber;
-    }
-
-    public void finish() {
-        done = true;
-    }
+    public abstract void step(LoopStepCounter counter);
 
     public boolean isDone() {
-        return done;
+        return counter.isDone();
     }
 }

@@ -40,15 +40,15 @@ class OuterSelectionSortStep extends LoopStep {
     }
 
     @Override
-    public void step(int i) {
+    public void step(LoopStepCounter counter) {
         if (innerStep == null) {
-            minIndex = i;
-            innerStep = new InnerSelectionSortStep(selectionSort, this, i + 1, to);
+            minIndex = counter.getCurrent();
+            innerStep = new InnerSelectionSortStep(selectionSort, this, counter.getCurrent() + 1, counter.getUpper());
         } else {
             innerStep.doStep();
             if (innerStep.isDone()) {
-                selectionSort.swap(i, minIndex);
-                increment();
+                selectionSort.swap(counter.getCurrent(), minIndex);
+                counter.increment();
                 innerStep = null;
             }
         }
@@ -75,10 +75,10 @@ class InnerSelectionSortStep extends LoopStep {
     }
 
     @Override
-    public void step(int i) {
-        if (selectionSort.list.get(i) < selectionSort.list.get(outerStep.getMinIndex())) {
-            outerStep.setMinIndex(i);
+    public void step(LoopStepCounter counter) {
+        if (selectionSort.list.get(counter.getCurrent()) < selectionSort.list.get(outerStep.getMinIndex())) {
+            outerStep.setMinIndex(counter.getCurrent());
         }
-        increment();
+        counter.increment();
     }
 }

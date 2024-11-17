@@ -18,8 +18,7 @@ public class Settings {
     public static int defaultNumberElements = 250;
     public static int defaultArrayBorder = 15;
     public static int defaultElementWidth = 4;
-    public static int defaultMaxHeight = 600;
-    public static int defaultMinHeight = 600;
+    public static int defaultHeight = 600;
 
     public static int defaultTestSize = 5000;
 

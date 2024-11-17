@@ -1,6 +1,5 @@
 package com.example.javafxsortingalgorithms.arraydisplay;
 
-import com.example.javafxsortingalgorithms.settings.DisplaySettings;
 import com.example.javafxsortingalgorithms.settings.SettingsPane;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -61,25 +60,24 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
     }
 
     @Override
-    public void setArray(List<Integer> list) {
-        this.array = list;
+    public void setList(List<Integer> list) {
+        this.list = list;
         resetMax();
         if (!elements.isEmpty()) {
             centerPane.getChildren().removeAll(elements);
             elements.clear();
         }
-        setHeightMultiplier();
         for (int i = 0; i < list.size(); i++) {
             DetailedElement element = new DetailedElement(this, i);
-            element.setElementHeight(list.get(i) * heightMultiplier, maxValue * heightMultiplier);
+            element.setElementHeight(list.get(i) * getHeightMultiplier(), maxValue * getHeightMultiplier());
             elements.add(element);
             centerPane.getChildren().add(element);
         }
-        centerPane.setPrefWidth(list.size() * settingsPane.getDisplaySettings().getElementWidth());
+        centerPane.setPrefWidth(list.size() * getElementWidth());
     }
 
     @Override
-    public void onFinish() {
+    public void playFinish() {
         detailedInfo.finish();
         centerPane.getChildren().removeAll(items);
     }
@@ -106,7 +104,7 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
     }
 
     @Override
-    public void createElements(int count) {
+    public void initializeElements(int count) {
         System.out.println("asked to create elements " + count);
     }
 
@@ -153,7 +151,7 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
         List<KeyValue> keyValues = new ArrayList<>();
         for (int i = 0; i < elements.size(); i++) {
             if (condition.apply(i)) {
-                keyValues.add(new KeyValue(elements.get(i).colourProperty(), DetailedElement.calculateColour(array.get(i), maxValue)));
+                keyValues.add(new KeyValue(elements.get(i).colourProperty(), DetailedElement.calculateColour(list.get(i), maxValue)));
             } else {
                 keyValues.add(new KeyValue(elements.get(i).colourProperty(), Color.LIGHTGRAY));
             }
@@ -178,12 +176,12 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
      * @param index The index that is read
      */
     public void reading(int index) {
-        currentAnimationGroup.addTimelines(createReadAnimation(index, array.get(index)));
+        currentAnimationGroup.addTimelines(createReadAnimation(index, list.get(index)));
     }
 
     public void reading(int... indices) {
         for (int index : indices) {
-            currentAnimationGroup.addTimelines(createReadAnimation(index, array.get(index)));
+            currentAnimationGroup.addTimelines(createReadAnimation(index, list.get(index)));
         }
     }
 
@@ -255,7 +253,7 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
     private Timeline createReadAnimation(int index, double height) {
         Polygon arrow = createReadArrow();
         arrow.setLayoutX(getX(settingsPane, index));
-        arrow.setLayoutY(maxValue * heightMultiplier);
+        arrow.setLayoutY(maxValue * getHeightMultiplier());
         return new Timeline(
                 new KeyFrame(
                         Duration.ZERO,
@@ -264,7 +262,7 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
                 new KeyFrame(
                         // TODO: Fine tune this, because the tallest one will instantly disappear when it reaches the top
                         Duration.millis(height / maxValue * ANIMATION_LENGTH),
-                        new KeyValue(arrow.layoutYProperty(), heightMultiplier * (maxValue - height))
+                        new KeyValue(arrow.layoutYProperty(), getHeightMultiplier() * (maxValue - height))
                 ),
                 new KeyFrame(
                         Duration.millis(ANIMATION_LENGTH + 1),
@@ -291,10 +289,6 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
 
     public SettingsPane getSettings() {
         return settingsPane;
-    }
-
-    public double getElementWidth() {
-        return settingsPane.getDisplaySettings().getElementWidth();
     }
 
     public static double getX(SettingsPane settingsPane, int index) {

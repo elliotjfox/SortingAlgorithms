@@ -13,7 +13,6 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class AlgorithmContainer {
 
@@ -66,7 +65,7 @@ public class AlgorithmContainer {
         settingsPane = new SettingsPane();
         createArray(settingsPane.getDisplaySettings().getNumberElements());
         // Change this type
-        display = new ArrayBarDisplay(list, settingsPane);
+        display = new ArrayColourfulDisplay(list, settingsPane);
 
         algorithmMenu = createAlgorithmSelector();
         menuBar = new MenuBar(algorithmMenu);
@@ -96,7 +95,7 @@ public class AlgorithmContainer {
         list = Settings.getRandomUniformArray(size);
 //        list = Settings.getArray(size, 0, 25);
 //        list = Settings.getRandom(size);
-        if (display != null) display.setArray(list);
+        if (display != null) display.setList(list);
     }
 
     public void play() {
@@ -129,7 +128,7 @@ public class AlgorithmContainer {
     public void reset(List<Integer> list) {
         stop();
         this.list = new ArrayList<>(list);
-        if (display != null) display.setArray(this.list);
+        if (display != null) display.setList(this.list);
         resetAlgorithm();
     }
 
@@ -139,7 +138,7 @@ public class AlgorithmContainer {
 
     public void finish() {
         stop();
-        display.onFinish();
+        display.playFinish();
         resetAlgorithm();
     }
 
@@ -207,7 +206,7 @@ public class AlgorithmContainer {
         stop();
         mode = AlgorithmMode.NORMAL;
         currentTimeline = normarlTimeline;
-        display = new ArrayBarDisplay(list, settingsPane);
+        display = new ArrayColourfulDisplay(list, settingsPane);
     }
 
     public void enterDetailedMode() {

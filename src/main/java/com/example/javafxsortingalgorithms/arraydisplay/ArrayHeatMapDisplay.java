@@ -9,7 +9,7 @@ import javafx.util.Duration;
 
 import java.util.List;
 
-public class ArrayHeatMapDisplay extends ArrayRectangleDisplay {
+public class ArrayHeatMapDisplay extends ArrayElementDisplay<Rectangle> {
 
     private double colourOffset;
 
@@ -37,6 +37,11 @@ public class ArrayHeatMapDisplay extends ArrayRectangleDisplay {
     }
 
     @Override
+    protected Rectangle createElement() {
+        return new Rectangle();
+    }
+
+    @Override
     public void drawArray() {
         if (elements == null) return;
         // TODO: Figure out how to stop the animation if needed
@@ -58,6 +63,8 @@ public class ArrayHeatMapDisplay extends ArrayRectangleDisplay {
 //            } else {
 //                rect.setFill(Color.hsb(hue, 1.0, 0.75));
 //            }
+
+            rect.setFill(Color.hsb(hue, 1.0, 0.75));
             rect.setX(getElementWidth() * i);
             rect.setY(0);
             rect.setWidth(getElementWidth());

@@ -1,6 +1,7 @@
 package com.example.javafxsortingalgorithms.arraydisplay;
 
 import com.example.javafxsortingalgorithms.settings.SettingsPane;
+import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
@@ -8,14 +9,14 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ArrayRectangleDisplay extends ArrayDisplay {
+public abstract class ArrayElementDisplay<T extends Node> extends ArrayDisplay {
 
-    protected final List<Rectangle> elements;
+    protected final List<T> elements;
 
     private final Pane centerPane;
 
-    public ArrayRectangleDisplay(List<Integer> list, SettingsPane settingsPane) {
-        super(settingsPane);
+    public ArrayElementDisplay(List<Integer> list, SettingsPane settingsPane) {
+        super(list, settingsPane);
 
         elements = new ArrayList<>();
 
@@ -35,9 +36,11 @@ public abstract class ArrayRectangleDisplay extends ArrayDisplay {
 
     protected void initializeFinishTimeline() {}
 
+    protected abstract T createElement();
+
     private void removeElements() {
-        for (Rectangle rect : elements) {
-            centerPane.getChildren().remove(rect);
+        for (Node element : elements) {
+            centerPane.getChildren().remove(element);
         }
         elements.clear();
     }
@@ -52,9 +55,9 @@ public abstract class ArrayRectangleDisplay extends ArrayDisplay {
 
         removeElements();
         for (int i = 0; i < count; i++) {
-            Rectangle rect = new Rectangle();
-            centerPane.getChildren().add(rect);
-            elements.add(rect);
+            T element = createElement();
+            centerPane.getChildren().add(element);
+            elements.add(element);
         }
     }
 }

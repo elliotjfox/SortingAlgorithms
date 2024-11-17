@@ -9,7 +9,7 @@ import javafx.util.Duration;
 
 import java.util.List;
 
-public class ArrayColourfulDisplay extends ArrayRectangleDisplay {
+public class ArrayColourfulDisplay extends ArrayElementDisplay<Rectangle> {
 
     private double colourOffset;
 
@@ -34,6 +34,11 @@ public class ArrayColourfulDisplay extends ArrayRectangleDisplay {
             colourOffset = 0;
             drawArray();
         });
+    }
+
+    @Override
+    protected Rectangle createElement() {
+        return new Rectangle();
     }
 
     @Override

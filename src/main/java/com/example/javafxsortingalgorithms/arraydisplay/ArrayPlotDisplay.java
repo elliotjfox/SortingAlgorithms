@@ -6,9 +6,14 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.List;
 
-public class ArrayPlotDisplay extends ArrayRectangleDisplay {
+public class ArrayPlotDisplay extends ArrayElementDisplay<Rectangle> {
     public ArrayPlotDisplay(List<Integer> arrayList, SettingsPane settingsPane) {
         super(arrayList, settingsPane);
+    }
+
+    @Override
+    protected Rectangle createElement() {
+        return new Rectangle();
     }
 
     @Override

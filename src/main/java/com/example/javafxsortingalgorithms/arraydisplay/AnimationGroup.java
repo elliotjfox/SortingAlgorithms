@@ -13,14 +13,6 @@ public class AnimationGroup {
     private final List<Runnable> whenDoneActions;
     private final List<Timeline> timelines;
 
-    public AnimationGroup(Runnable onPlayAction, Timeline... timelines) {
-        this.timelines = new ArrayList<>();
-        this.onPlayActions = new ArrayList<>();
-        this.whenDoneActions = new ArrayList<>();
-        addTimelines(timelines);
-        addOnPlay(onPlayAction);
-    }
-
     public AnimationGroup(Timeline... timelines) {
         this.timelines = new ArrayList<>();
         this.onPlayActions = new ArrayList<>();
@@ -31,7 +23,6 @@ public class AnimationGroup {
     public void addTimelines(Timeline... timelines) {
         this.timelines.addAll(List.of(timelines));
     }
-
 
     public void addOnPlay(Runnable... onPlayActions) {
         this.onPlayActions.addAll(List.of(onPlayActions));

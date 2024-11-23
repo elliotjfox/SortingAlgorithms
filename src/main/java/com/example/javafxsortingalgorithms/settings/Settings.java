@@ -29,6 +29,7 @@ public class Settings {
             case "Bitonic":     yield new BitonicSettings();
             case "Bogo":        yield new GenericAlgorithmSettings<>("Bogo Sort", BogoSort::new);
             case "Bubble":      yield new GenericAlgorithmSettings<>("Bubble Sort", BubbleSort::new);
+            case "Cartesian":   yield new GenericAlgorithmSettings<>("Cartesian Tree Sort", CartesianTreeSort::new);
             case "Cocktail":    yield new GenericAlgorithmSettings<>("Cocktail Shaker Sort", CocktailShakerSort::new);
             case "Comb":        yield new CombSortSettings();
             case "Exchange":    yield new GenericAlgorithmSettings<>("Exchange Sort", ExchangeSort::new);

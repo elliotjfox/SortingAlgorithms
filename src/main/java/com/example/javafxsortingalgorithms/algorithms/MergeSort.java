@@ -2,6 +2,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
+import javafx.scene.paint.Color;
 
 import java.util.List;
 
@@ -12,18 +13,43 @@ public class MergeSort extends ActionSortingAlgorithm {
     public MergeSort(List<Integer> arrayList, boolean isInstant) {
         super(arrayList, isInstant);
 
-        actions.add(new Divide(0, arrayList.size()));
+        if (!isInstant) actions.add(new Divide(0, arrayList.size()));
     }
 
     @Override
     protected void instantAlgorithm(TestEntry entry) {
+//        mergeSort();
+        divide(0, list.size(), entry);
+    }
 
+    // [from, to)
+    private void divide(int from, int to, TestEntry entry) {
+        if (to - from >= 2) {
+            int half = (from + to) / 2;
+            divide(from, half, entry);
+            divide(half, to, entry);
+            merge(from, to, entry);
+        }
+    }
+
+    private void merge(int left, int end, TestEntry entry) {
+        int right = (left + end) / 2;
+        while (right < end && left < right) {
+            entry.addRead(2);
+            if (list.get(left) < list.get(right)) {
+                left++;
+            } else {
+                entry.addWrite(2);
+                move(right, left);
+                right++;
+            }
+        }
     }
 
     @Override
     public void startDetailed(ArrayDetailedDisplay display) {
-        DetailedSection section = new DetailedSection(display, list.size(), true);
-        display.addItem(section, 0, -SECTION_OFFSET);
+        DetailedSection currentSection = new DetailedSection(display, list.size(), true);
+        display.addItem(currentSection, 0, -SECTION_OFFSET);
     }
 
     @Override
@@ -60,36 +86,51 @@ public class MergeSort extends ActionSortingAlgorithm {
             }
         }
 
-        // TODO: Create animations for this
         @Override
         public void performDetailed(ActionSortingAlgorithm algorithm, ArrayDetailedDisplay display) {
-//            takesStep = true;
             if (max - min >= 2) {
                 int half = (min + max) / 2;
-//                DetailedSection leftSection = new DetailedSection((max - min ) * 25, true);
-//                DetailedSection rightSection = new DetailedSection((max - min) * 25, true);
+
+                DetailedSection leftSection = new DetailedSection(display, max - min, true);
+                DetailedSection rightSection = new DetailedSection(display, max - min, true);
                 algorithm.addToStart(
-//                        new LaterAction(() -> {
-//                                display.addItem(leftSection, min, -(depth) * 15 - SECTION_OFFSET);
-//                        }),
-//                        new AnimationAction(
-//                                display.moveItemToElementAnimation(leftSection, min, -(depth + 1) * 15 - SECTION_OFFSET),
-//                                leftSection.resizeAnimation((half - min) * 25)
-//                        ),
-//                        new LaterAction(() -> leftSection.setFill(Color.LIGHTGREEN)),
+                        new LaterAction(() -> {
+
+                            display.addItem(leftSection, min, -(depth) * 15 - SECTION_OFFSET);
+                            display.addItem(rightSection, min, -(depth) * 15 - SECTION_OFFSET);
+                            leftSection.moveToIndex(min, -(depth + 1) * 15 - SECTION_OFFSET);
+                            rightSection.moveToIndex(half, -(depth + 1) * 15 - SECTION_OFFSET);
+                            display.animate(
+                                    display.highlightAnimation(i -> i >= min && i < max),
+                                    leftSection.resizeTimeline(half - min),
+                                    rightSection.resizeTimeline(max - half)
+                            );
+                            display.onPlay(() -> display.setCurrentTask(STR."Dividing [\{min}, \{max - 1}]"));
+                        }, true),
                         new Divide(min, half, depth + 1),
-//                        new LaterAction(() -> {
-//                            display.addItem(rightSection, min, -(depth) * 15 - SECTION_OFFSET);
-//                            leftSection.setFill(Color.BLACK);
-//                            rightSection.setFill(Color.LIGHTGREEN);
-//                        }),
-//                        new AnimationAction(
-//                                display.moveItemToElementAnimation(rightSection, half, -(depth + 1) * 15 - SECTION_OFFSET),
-//                                rightSection.resizeAnimation((max - half) * 25)
-//                        ),
                         new Divide(half, max, depth + 1),
-//                        new LaterAction(() -> rightSection.setFill(Color.BLACK)),
-                        new Merge(min, max)
+                        new LaterAction(() -> {
+                            leftSection.setFill(Color.LIGHTGREEN);
+                            rightSection.setFill(Color.LIGHTGREEN);
+                            display.animate(display.highlightAnimation(i -> i >= min && i < max));
+                            display.onPlay(() -> display.setCurrentTask(STR."Merging [\{min}, \{half - 1}] and [\{half}, \{max - 1}]"));
+                        }),
+                        new Merge(min, max),
+                        new LaterAction(() -> {
+                            leftSection.setFill(Color.BLACK);
+                            rightSection.setFill(Color.BLACK);
+                        }),
+                        new AnimationAction(
+                                leftSection.moveToIndexTimeline(min, -depth * 15 - SECTION_OFFSET),
+                                leftSection.resizeTimeline(max - min),
+                                rightSection.moveToIndexTimeline(min, -depth * 15 - SECTION_OFFSET),
+                                rightSection.resizeTimeline(max - min)
+                        ),
+                        new Wait(),
+                        new LaterAction(() -> {
+                            display.removeItem(leftSection);
+                            display.removeItem(rightSection);
+                        })
                 );
             }
         }
@@ -111,7 +152,7 @@ public class MergeSort extends ActionSortingAlgorithm {
 
         @Override
         void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
-            while (rightSide < end && leftSide < rightSide) {
+            while (rightSide < end && leftSide < rightSide && i < rightSide) {
                 if (algorithm.list.get(leftSide) < algorithm.list.get(rightSide)) {
                     // Pause to keep the merge smooth
                     algorithm.addToStart(new Wait());
@@ -124,7 +165,6 @@ public class MergeSort extends ActionSortingAlgorithm {
             }
         }
 
-        // TODO: Create animations for this
         @Override
         public void performDetailed(ActionSortingAlgorithm algorithm, ArrayDetailedDisplay display) {
             DetailedArrow leftArrow = new DetailedArrow(display, true);
@@ -132,41 +172,65 @@ public class MergeSort extends ActionSortingAlgorithm {
 
             int finalRight = rightSide;
             int finalLeft = leftSide;
-//            algorithm.addToStart(
-//                    new LaterAction(() -> {
-//                        display.addItem(rightArrow, finalRight, 0);
-//                        display.addItem(leftArrow, finalLeft, 0);
-//                    })
-//            );
-            while (rightSide < end && leftSide < rightSide) {
-//                algorithm.addToStart(
-//                        new AnimationAction(
-//                                display.moveItemToElementAnimation(leftArrow, leftSide, 0),
-//                                display.moveItemToElementAnimation(rightArrow, rightSide, 0)
-//                        ),
-//                        new LaterAction(() -> {
-//                            display.addAnimations(new AnimationGroup(
-//                                    display.readAnimation(leftSide),
-//                                    display.readAnimation(rightSide)
-//                            ));
-//                        })
-//                );
+            algorithm.addToStart(
+                    new LaterAction(() -> {
+                        display.addItem(rightArrow, finalRight, 0);
+                        display.addItem(leftArrow, finalLeft, 0);
+                    })
+            );
+            while (rightSide < end && leftSide < rightSide && i < rightSide) {
+                int innerFinalRight = rightSide;
+                int finalI = i;
                 if (algorithm.list.get(leftSide) < algorithm.list.get(rightSide)) {
-                    algorithm.addToStart(new Wait());
+                    algorithm.addToStart(
+                            new AnimationAction(leftArrow.moveToIndexTimeline(finalI, 0), rightArrow.moveToIndexTimeline(innerFinalRight, 0)),
+                            new Wait(),
+                            new LaterAction(() -> display.reading(finalI, innerFinalRight), true)
+                    );
                     leftSide++;
                 } else {
-                    algorithm.addToStart(new Move(rightSide, i));
+                    algorithm.addToStart(
+                            new AnimationAction(leftArrow.moveToIndexTimeline(finalI, 0), rightArrow.moveToIndexTimeline(innerFinalRight, 0)),
+                            new Wait(),
+                            new LaterAction(() -> display.reading(finalI, innerFinalRight)),
+                            new Move(rightSide, i)
+                    );
                     rightSide++;
                 }
                 i++;
             }
 
-//            algorithm.addToStart(
-//                    new LaterAction(() -> {
-//                        display.removeItem(leftArrow);
-//                        display.removeItem(rightArrow);
-//                    })
-//            );
+            algorithm.addToStart(
+                    new LaterAction(() -> {
+                        display.removeItem(leftArrow);
+                        display.removeItem(rightArrow);
+                    })
+            );
         }
     }
+
+
+//    private void mergeSort() {
+//        divide(0, list.size());
+//    }
+//
+//    private void divide(int from, int to) {
+//        if (to - from >= 2) {
+//            int half = (from + to) / 2;
+//            divide(from, half);
+//            divide(half, to);
+//            merge(from, half, to);
+//        }
+//    }
+//
+//    private void merge(int left, int right, int end) {
+//        while (left < right && right < end) {
+//            if (list.get(left) < list.get(right)) {
+//                left++;
+//            } else {
+//                move(right, left);
+//                right++;
+//            }
+//        }
+//    }
 }

@@ -62,51 +62,50 @@ public class Settings {
         return list;
     }
 
-    public static ArrayList<Integer> getRandomUniformArray(int size) {
-        ArrayList<Integer> array = new ArrayList<>();
+    public static List<Integer> getRandomUniformList(int size) {
+        List<Integer> list = new ArrayList<>();
 
+        // Very arbitrary value lol
         if (size >= 5000) {
-            System.out.println("Warning: suspiciously large number for normal array size");
+            System.out.println("Warning: suspiciously large number for normal list size, returning size 5000");
+            return getRandomUniformList(5000);
         }
 
         for (int i = 0; i < size; i++) {
-            array.add(i);
+            list.add(i);
         }
 
-//        for (int i = size; i > 1; i--) {
-//            array.set(i - 1, array.set(random.nextInt(i), array.get(i - 1)));
-//        }
-        Collections.shuffle(array);
+        Collections.shuffle(list, random);
 
-        return array;
+        return list;
     }
 
-    public static ArrayList<Integer> getRandom(int size) {
-        ArrayList<Integer> array = new ArrayList<>();
+    public static List<Integer> getRandomList(int size) {
+        List<Integer> array = new ArrayList<>();
 
         for (int i = 0; i < size; i++) {
             array.add(random.nextInt(size));
         }
 
-        Collections.shuffle(array);
+        Collections.shuffle(array, random);
 
         return array;
     }
 
-    public static ArrayList<Integer> getArray(int size, int min, int max) {
-        ArrayList<Integer> array = new ArrayList<>();
+    public static List<Integer> getRangeList(int size, int min, int max) {
+        List<Integer> array = new ArrayList<>();
 
         for (int i = 0; i < size; i++) {
             int tmp = random.nextInt(max - min) + min;
 //            System.out.println(tmp);
             array.add(tmp);
         }
-        Collections.shuffle(array);
+        Collections.shuffle(array, random);
         return array;
     }
 
     public static void getTestList(int size, Consumer<List<Integer>> whenDone) {
-        ArrayList<Integer> array = new ArrayList<>();
+        List<Integer> array = new ArrayList<>();
 
         if (size >= 500000) {
             Stage dialog = new Stage();
@@ -147,7 +146,7 @@ public class Settings {
                 array.add(i);
             }
 
-            Collections.shuffle(array);
+            Collections.shuffle(array, random);
 
             whenDone.accept(array);
         }

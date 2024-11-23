@@ -3,12 +3,15 @@ package com.example.javafxsortingalgorithms.arraydisplay;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -19,6 +22,7 @@ public class DetailedBinaryTree extends DetailedItem {
     private final List<DetailedBinaryTreeItem> treeItems;
     private final List<Line> lines;
 
+    // TODO: Make this adaptable to different sizes maybe?
     public DetailedBinaryTree(ArrayDetailedDisplay display, List<Integer> list) {
         super(display);
         treeItems = new ArrayList<>();
@@ -72,7 +76,6 @@ public class DetailedBinaryTree extends DetailedItem {
         );
     }
 
-    // TODO: Make this happen at the same time as the bars moving
     public Timeline extractItem(int toRemove, int toReplace) {
         DetailedBinaryTreeItem toRemoveItem = treeItems.get(toRemove);
         Line toRemoveLine = lines.get(toReplace);
@@ -116,14 +119,15 @@ public class DetailedBinaryTree extends DetailedItem {
         return timeline;
     }
 
-    private static class DetailedBinaryTreeItem extends Group {
+    private static class DetailedBinaryTreeItem extends StackPane {
         public DetailedBinaryTreeItem(int i, int max) {
+            setAlignment(Pos.CENTER);
             Rectangle rectangle = new Rectangle(25, 25, Color.hsb(360.0 * i / max, 1.0, 1.0));
+            rectangle.setStroke(Color.BLACK);
             getChildren().add(rectangle);
             Label label = new Label(Integer.toString(i));
-            label.layoutXProperty().bind(label.widthProperty().divide(2));
-            label.layoutYProperty().bind(label.heightProperty().divide(2));
             getChildren().add(label);
+            label.setTextAlignment(TextAlignment.CENTER);
         }
     }
 }

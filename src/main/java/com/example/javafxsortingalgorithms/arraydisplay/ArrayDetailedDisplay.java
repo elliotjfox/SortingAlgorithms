@@ -63,6 +63,7 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
     public void setList(List<Integer> list) {
         this.list = list;
         resetMax();
+        bindHeight();
         if (!elements.isEmpty()) {
             centerPane.getChildren().removeAll(elements);
             elements.clear();
@@ -181,6 +182,7 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
 
     public void reading(int... indices) {
         for (int index : indices) {
+            if (index < 0 || index >= list.size()) continue;
             currentAnimationGroup.addTimelines(createReadAnimation(index, list.get(index)));
         }
     }
@@ -250,7 +252,7 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
      * @param height The height of the element at the index when the animation should play
      * @return The timeline animation
      */
-    private Timeline createReadAnimation(int index, double height) {
+    public Timeline createReadAnimation(int index, double height) {
         Polygon arrow = createReadArrow();
         arrow.setLayoutX(getX(settingsPane, index));
         arrow.setLayoutY(maxValue * getHeightMultiplier());

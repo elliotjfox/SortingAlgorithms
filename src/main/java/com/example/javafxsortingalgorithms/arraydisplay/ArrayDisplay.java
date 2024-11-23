@@ -77,7 +77,7 @@ public abstract class ArrayDisplay extends Pane {
         }
     }
 
-    private void bindHeight() {
+    protected void bindHeight() {
         heightMultiplier.bind(Bindings.createDoubleBinding(
                 () -> (double) settingsPane.getDisplaySettings().getDisplayHeight() / maxValue,
                 settingsPane.getDisplaySettings().height()

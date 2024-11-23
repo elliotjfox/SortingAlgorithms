@@ -92,7 +92,7 @@ public class AlgorithmContainer {
     }
 
     public void createArray(int size) {
-        list = Settings.getRandomUniformArray(size);
+        list = Settings.getRandomUniformList(size);
 //        list = Settings.getArray(size, 0, 25);
 //        list = Settings.getRandom(size);
         if (display != null) display.setList(list);

@@ -15,7 +15,7 @@ public class DetailedInfo extends Label {
     public DetailedInfo() {
         info = new LinkedHashMap<>();
         setWrapText(true);
-        setPrefWidth(200);
+        setPrefWidth(300);
     }
 
     public void updateInfo(String key, Object value) {

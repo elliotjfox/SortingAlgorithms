@@ -143,14 +143,9 @@ public class Settings {
 
             new Thread(task).start();
         } else {
-            ArrayList<Integer> tmp = new ArrayList<>();
             for (int i = 0; i < size; i++) {
-                tmp.add(i);
+                array.add(i);
             }
-
-//            for (int i = 0; i < size; i++) {
-//                array.add(tmp.remove(random.nextInt(tmp.size())));
-//            }
 
             Collections.shuffle(array);
 

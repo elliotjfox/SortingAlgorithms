@@ -1,10 +1,10 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDetailedDisplay;
+import com.example.javafxsortingalgorithms.arraydisplay.ArrayAnimatedDisplay;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.DetailedArrow;
-import com.example.javafxsortingalgorithms.arraydisplay.DetailedInfo;
+import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrow;
+import com.example.javafxsortingalgorithms.arraydisplay.AnimatedInfo;
 
 import java.util.List;
 
@@ -12,8 +12,8 @@ public class GnomeSort extends SortingAlgorithm {
 
     private int currentSpot;
 
-    private DetailedArrow leftArrow;
-    private DetailedArrow rightArrow;
+    private AnimatedArrow leftArrow;
+    private AnimatedArrow rightArrow;
 
     public GnomeSort(List<Integer> arrayList, boolean isInstant) {
         super(arrayList, isInstant);
@@ -69,11 +69,11 @@ public class GnomeSort extends SortingAlgorithm {
     }
 
     @Override
-    public void startDetailed(ArrayDetailedDisplay display) {
-        leftArrow = new DetailedArrow(display, true);
+    public void startAnimated(ArrayAnimatedDisplay display) {
+        leftArrow = new AnimatedArrow(display, true);
         display.addItem(leftArrow, 0, 0);
 
-        rightArrow = new DetailedArrow(display, true);
+        rightArrow = new AnimatedArrow(display, true);
         display.addItem(rightArrow, 1, 0);
 
         display.setCurrentTask("Sorting...");
@@ -84,7 +84,7 @@ public class GnomeSort extends SortingAlgorithm {
     }
 
     @Override
-    public void iterateDetailed(ArrayDetailedDisplay display) {
+    public void iterateAnimated(ArrayAnimatedDisplay display) {
         leftArrow.moveToIndex(currentSpot, 0);
         rightArrow.moveToIndex(currentSpot + 1, 0);
 
@@ -96,8 +96,8 @@ public class GnomeSort extends SortingAlgorithm {
         if (currentSpot < 0) {
             currentSpot++;
             // TODO: Keep this or not?
-            display.updateInfoWhenDone("Left index", DetailedInfo.OUT_OF_BOUNDS_INDEX);
-            display.updateInfoWhenDone("Left value", DetailedInfo.OUT_OF_BOUND_VALUE);
+            display.updateInfoWhenDone("Left index", AnimatedInfo.OUT_OF_BOUNDS_INDEX);
+            display.updateInfoWhenDone("Left value", AnimatedInfo.OUT_OF_BOUND_VALUE);
             display.updateInfoWhenDone("Right index", currentSpot);
             display.updateInfoWhenDone("Right value", list.get(currentSpot));
             return;

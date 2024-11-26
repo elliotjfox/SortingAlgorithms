@@ -1,9 +1,9 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDetailedDisplay;
+import com.example.javafxsortingalgorithms.arraydisplay.ArrayAnimatedDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.DetailedArrow;
+import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrow;
 import javafx.scene.paint.Color;
 
 import java.util.List;
@@ -36,11 +36,11 @@ public class SelectionSort extends SortingAlgorithm {
     private int sorted;
 
     /** The arrow pointing to the minimum number */
-    private DetailedArrow minArrow;
+    private AnimatedArrow minArrow;
     /** The arrow pointing to the maximum number */
-    private DetailedArrow maxArrow;
+    private AnimatedArrow maxArrow;
     /** The arrow pointing to the current index */
-    private DetailedArrow arrow;
+    private AnimatedArrow arrow;
 
     /**
      * Create a selection sort to sort the provided list, with the provided selection type.
@@ -236,10 +236,10 @@ public class SelectionSort extends SortingAlgorithm {
     }
 
     @Override
-    public void startDetailed(ArrayDetailedDisplay display) {
+    public void startAnimated(ArrayAnimatedDisplay display) {
         curIndex++;
 
-        arrow = new DetailedArrow(display, true);
+        arrow = new AnimatedArrow(display, true);
         display.addItem(arrow, curIndex, 0);
 
         display.getDetailedInfo().updateInfo("Sorted", 0);
@@ -248,7 +248,7 @@ public class SelectionSort extends SortingAlgorithm {
 
 
         if (mode != SelectionMode.MAX) {
-            minArrow = new DetailedArrow(display, true);
+            minArrow = new AnimatedArrow(display, true);
             minArrow.setFill(Color.LIGHTGREEN);
             display.addItem(minArrow, minIndex, 0);
             display.getDetailedInfo().updateInfo("Min index", minIndex);
@@ -256,7 +256,7 @@ public class SelectionSort extends SortingAlgorithm {
         }
 
         if (mode != SelectionMode.MIN) {
-            maxArrow = new DetailedArrow(display, true);
+            maxArrow = new AnimatedArrow(display, true);
             maxArrow.setFill(Color.LIGHTBLUE);
             display.addItem(maxArrow, maxIndex, 0);
             display.getDetailedInfo().updateInfo("Max index", maxIndex);
@@ -265,7 +265,7 @@ public class SelectionSort extends SortingAlgorithm {
     }
 
     @Override
-    public void iterateDetailed(ArrayDetailedDisplay display) {
+    public void iterateAnimated(ArrayAnimatedDisplay display) {
         switch (mode) {
             case MIN -> minDetailed(display);
             case MAX -> maxDetailed(display);
@@ -277,7 +277,7 @@ public class SelectionSort extends SortingAlgorithm {
      * Does the same thing as {@link #iterateMin(ArrayDisplay)}, except it also adds animations onto the provided detailed display.
      * @param display The detailed display
      */
-    private void minDetailed(ArrayDetailedDisplay display) {
+    private void minDetailed(ArrayAnimatedDisplay display) {
         // If we are at the end of the array
         if (curIndex >= list.size()) {
             System.out.println("resetting");
@@ -330,7 +330,7 @@ public class SelectionSort extends SortingAlgorithm {
      * Does the same thing as {@link #iterateMax(ArrayDisplay)}, except it also adds animations onto the provided detailed display.
      * @param display The detailed display
      */
-    private void maxDetailed(ArrayDetailedDisplay display) {
+    private void maxDetailed(ArrayAnimatedDisplay display) {
         // If we are at the end of the array
         if (curIndex >= list.size() - sorted) {
             // Move the smallest to the start
@@ -370,7 +370,7 @@ public class SelectionSort extends SortingAlgorithm {
      * Does the same thing as {@link #iterateBoth(ArrayDisplay)}, except it also adds animations onto the provided detailed display.
      * @param display The detailed display
      */
-    private void bothDetailed(ArrayDetailedDisplay display) {
+    private void bothDetailed(ArrayAnimatedDisplay display) {
         // If we have reached the end of the unsorted things
         if (curIndex >= list.size() - sorted) {
 

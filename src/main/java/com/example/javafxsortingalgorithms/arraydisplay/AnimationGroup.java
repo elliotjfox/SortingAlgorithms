@@ -35,7 +35,7 @@ public class AnimationGroup {
     public void play() {
         if (!whenDoneActions.isEmpty()) {
             addTimelines(new Timeline(new KeyFrame(
-                    Duration.millis(ArrayDetailedDisplay.ANIMATION_LENGTH),
+                    Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
                     event -> {
                         for (Runnable r : whenDoneActions) r.run();
                     }

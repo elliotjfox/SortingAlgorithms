@@ -16,16 +16,16 @@ import java.util.List;
 
 public class AlgorithmContainer {
 
-    // TODO: Finish getting detailed working
+    // TODO: Finish getting animated working
     public enum AlgorithmMode {
         NORMAL,
-        DETAILED,
+        ANIMATED,
         TESTING,
-        COMPARING; // TODO: Might not be needed
+        COMPARING // TODO: Might not be needed
     }
 
     // TODO: Could just use a boolean
-    private enum DetailedMode {
+    private enum AnimatedMode {
         ITERATE,
         ANIMATIONS
     }
@@ -35,14 +35,14 @@ public class AlgorithmContainer {
     private SettingsPane settingsPane;
     private ArrayDisplay display;
     private final Timeline normarlTimeline;
-    private final Timeline detailedTimeline;
+    private final Timeline animatedTimeline;
     private final Menu algorithmMenu;
     private final MenuBar menuBar;
     private final Button settingsButton;
     private Timeline currentTimeline;
 
     private AlgorithmMode mode;
-    private DetailedMode detailedMode;
+    private AnimatedMode animatedMode;
 
     public AlgorithmContainer() {
         normarlTimeline = new Timeline(
@@ -53,13 +53,13 @@ public class AlgorithmContainer {
         );
         normarlTimeline.setCycleCount(Animation.INDEFINITE);
 
-        detailedTimeline = new Timeline(
+        animatedTimeline = new Timeline(
                 new KeyFrame(
-                        Duration.millis(ArrayDetailedDisplay.ANIMATION_LENGTH + ArrayDetailedDisplay.ANIMATION_COOLDOWN),
-                        event -> iterateDetailed()
+                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH + ArrayAnimatedDisplay.ANIMATION_COOLDOWN),
+                        event -> iterateAnimated()
                 )
         );
-        detailedTimeline.setCycleCount(Animation.INDEFINITE);
+        animatedTimeline.setCycleCount(Animation.INDEFINITE);
 
 
         settingsPane = new SettingsPane();
@@ -76,17 +76,17 @@ public class AlgorithmContainer {
 //        settingsPane.setAlgorithmSettings(Settings.createSettings(algorithmSelector.getSelectionModel().getSelectedItem()));
 
         mode = AlgorithmMode.NORMAL;
-        detailedMode = DetailedMode.ITERATE;
+        animatedMode = AnimatedMode.ITERATE;
         currentTimeline = normarlTimeline;
     }
 
     public void createAlgorithm() {
         algorithm = settingsPane.getAlgorithmSettings().createAlgorithm(list);
-        if (mode == AlgorithmMode.DETAILED) {
-            if (display instanceof ArrayDetailedDisplay) {
-                algorithm.startDetailed((ArrayDetailedDisplay) display);
+        if (mode == AlgorithmMode.ANIMATED) {
+            if (display instanceof ArrayAnimatedDisplay) {
+                algorithm.startAnimated((ArrayAnimatedDisplay) display);
             } else {
-                System.out.println("Display is not a detailed display when it should be!");
+                System.out.println("Display is not a animated display when it should be!");
             }
         }
     }
@@ -114,7 +114,7 @@ public class AlgorithmContainer {
         if (!hasCreatedAlgorithm()) createAlgorithm();
         switch (mode) {
             case NORMAL -> iterateNormal(1);
-            case DETAILED -> iterateDetailed();
+            case ANIMATED -> iterateAnimated();
             default -> System.out.println("Tried to step, but can't");
         }
     }
@@ -170,34 +170,34 @@ public class AlgorithmContainer {
         display.drawArray();
     }
 
-    public void iterateDetailed() {
-        if (!(display instanceof ArrayDetailedDisplay detailedDisplay)) {
-            System.out.println("Display is not a detailed display!!");
+    public void iterateAnimated() {
+        if (!(display instanceof ArrayAnimatedDisplay animatedDisplay)) {
+            System.out.println("Display is not a animated display!!");
             return;
         }
 
         // So that iterating doesn't take any time
-        if (detailedMode == DetailedMode.ITERATE) {
+        if (animatedMode == AnimatedMode.ITERATE) {
             // Only check if we would be iterating
             if (algorithm.isDone()) {
                 finish();
                 return;
             }
-            detailedDisplay.newGroup();
-            algorithm.iterateDetailed(detailedDisplay);
-            if (detailedDisplay.hasAnimations() || detailedDisplay.needsToMoveElements()) {
-                detailedMode = DetailedMode.ANIMATIONS;
+            animatedDisplay.newGroup();
+            algorithm.iterateAnimated(animatedDisplay);
+            if (animatedDisplay.hasAnimations() || animatedDisplay.needsToMoveElements()) {
+                animatedMode = AnimatedMode.ANIMATIONS;
             }
         }
 
-        if (detailedDisplay.hasAnimations()) {
-            detailedDisplay.playAnimations();
-        } else if (detailedDisplay.needsToMoveElements()) {
-            detailedDisplay.playFinalAnimations();
+        if (animatedDisplay.hasAnimations()) {
+            animatedDisplay.playAnimations();
+        } else if (animatedDisplay.needsToMoveElements()) {
+            animatedDisplay.playFinalAnimations();
         }
 
-        if (!detailedDisplay.hasAnimations() && !detailedDisplay.needsToMoveElements()) {
-            detailedMode = DetailedMode.ITERATE;
+        if (!animatedDisplay.hasAnimations() && !animatedDisplay.needsToMoveElements()) {
+            animatedMode = AnimatedMode.ITERATE;
         }
     }
 
@@ -209,11 +209,11 @@ public class AlgorithmContainer {
         display = new ArrayColourfulDisplay(list, settingsPane);
     }
 
-    public void enterDetailedMode() {
+    public void enterAnimatedMode() {
         stop();
-        mode = AlgorithmMode.DETAILED;
-        currentTimeline = detailedTimeline;
-        display = new ArrayDetailedDisplay(settingsPane);
+        mode = AlgorithmMode.ANIMATED;
+        currentTimeline = animatedTimeline;
+        display = new ArrayAnimatedDisplay(settingsPane);
         reset();
     }
 

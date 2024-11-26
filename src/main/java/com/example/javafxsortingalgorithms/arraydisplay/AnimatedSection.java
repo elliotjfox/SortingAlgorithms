@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-public class DetailedSection extends DetailedItem {
+public class AnimatedSection extends AnimatedItem {
 
     private static final double SECTION_THICKNESS = 5;
     private static final Color DEFAULT_COLOUR = Color.BLACK;
@@ -19,11 +19,11 @@ public class DetailedSection extends DetailedItem {
     private Rectangle left;
     private Rectangle right;
 
-    public DetailedSection(ArrayDetailedDisplay display, int width, boolean hasEdges) {
+    public AnimatedSection(ArrayAnimatedDisplay display, int width, boolean hasEdges) {
         this(display, display.getElementWidth() * width, hasEdges);
     }
 
-    public DetailedSection(ArrayDetailedDisplay display, double exactWidth, boolean hasEdges) {
+    public AnimatedSection(ArrayAnimatedDisplay display, double exactWidth, boolean hasEdges) {
         super(display);
 
         this.width = exactWidth;
@@ -65,7 +65,7 @@ public class DetailedSection extends DetailedItem {
     public Timeline shrinkTimeline() {
         return new Timeline(
                 new KeyFrame(
-                        Duration.millis(ArrayDetailedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
                         new KeyValue(scaleYProperty(), 0)
                 )
         );
@@ -74,7 +74,7 @@ public class DetailedSection extends DetailedItem {
     public Timeline unshrinkTimeline() {
         return new Timeline(
                 new KeyFrame(
-                        Duration.millis(ArrayDetailedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
                         new KeyValue(scaleYProperty(), 1)
                 )
         );
@@ -97,7 +97,7 @@ public class DetailedSection extends DetailedItem {
         if (hasEdges) {
             timeline = new Timeline(
                     new KeyFrame(
-                            Duration.millis(ArrayDetailedDisplay.ANIMATION_LENGTH),
+                            Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
                             new KeyValue(rectangle.widthProperty(), exactWidth),
                             new KeyValue(right.layoutXProperty(), exactWidth - SECTION_THICKNESS)
                     )
@@ -105,7 +105,7 @@ public class DetailedSection extends DetailedItem {
         } else {
             timeline = new Timeline(
                     new KeyFrame(
-                            Duration.millis(ArrayDetailedDisplay.ANIMATION_LENGTH),
+                            Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
                             new KeyValue(rectangle.widthProperty(), exactWidth)
                     )
             );

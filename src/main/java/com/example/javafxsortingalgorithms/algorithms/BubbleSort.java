@@ -20,8 +20,8 @@ public class BubbleSort extends SortingAlgorithm {
     private int lastPos;
     private boolean hasMadeSwap;
 
-    private DetailedArrow leftArrow;
-    private DetailedArrow rightArrow;
+    private AnimatedArrow leftArrow;
+    private AnimatedArrow rightArrow;
 
     public BubbleSort(List<Integer> arrayList, boolean isInstant) {
         super(arrayList, isInstant);
@@ -85,12 +85,12 @@ public class BubbleSort extends SortingAlgorithm {
     }
 
     @Override
-    public void startDetailed(ArrayDetailedDisplay display) {
+    public void startAnimated(ArrayAnimatedDisplay display) {
         // TODO: Make this linked to the settings (element width)
-        leftArrow = new DetailedArrow(display, true);
+        leftArrow = new AnimatedArrow(display, true);
         display.addItem(leftArrow, 0, 0);
 
-        rightArrow = new DetailedArrow(display, true);
+        rightArrow = new AnimatedArrow(display, true);
         display.addItem(rightArrow, 1, 0);
 
         display.updateInfo("Number sorted", 0);
@@ -101,7 +101,7 @@ public class BubbleSort extends SortingAlgorithm {
     }
 
     @Override
-    public void iterateDetailed(ArrayDetailedDisplay display) {
+    public void iterateAnimated(ArrayAnimatedDisplay display) {
         // Check if the next position would be outside the array, and reset if we need to.
         if (lastPos + 1 >= list.size() - sorted) {
             sorted++;
@@ -135,7 +135,7 @@ public class BubbleSort extends SortingAlgorithm {
         lastPos++;
     }
 
-    private void updateInfo(ArrayDetailedDisplay display) {
+    private void updateInfo(ArrayAnimatedDisplay display) {
         display.updateInfoWhenDone("Number sorted", sorted);
         display.updateInfoWhenDone("Left index", lastPos);
         display.updateInfoWhenDone("Left value", list.get(lastPos));

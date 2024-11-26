@@ -12,14 +12,14 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-public class DetailedElement extends DetailedItem {
+public class AnimatedElement extends AnimatedItem {
 
     private final SettingsPane settingsPane;
     private int index;
     private final Rectangle rectangle;
     private final ObjectProperty<Paint> colourProperty;
 
-    public DetailedElement(ArrayDetailedDisplay display, int index) {
+    public AnimatedElement(ArrayAnimatedDisplay display, int index) {
         super(display);
         this.settingsPane = display.getSettings();
         this.index = index;
@@ -38,7 +38,7 @@ public class DetailedElement extends DetailedItem {
         rectangle = new Rectangle();
         getChildren().add(rectangle);
 
-        setLayoutX(ArrayDetailedDisplay.getX(settingsPane, index));
+        setLayoutX(ArrayAnimatedDisplay.getX(settingsPane, index));
         rectangle.setWidth(settingsPane.getDisplaySettings().getElementWidth());
         rectangle.yProperty().bind(Bindings.multiply(-1, rectangle.heightProperty()));
         rectangle.fillProperty().bind(colourProperty);
@@ -74,8 +74,8 @@ public class DetailedElement extends DetailedItem {
         if (index == i) return;
         Timeline timeline = new Timeline(
                 new KeyFrame(
-                        Duration.millis(ArrayDetailedDisplay.ANIMATION_LENGTH),
-                        new KeyValue(layoutXProperty(), ArrayDetailedDisplay.getX(settingsPane, i))
+                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
+                        new KeyValue(layoutXProperty(), ArrayAnimatedDisplay.getX(settingsPane, i))
                 )
         );
         index = i;

@@ -11,12 +11,12 @@ import java.util.Arrays;
 import java.util.List;
 
 // TODO: Finish implementing this properly
-public class DetailedSectionList extends DetailedItem {
+public class AnimatedSectionList extends AnimatedItem {
 
-    private final List<DetailedSection> sections;
+    private final List<AnimatedSection> sections;
     private final VBox vBox;
 
-    public DetailedSectionList(ArrayDetailedDisplay display) {
+    public AnimatedSectionList(ArrayAnimatedDisplay display) {
         super(display);
         sections = new ArrayList<>();
         vBox = new VBox(10);
@@ -24,7 +24,7 @@ public class DetailedSectionList extends DetailedItem {
         getChildren().add(vBox);
     }
 
-    public Timeline addSections(DetailedSection... newSections) {
+    public Timeline addSections(AnimatedSection... newSections) {
         KeyValue[] keyValues = new KeyValue[newSections.length];
         for (int i = 0; i < newSections.length; i++) {
             keyValues[i] = new KeyValue(newSections[i].scaleYProperty(), 1);
@@ -36,20 +36,20 @@ public class DetailedSectionList extends DetailedItem {
                         event -> {
                             vBox.getChildren().addAll(newSections);
                             sections.addAll(Arrays.asList(newSections));
-                            for (DetailedSection newSection : newSections) {
+                            for (AnimatedSection newSection : newSections) {
                                 newSection.setScaleY(0);
                             }
                         }
                 ),
                 new KeyFrame(
-                        Duration.millis(ArrayDetailedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
                         keyValues
                 )
         );
     }
 
     public Timeline shrinkHighest() {
-        DetailedSection selectedSection = sections.removeFirst();
+        AnimatedSection selectedSection = sections.removeFirst();
 
         return new Timeline(
                 new KeyFrame(
@@ -57,7 +57,7 @@ public class DetailedSectionList extends DetailedItem {
                         event -> selectedSection.setSectionVisible(false)
                 ),
                 new KeyFrame(
-                        Duration.millis(ArrayDetailedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
                         event -> vBox.getChildren().remove(selectedSection),
                         new KeyValue(selectedSection.scaleYProperty(), 0)
                 )

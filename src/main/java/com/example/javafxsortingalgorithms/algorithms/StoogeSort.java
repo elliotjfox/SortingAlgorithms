@@ -1,16 +1,16 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDetailedDisplay;
+import com.example.javafxsortingalgorithms.arraydisplay.ArrayAnimatedDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.DetailedSection;
-import com.example.javafxsortingalgorithms.arraydisplay.DetailedSectionList;
+import com.example.javafxsortingalgorithms.arraydisplay.AnimatedSection;
+import com.example.javafxsortingalgorithms.arraydisplay.AnimatedSectionList;
 
 import java.util.List;
 
 public class StoogeSort extends ActionSortingAlgorithm {
 
-    private DetailedSectionList sectionList;
+    private AnimatedSectionList sectionList;
 
     public StoogeSort(List<Integer> arrayList, boolean isInstant) {
         super(arrayList, isInstant);
@@ -24,8 +24,8 @@ public class StoogeSort extends ActionSortingAlgorithm {
     }
 
     @Override
-    public void startDetailed(ArrayDetailedDisplay display) {
-        sectionList = new DetailedSectionList(display);
+    public void startAnimated(ArrayAnimatedDisplay display) {
+        sectionList = new AnimatedSectionList(display);
         display.addItem(sectionList, 0, 0);
     }
 
@@ -68,7 +68,7 @@ public class StoogeSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayDetailedDisplay display) {
+        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             if (from >= to) return;
 
             if (algorithm instanceof StoogeSort stoogeSort) {
@@ -92,9 +92,9 @@ public class StoogeSort extends ActionSortingAlgorithm {
                     display.newGroup();
                     display.animate(
                             stoogeSort.sectionList.addSections(
-                                    new DetailedSection(display, from + third - to + 1, true),
-                                    new DetailedSection(display, to - from - third + 1, true),
-                                    new DetailedSection(display, from + third - to + 1, true)
+                                    new AnimatedSection(display, from + third - to + 1, true),
+                                    new AnimatedSection(display, to - from - third + 1, true),
+                                    new AnimatedSection(display, from + third - to + 1, true)
                             )
                     );
                 }

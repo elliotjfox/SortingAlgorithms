@@ -1,10 +1,9 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.arraydisplay.AnimationGroup;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDetailedDisplay;
+import com.example.javafxsortingalgorithms.arraydisplay.ArrayAnimatedDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.DetailedSortingNetwork;
+import com.example.javafxsortingalgorithms.arraydisplay.AnimatedSortingNetwork;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +13,7 @@ public class BitonicSort extends ActionSortingAlgorithm {
 
     private final boolean fastMode;
 
-    private DetailedSortingNetwork sortingNetwork;
+    private AnimatedSortingNetwork sortingNetwork;
 
     public BitonicSort(List<Integer> arrayList, boolean isInstant, boolean fastMode) {
         super(arrayList, isInstant);
@@ -158,8 +157,8 @@ public class BitonicSort extends ActionSortingAlgorithm {
     }
 
     @Override
-    public void startDetailed(ArrayDetailedDisplay display) {
-        sortingNetwork = new DetailedSortingNetwork(display, list);
+    public void startAnimated(ArrayAnimatedDisplay display) {
+        sortingNetwork = new AnimatedSortingNetwork(display, list);
         display.addItem(sortingNetwork, 0, 0);
 
         // Buffer for the first one
@@ -267,7 +266,7 @@ public class BitonicSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayDetailedDisplay display) {
+        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             if (algorithm instanceof BitonicSort bitonicSort) {
                 display.animate(
                         bitonicSort.sortingNetwork.moveUp(),
@@ -321,7 +320,7 @@ public class BitonicSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayDetailedDisplay display) {
+        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             for (int i = 0; i < algorithm.list.size() - 1; i += 2) {
                 addComparisons(i, i + 1);
             }

@@ -46,8 +46,8 @@ public class MergeSort extends ActionSortingAlgorithm {
     }
 
     @Override
-    public void startDetailed(ArrayDetailedDisplay display) {
-        DetailedSection currentSection = new DetailedSection(display, list.size(), true);
+    public void startAnimated(ArrayAnimatedDisplay display) {
+        AnimatedSection currentSection = new AnimatedSection(display, list.size(), true);
         display.addItem(currentSection, 0, -SECTION_OFFSET);
     }
 
@@ -86,12 +86,12 @@ public class MergeSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayDetailedDisplay display) {
+        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             if (max - min >= 2) {
                 int half = (min + max) / 2;
 
-                DetailedSection leftSection = new DetailedSection(display, max - min, true);
-                DetailedSection rightSection = new DetailedSection(display, max - min, true);
+                AnimatedSection leftSection = new AnimatedSection(display, max - min, true);
+                AnimatedSection rightSection = new AnimatedSection(display, max - min, true);
                 algorithm.addToStart(
                         new LaterAction(() -> {
 
@@ -165,9 +165,9 @@ public class MergeSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayDetailedDisplay display) {
-            DetailedArrow leftArrow = new DetailedArrow(display, true);
-            DetailedArrow rightArrow = new DetailedArrow(display, true);
+        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+            AnimatedArrow leftArrow = new AnimatedArrow(display, true);
+            AnimatedArrow rightArrow = new AnimatedArrow(display, true);
 
             int finalRight = rightSide;
             int finalLeft = leftSide;

@@ -13,25 +13,25 @@ import javafx.util.Duration;
 import java.util.*;
 import java.util.function.Function;
 
-public class ArrayDetailedDisplay extends ArrayDisplay {
+public class ArrayAnimatedDisplay extends ArrayDisplay {
 
     public static final double ANIMATION_LENGTH = 400;
     public static final double ANIMATION_COOLDOWN = 75;
 
-    private final List<DetailedItem> items;
-    private final ArrayList<DetailedElement> elements;
+    private final List<AnimatedItem> items;
+    private final ArrayList<AnimatedElement> elements;
     private boolean needsToMoveElements;
     private final List<AnimationGroup> animationGroups;
     private final AnimationGroup elementAnimationGroup;
 
     private final BorderPane borderPane;
     private final Pane centerPane;
-    private final DetailedInfo detailedInfo;
+    private final AnimatedInfo animatedInfo;
 
     private AnimationGroup currentAnimationGroup;
 
 
-    public ArrayDetailedDisplay(SettingsPane settingsPane) {
+    public ArrayAnimatedDisplay(SettingsPane settingsPane) {
         super(settingsPane);
 
         items = new ArrayList<>();
@@ -40,8 +40,8 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
         animationGroups = new ArrayList<>();
         elementAnimationGroup = new AnimationGroup();
 //        currentTask = new Label();
-        detailedInfo = new DetailedInfo();
-        detailedInfo.updateInfo("Current task", "");
+        animatedInfo = new AnimatedInfo();
+        animatedInfo.updateInfo("Current task", "");
 
 
         borderPane = new BorderPane();
@@ -53,8 +53,8 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
         borderPane.setTop(top);
         borderPane.setCenter(centerPane);
 
-        borderPane.setLeft(detailedInfo);
-        detailedInfo.setViewOrder(-1);
+        borderPane.setLeft(animatedInfo);
+        animatedInfo.setViewOrder(-1);
 
         getChildren().add(borderPane);
     }
@@ -69,7 +69,7 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
             elements.clear();
         }
         for (int i = 0; i < list.size(); i++) {
-            DetailedElement element = new DetailedElement(this, i);
+            AnimatedElement element = new AnimatedElement(this, i);
             element.setElementHeight(list.get(i) * getHeightMultiplier(), maxValue * getHeightMultiplier());
             elements.add(element);
             centerPane.getChildren().add(element);
@@ -79,28 +79,28 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
 
     @Override
     public void playFinish() {
-        detailedInfo.finish();
+        animatedInfo.finish();
         centerPane.getChildren().removeAll(items);
     }
 
-    public void addItem(DetailedItem item) {
+    public void addItem(AnimatedItem item) {
         centerPane.getChildren().add(item);
         items.add(item);
     }
 
-    public void addItem(DetailedItem item, double x, double y) {
+    public void addItem(AnimatedItem item, double x, double y) {
         centerPane.getChildren().add(item);
         items.add(item);
         item.setPosition(x, y);
     }
 
-    public void addItem(DetailedItem item, int index, double y) {
+    public void addItem(AnimatedItem item, int index, double y) {
         centerPane.getChildren().add(item);
         items.add(item);
         item.setIndex(index, y);
     }
 
-    public void removeItem(DetailedItem item) {
+    public void removeItem(AnimatedItem item) {
         centerPane.getChildren().remove(item);
     }
 
@@ -135,7 +135,7 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
     }
 
     public void swap(int firstIndex, int secondIndex) {
-        DetailedElement tmp = elements.get(firstIndex);
+        AnimatedElement tmp = elements.get(firstIndex);
         elements.set(firstIndex, elements.get(secondIndex));
         elements.set(secondIndex, tmp);
         needsToMoveElements = true;
@@ -152,7 +152,7 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
         List<KeyValue> keyValues = new ArrayList<>();
         for (int i = 0; i < elements.size(); i++) {
             if (condition.apply(i)) {
-                keyValues.add(new KeyValue(elements.get(i).colourProperty(), DetailedElement.calculateColour(list.get(i), maxValue)));
+                keyValues.add(new KeyValue(elements.get(i).colourProperty(), AnimatedElement.calculateColour(list.get(i), maxValue)));
             } else {
                 keyValues.add(new KeyValue(elements.get(i).colourProperty(), Color.LIGHTGRAY));
             }
@@ -214,19 +214,19 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
     }
 
     public void setCurrentTask(String task) {
-        detailedInfo.updateInfo("Current task", task);
+        animatedInfo.updateInfo("Current task", task);
     }
 
     public void updateInfoWhenDone(String key, Object value) {
-        whenDone(() -> detailedInfo.updateInfo(key, value));
+        whenDone(() -> animatedInfo.updateInfo(key, value));
     }
 
     public void updateInfoOnPlay(String key, Object value) {
-        onPlay(() -> detailedInfo.updateInfo(key, value));
+        onPlay(() -> animatedInfo.updateInfo(key, value));
     }
 
     public void updateInfo(String key, Object value) {
-        detailedInfo.updateInfo(key, value);
+        animatedInfo.updateInfo(key, value);
     }
 
     public void onPlay(Runnable runnable) {
@@ -285,8 +285,8 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
         return elementAnimationGroup;
     }
 
-    public DetailedInfo getDetailedInfo() {
-        return detailedInfo;
+    public AnimatedInfo getDetailedInfo() {
+        return animatedInfo;
     }
 
     public SettingsPane getSettings() {

@@ -1,20 +1,19 @@
 package com.example.javafxsortingalgorithms.arraydisplay;
 
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 
-public class DetailedArrow extends DetailedItem {
+public class AnimatedArrow extends AnimatedItem {
 
     private final Polygon triangle;
     private boolean pointingUp;
     private double length;
 
-    public DetailedArrow(ArrayDetailedDisplay display) {
+    public AnimatedArrow(ArrayAnimatedDisplay display) {
         this(display, true);
     }
 
-    public DetailedArrow(ArrayDetailedDisplay display, boolean up) {
+    public AnimatedArrow(ArrayAnimatedDisplay display, boolean up) {
         super(display);
 
         length = display.getElementWidth();

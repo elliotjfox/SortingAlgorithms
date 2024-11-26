@@ -1,6 +1,5 @@
 package com.example.javafxsortingalgorithms;
 
-import com.example.javafxsortingalgorithms.settings.Settings;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.layout.*;
@@ -12,7 +11,7 @@ public class AlgorithmDisplay extends VBox {
         TESTING,
         DETAILED,
         // TODO: Implement
-        COMPARING;
+        COMPARING
     }
 
     private final ButtonPane buttonPane;
@@ -91,7 +90,7 @@ public class AlgorithmDisplay extends VBox {
             }
             case DETAILED -> {
                 System.out.println("Now detailed mode");
-                firstAlgorithm.enterDetailedMode();
+                firstAlgorithm.enterAnimatedMode();
                 arrayPane.getChildren().addAll(firstAlgorithm.getDisplay());
                 buttonPane.addSelector(firstAlgorithm);
             }

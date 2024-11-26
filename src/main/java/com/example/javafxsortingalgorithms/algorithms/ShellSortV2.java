@@ -1,9 +1,9 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDetailedDisplay;
+import com.example.javafxsortingalgorithms.arraydisplay.ArrayAnimatedDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.DetailedArrow;
+import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrow;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public class ShellSortV2 extends ActionSortingAlgorithm {
     private final double shrinkFactor;
     private int gapSize;
 
-    private DetailedArrow arrow;
+    private AnimatedArrow arrow;
 
     public ShellSortV2(List<Integer> arrayList, boolean isInstant) {
         super(arrayList, isInstant);
@@ -57,8 +57,8 @@ public class ShellSortV2 extends ActionSortingAlgorithm {
     }
 
     @Override
-    public void startDetailed(ArrayDetailedDisplay display) {
-        arrow = new DetailedArrow(display, true);
+    public void startAnimated(ArrayAnimatedDisplay display) {
+        arrow = new AnimatedArrow(display, true);
         display.addItem(arrow, 0, 0);
 
         display.updateInfo("Gap Size", (int) (list.size() / shrinkFactor));
@@ -96,7 +96,7 @@ public class ShellSortV2 extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayDetailedDisplay display) {
+        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             if (from - gapSize < 0) return;
 
             algorithm.addToStart(
@@ -145,7 +145,7 @@ public class ShellSortV2 extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayDetailedDisplay display) {
+        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             if (!(algorithm instanceof ShellSortV2 shellSort) || index - gapSize < 0) {
                 return;
             }

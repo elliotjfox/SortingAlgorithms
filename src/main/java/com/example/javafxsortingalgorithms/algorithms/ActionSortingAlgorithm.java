@@ -1,7 +1,6 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.arraydisplay.AnimationGroup;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDetailedDisplay;
+import com.example.javafxsortingalgorithms.arraydisplay.ArrayAnimatedDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 import javafx.animation.Timeline;
 
@@ -12,7 +11,7 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
 
     protected ArrayList<AlgorithmAction> actions;
     protected ArrayList<AlgorithmAction> toAdd;
-    protected ArrayDetailedDisplay display;
+    protected ArrayAnimatedDisplay display;
 
     public ActionSortingAlgorithm(List<Integer> arrayList, boolean isInstant) {
         super(arrayList, isInstant);
@@ -38,7 +37,7 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
     }
 
     @Override
-    public void iterateDetailed(ArrayDetailedDisplay display) {
+    public void iterateAnimated(ArrayAnimatedDisplay display) {
         AlgorithmAction currentAction;
         do {
             if (actions.isEmpty()) {
@@ -66,7 +65,7 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
         protected boolean takesStep = true;
         abstract void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display);
 
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayDetailedDisplay display) {
+        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             // TODO: Eventually make this abstract
             System.out.println("TODO: Should this action (" + getClass().getSimpleName() + ") have a detailed version?");
             perform(algorithm, display);
@@ -78,7 +77,7 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
         void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {}
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayDetailedDisplay display) {}
+        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {}
     }
 
     protected static class Move extends AlgorithmAction {
@@ -97,7 +96,7 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayDetailedDisplay display) {
+        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             algorithm.move(from, to);
             display.move(from, to);
         }
@@ -120,7 +119,7 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayDetailedDisplay display) {
+        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             algorithm.swap(firstIndex, secondIndex);
             display.swap(firstIndex, secondIndex);
         }
@@ -145,7 +144,7 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayDetailedDisplay display) {
+        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             action.run();
         }
     }
@@ -164,7 +163,7 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayDetailedDisplay display) {
+        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             display.animate(timelines);
         }
     }
@@ -182,7 +181,7 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayDetailedDisplay display) {
+        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             for (int i = 0; i < algorithm.list.size() - 1; i++) {
                 display.comparing(i, i + 1);
 //                display.addAnimations(new AnimationGroup(

@@ -1,16 +1,16 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDetailedDisplay;
+import com.example.javafxsortingalgorithms.arraydisplay.ArrayAnimatedDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.DetailedCartesianTree;
+import com.example.javafxsortingalgorithms.arraydisplay.AnimatedCartesianTree;
 
 import java.util.List;
 
 public class CartesianTreeSort extends ActionSortingAlgorithm {
 
     private CartesianTreeNode rootNode;
-    private DetailedCartesianTree cartesianTree;
+    private AnimatedCartesianTree cartesianTree;
 
     public CartesianTreeSort(List<Integer> arrayList, boolean isInstant) {
         super(arrayList, isInstant);
@@ -36,8 +36,8 @@ public class CartesianTreeSort extends ActionSortingAlgorithm {
     }
 
     @Override
-    public void startDetailed(ArrayDetailedDisplay display) {
-        cartesianTree = new DetailedCartesianTree(display, list);
+    public void startAnimated(ArrayAnimatedDisplay display) {
+        cartesianTree = new AnimatedCartesianTree(display, list);
         display.addItem(cartesianTree, list.size(), 600);
     }
 
@@ -56,7 +56,7 @@ public class CartesianTreeSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayDetailedDisplay display) {
+        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             if (algorithm instanceof CartesianTreeSort cartesianTreeSort) {
                 performDetailed(cartesianTreeSort, display);
             }
@@ -64,7 +64,7 @@ public class CartesianTreeSort extends ActionSortingAlgorithm {
 
         public abstract void perform(CartesianTreeSort cartesianTreeSort, ArrayDisplay display);
 
-        public abstract void performDetailed(CartesianTreeSort cartesianTreeSort, ArrayDetailedDisplay display);
+        public abstract void performDetailed(CartesianTreeSort cartesianTreeSort, ArrayAnimatedDisplay display);
     }
 
     private static class FindHighest extends CartesianTreeAction {
@@ -115,7 +115,7 @@ public class CartesianTreeSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(CartesianTreeSort cartesianTreeSort, ArrayDetailedDisplay display) {
+        public void performDetailed(CartesianTreeSort cartesianTreeSort, ArrayAnimatedDisplay display) {
             for (int i = from + 1; i <= to; i++) {
                 cartesianTreeSort.addToStart(new Compare(this, i));
             }
@@ -159,7 +159,7 @@ public class CartesianTreeSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(CartesianTreeSort cartesianTreeSort, ArrayDetailedDisplay display) {
+        public void performDetailed(CartesianTreeSort cartesianTreeSort, ArrayAnimatedDisplay display) {
             display.reading(findHighest.highestIndex, i);
             if (cartesianTreeSort.list.get(i) > cartesianTreeSort.list.get(findHighest.highestIndex)) {
                 findHighest.highestIndex = i;
@@ -175,15 +175,17 @@ public class CartesianTreeSort extends ActionSortingAlgorithm {
             int index = rightMost.getIndex();
             System.out.println(index);
             cartesianTreeSort.addToStart(new Swap(cartesianTreeSort.rootNode.getIndex(), index));
+
+            CartesianTreeNode.swapIndex(cartesianTreeSort.rootNode, rightMost);
             CartesianTreeNode.swapChildren(cartesianTreeSort.rootNode, rightMost);
+
             CartesianTreeNode tmp = cartesianTreeSort.rootNode;
             cartesianTreeSort.rootNode = rightMost;
-//            cartesianTreeSort.rootNode.getRightmost().setRight(tmp);
-
+            cartesianTreeSort.rootNode.getRightmost().setRight(tmp);
         }
 
         @Override
-        public void performDetailed(CartesianTreeSort cartesianTreeSort, ArrayDetailedDisplay display) {
+        public void performDetailed(CartesianTreeSort cartesianTreeSort, ArrayAnimatedDisplay display) {
 
         }
     }
@@ -209,12 +211,31 @@ public class CartesianTreeSort extends ActionSortingAlgorithm {
                 CartesianTreeNode nodeToSwap = node.getLeft().getValue() >= node.getRight().getValue() ? node.getLeft() : node.getRight();
                 CartesianTreeNode.swapChildren(node, nodeToSwap);
                 cartesianTreeSort.addToStart(new MaxHeapify(nodeToSwap));
+            } else if (node.getLeft() != null && node.getLeft().getValue() > node.getValue()) {
+                CartesianTreeNode.swapChildren(node, node.getLeft());
+            } else if (node.getRight() != null && node.getRight().getValue() > node.getValue()) {
+                CartesianTreeNode.swapChildren(node, node.getRight());
             }
         }
 
         @Override
-        public void performDetailed(CartesianTreeSort cartesianTreeSort, ArrayDetailedDisplay display) {
+        public void performDetailed(CartesianTreeSort cartesianTreeSort, ArrayAnimatedDisplay display) {
+            if (node.getLeft() == null && node.getRight() == null) {
+                return;
+            }
 
+            if (node.getLeft() != null && node.getRight() != null) {
+                if (node.getValue() >= node.getLeft().getValue() && node.getValue() >= node.getRight().getValue()) {
+                    return;
+                }
+                CartesianTreeNode nodeToSwap = node.getLeft().getValue() >= node.getRight().getValue() ? node.getLeft() : node.getRight();
+                CartesianTreeNode.swapChildren(node, nodeToSwap);
+                cartesianTreeSort.addToStart(new MaxHeapify(nodeToSwap));
+            } else if (node.getLeft() != null && node.getLeft().getValue() > node.getValue()) {
+                CartesianTreeNode.swapChildren(node, node.getLeft());
+            } else if (node.getRight() != null && node.getRight().getValue() > node.getValue()) {
+                CartesianTreeNode.swapChildren(node, node.getRight());
+            }
         }
     }
 }

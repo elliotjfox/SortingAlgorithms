@@ -4,7 +4,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -16,13 +15,13 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DetailedCartesianTree extends DetailedItem {
+public class AnimatedCartesianTree extends AnimatedItem {
 
     private final List<DetailedCartesianTreeItem> treeItems;
     private final List<Boolean> found;
     private final List<Line> lines;
 
-    public DetailedCartesianTree(ArrayDetailedDisplay display, List<Integer> list) {
+    public AnimatedCartesianTree(ArrayAnimatedDisplay display, List<Integer> list) {
         super(display);
 
         treeItems = new ArrayList<>();
@@ -48,13 +47,13 @@ public class DetailedCartesianTree extends DetailedItem {
         }
         return new Timeline(
                 new KeyFrame(
-                        Duration.millis(ArrayDetailedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
                         "",
                         event -> {},
                         keyValues
                 )
         );
-    };
+    }
 
     public void lowerOthers(int highestIndex, int from, int to) {
         display.animate(lowerOthersTimeline(highestIndex, from, to));

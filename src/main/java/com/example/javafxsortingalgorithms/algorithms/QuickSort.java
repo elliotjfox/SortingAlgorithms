@@ -38,7 +38,7 @@ public class QuickSort extends ActionSortingAlgorithm {
         section = new DetailedSection(display, list.size(), true);
         display.addItem(section, 0, -SECTION_OFFSET);
         section.setFill(Color.rgb(44, 199, 88));
-        actions.add(new AnimationAction(display.recolourAnimation()));
+        actions.add(new AnimationAction(display.recolourTimeline()));
     }
 
     @Override

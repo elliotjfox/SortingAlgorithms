@@ -18,7 +18,6 @@ public class MergeSort extends ActionSortingAlgorithm {
 
     @Override
     protected void instantAlgorithm(TestEntry entry) {
-//        mergeSort();
         divide(0, list.size(), entry);
     }
 
@@ -39,7 +38,7 @@ public class MergeSort extends ActionSortingAlgorithm {
             if (list.get(left) < list.get(right)) {
                 left++;
             } else {
-                entry.addWrite(2);
+                entry.addWrite(1);
                 move(right, left);
                 right++;
             }
@@ -54,7 +53,7 @@ public class MergeSort extends ActionSortingAlgorithm {
 
     @Override
     public String getName() {
-        return null;
+        return "Merge Sort";
     }
 
 
@@ -209,23 +208,22 @@ public class MergeSort extends ActionSortingAlgorithm {
         }
     }
 
-
-//    private void mergeSort() {
+//    void mergeSort() {
 //        divide(0, list.size());
 //    }
 //
-//    private void divide(int from, int to) {
-//        if (to - from >= 2) {
-//            int half = (from + to) / 2;
-//            divide(from, half);
-//            divide(half, to);
-//            merge(from, half, to);
+//    void divide(int min, int max) {
+//        if (max - min >= 2) {
+//            int half = (min + max) / 2;
+//            divide(min, half);
+//            divide(half, max);
+//            merge(min, half, max);
 //        }
 //    }
 //
-//    private void merge(int left, int right, int end) {
+//    void merge(int left, int right, int end) {
 //        while (left < right && right < end) {
-//            if (list.get(left) < list.get(right)) {
+//            if (list.get(left) <= list.get(right)) {
 //                left++;
 //            } else {
 //                move(right, left);

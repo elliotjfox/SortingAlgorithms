@@ -168,7 +168,7 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
         );
     }
 
-    public Timeline recolourAnimation() {
+    public Timeline recolourTimeline() {
         return highlightAnimation(i -> true);
     }
 
@@ -205,9 +205,9 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
     public void animate(Timeline... timelines) {
         for (Timeline timeline : timelines) {
             // Accounting for the read animations being 1 more
-            double timeLineLength = timeline.getKeyFrames().getLast().getTime().toMillis();
-            if (timeLineLength - 1 > ANIMATION_LENGTH) {
-                System.out.println(STR."Timeline is longer than animation length! (\{timeLineLength} > \{ANIMATION_LENGTH})");
+            double timelineLength = timeline.getKeyFrames().getLast().getTime().toMillis();
+            if (timelineLength - 1 > ANIMATION_LENGTH) {
+                System.out.println("Timeline is longer than animation length! (" + timelineLength + " > " + ANIMATION_LENGTH + ")");
             }
         }
         currentAnimationGroup.addTimelines(timelines);

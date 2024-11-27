@@ -36,7 +36,7 @@ public class StrandSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             int k = 0;
             int i = start;
             int last = i;
@@ -79,7 +79,7 @@ public class StrandSort extends ActionSortingAlgorithm {
 
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             int i = left;
             while (left < right && right <= end) {
 //                System.out.print(STR."\{left}/\{right}/\{end}");

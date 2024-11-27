@@ -44,7 +44,7 @@ public class StoogeSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
 //            System.out.println(STR."[\{from}, \{to}]");
             if (from >= to) return;
 
@@ -68,7 +68,7 @@ public class StoogeSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             if (from >= to) return;
 
             if (algorithm instanceof StoogeSort stoogeSort) {

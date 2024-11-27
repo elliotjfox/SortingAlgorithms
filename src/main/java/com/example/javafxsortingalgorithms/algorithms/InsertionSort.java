@@ -103,7 +103,7 @@ public class InsertionSort extends ActionSortingAlgorithm {
 
     private static class Root extends AlgorithmAction {
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             if (algorithm instanceof InsertionSort insertionSort) {
                 switch (insertionSort.searchType) {
                     case RIGHT_LINEAR -> {
@@ -120,7 +120,7 @@ public class InsertionSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             if (!(algorithm instanceof InsertionSort insertionSort)) return;
             Function<Integer, InsertionSearchAction> addSearch = switch (insertionSort.searchType) {
                 case RIGHT_LINEAR -> (i) -> new RightSearch(i - 1, i);
@@ -151,14 +151,14 @@ public class InsertionSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             if (algorithm instanceof InsertionSort) {
                 search((InsertionSort) algorithm, display);
             }
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             if (algorithm instanceof InsertionSort) {
                 searchDetailed((InsertionSort) algorithm, display);
             }

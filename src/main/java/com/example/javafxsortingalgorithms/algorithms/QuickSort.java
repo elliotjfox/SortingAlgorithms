@@ -63,7 +63,7 @@ public class QuickSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             int k = end;
             for (int i = end; i > start; i--) {
                 if (algorithm.list.get(i) > algorithm.list.get(start)) {
@@ -78,7 +78,7 @@ public class QuickSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             AnimatedArrow kArrow = new AnimatedArrow(display, true);
             display.addItem(kArrow, end, 0);
 
@@ -190,7 +190,7 @@ public class QuickSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             int k = start;
             for (int i = start; i < end; i++) {
                 if (algorithm.list.get(i) < algorithm.list.get(end)) {

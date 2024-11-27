@@ -49,14 +49,14 @@ public class CartesianTreeSort extends ActionSortingAlgorithm {
     private abstract static class CartesianTreeAction extends AlgorithmAction {
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             if (algorithm instanceof CartesianTreeSort cartesianTreeSort) {
                 perform(cartesianTreeSort, display);
             }
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             if (algorithm instanceof CartesianTreeSort cartesianTreeSort) {
                 performDetailed(cartesianTreeSort, display);
             }

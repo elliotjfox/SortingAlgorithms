@@ -80,7 +80,7 @@ public class ShellSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             if (!(algorithm instanceof  ShellSort shellSort)) {
                 return;
             }
@@ -94,7 +94,7 @@ public class ShellSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             if (!(algorithm instanceof  ShellSort shellSort)) {
                 return;
             }
@@ -133,7 +133,7 @@ public class ShellSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             if (!(algorithm instanceof ShellSort shellSort) || index - gapSize < 0) {
                 return;
             }
@@ -152,7 +152,7 @@ public class ShellSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             if (!(algorithm instanceof ShellSort shellSort) || index - gapSize < 0) {
                 return;
             }

@@ -74,7 +74,7 @@ public class MergeSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             if (max - min >= 2) {
                 int half = (min + max) / 2;
                 algorithm.addToStart(
@@ -86,7 +86,7 @@ public class MergeSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             if (max - min >= 2) {
                 int half = (min + max) / 2;
 
@@ -150,7 +150,7 @@ public class MergeSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             while (rightSide < end && leftSide < rightSide && i < rightSide) {
                 if (algorithm.list.get(leftSide) < algorithm.list.get(rightSide)) {
                     // Pause to keep the merge smooth
@@ -165,7 +165,7 @@ public class MergeSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             AnimatedArrow leftArrow = new AnimatedArrow(display, true);
             AnimatedArrow rightArrow = new AnimatedArrow(display, true);
 

@@ -85,7 +85,7 @@ public class ShellSortV2 extends ActionSortingAlgorithm {
         }
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             if (from - gapSize < 0) return;
             if (algorithm.getArray().get(from - gapSize) > algorithm.getArray().get(from)) {
                 algorithm.addToStart(
@@ -96,7 +96,7 @@ public class ShellSortV2 extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             if (from - gapSize < 0) return;
 
             algorithm.addToStart(
@@ -126,7 +126,7 @@ public class ShellSortV2 extends ActionSortingAlgorithm {
         }
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             if (!(algorithm instanceof ShellSortV2 shellSort) || index - gapSize < 0) {
                 return;
             }
@@ -145,7 +145,7 @@ public class ShellSortV2 extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             if (!(algorithm instanceof ShellSortV2 shellSort) || index - gapSize < 0) {
                 return;
             }

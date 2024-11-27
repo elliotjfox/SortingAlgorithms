@@ -82,14 +82,14 @@ public class HeapSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             for (int i = algorithm.list.size() / 2; i >= 0; i--) {
                 algorithm.addToStart(new MaxHeapify(i));
             }
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             display.setCurrentTask("Creating binary tree");
             for (int i = algorithm.list.size() / 2; i >= 0; i--) {
                 algorithm.addToStart(new MaxHeapify(i));
@@ -107,7 +107,7 @@ public class HeapSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             if (algorithm instanceof HeapSort) {
                 perform((HeapSort) algorithm);
             }
@@ -135,7 +135,7 @@ public class HeapSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             if (algorithm instanceof HeapSort) {
                 performDetailed((HeapSort) algorithm, display);
             }
@@ -190,7 +190,7 @@ public class HeapSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             if (algorithm instanceof HeapSort) {
                 perform((HeapSort) algorithm);
             }
@@ -208,7 +208,7 @@ public class HeapSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             if (algorithm instanceof HeapSort) {
                 performDetailed((HeapSort) algorithm, display);
             }

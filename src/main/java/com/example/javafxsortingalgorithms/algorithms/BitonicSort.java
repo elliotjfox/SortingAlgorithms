@@ -252,7 +252,7 @@ public class BitonicSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             for (int i = 0; i < comparisons.size() - 1; i += 2) {
                 if (comparisons.get(i) < 0 || comparisons.get(i + 1) >= algorithm.list.size()) continue;
                 if (algorithm.list.get(comparisons.get(i)) > algorithm.list.get(comparisons.get(i + 1))) {
@@ -266,7 +266,7 @@ public class BitonicSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             if (algorithm instanceof BitonicSort bitonicSort) {
                 display.animate(
                         bitonicSort.sortingNetwork.moveUp(),
@@ -312,19 +312,19 @@ public class BitonicSort extends ActionSortingAlgorithm {
     protected static class BitonicAllSwap extends BitonicComparison {
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             for (int i = 0; i < algorithm.list.size() - 1; i += 2) {
                 addComparisons(i, i + 1);
             }
-            super.perform(algorithm, display);
+            super.execute(algorithm, display);
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
             for (int i = 0; i < algorithm.list.size() - 1; i += 2) {
                 addComparisons(i, i + 1);
             }
-            super.performDetailed(algorithm, display);
+            super.executeAnimated(algorithm, display);
         }
     }
 

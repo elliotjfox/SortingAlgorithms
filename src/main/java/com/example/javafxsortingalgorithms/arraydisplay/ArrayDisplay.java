@@ -66,8 +66,20 @@ public abstract class ArrayDisplay extends Pane {
         addColourAction(i, ColourAction.READ);
     }
 
+    public void readIndex(int... indices) {
+        for (int index : indices) {
+            readIndex(index);
+        }
+    }
+
     public void writeIndex(int i) {
         addColourAction(i, ColourAction.WRITE);
+    }
+
+    public void writeIndex(int... indices) {
+        for (int index : indices) {
+            writeIndex(index);
+        }
     }
 
     protected void resetMax() {

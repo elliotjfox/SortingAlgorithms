@@ -47,7 +47,6 @@ public class Settings {
             case "Shell":       yield new ShellSortSettings();
             case "Stooge":      yield new GenericAlgorithmSettings<>("Stooge Sort", StoogeSort::new);
             case "Strand":      yield new GenericAlgorithmSettings<>("Strand Sort", StrandSort::new);
-            case "Shell2":      yield new GenericAlgorithmSettings<>("Strand Sort", ShellSortV2::new);
             case "Cycle":       yield new GenericAlgorithmSettings<>("Strand Sort", CycleSort::new);
             default:            yield new GenericAlgorithmSettings<>("Gnome Sort", GnomeSort::new);
         };

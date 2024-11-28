@@ -278,7 +278,6 @@ public class AlgorithmContainer {
                 createMenuItem("Exchange Sort", "Exchange"),
                 createMenuItem("Strand Sort", "Strand"),
                 createMenuItem("Cartesian Tree Sort", "Cartesian"),
-                createMenuItem("Shell Sort 2", "Shell2"),
                 createMenuItem("Cycle Sort", "Cycle")
                 );
 

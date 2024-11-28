@@ -9,23 +9,47 @@ import java.util.List;
 
 public class ShellSort extends ActionSortingAlgorithm {
 
+    public enum ShellSortMode {
+        // This is sorting each element sequentially
+        ONE_BY_ONE,
+        // This is sorting all the ones that are k apart at once, then the ones 1 above k, etc.
+        OFFSET_FIRST
+    }
+
     private final double shrinkFactor;
     private int gapSize;
 
     private AnimatedArrow arrow;
 
-    public ShellSort(List<Integer> arrayList, boolean isInstant, double shrinkFactor) {
+    public ShellSort(List<Integer> arrayList, boolean isInstant, double shrinkFactor, ShellSortMode mode) {
         super(arrayList, isInstant);
 
         this.shrinkFactor = shrinkFactor;
         gapSize = arrayList.size();
 
         if (!isInstant) {
-            do {
-                shrinkGap();
-                actions.add(new AddSearches(gapSize));
-            } while (gapSize > 1);
+            switch (mode) {
+                case ONE_BY_ONE -> addOneByOneActions();
+                case OFFSET_FIRST -> addOffsetFirstActions();
+            }
         }
+    }
+
+    private void addOneByOneActions() {
+        do {
+            shrinkGap();
+            // For each element, sort it
+            for (int i = gapSize; i < list.size(); i++) {
+                actions.add(new SearchFrom(i, gapSize));
+            }
+        } while (gapSize > 1);
+    }
+
+    private void addOffsetFirstActions() {
+        do {
+            shrinkGap();
+            actions.add(new AddSearches(gapSize));
+        } while (gapSize > 1);
     }
 
     @Override
@@ -87,7 +111,7 @@ public class ShellSort extends ActionSortingAlgorithm {
             for (int i = 0; i < gap; i++) {
                 for (int j = i; j < shellSort.list.size(); j += gap) {
                     algorithm.addToStart(
-                            new ShellSearch(j, gap)
+                            new SearchFrom(j, gap)
                     );
                 }
             }
@@ -115,73 +139,72 @@ public class ShellSort extends ActionSortingAlgorithm {
                                 display.updateInfoOnPlay("Offset", finalI);
                                 display.updateInfoWhenDone("Current task", STR."Searching from \{finalJ}");
                             }, true),
-                            new ShellSearch(j, gap)
+                            new SearchFrom(j, gap)
                     );
                 }
             }
         }
     }
 
-    private static class ShellSearch extends AlgorithmAction {
+    private static class SearchFrom extends AlgorithmAction {
 
-        private final int index;
+        private final int from;
         protected final int gapSize;
 
-        public ShellSearch(int index, int gapSize) {
-            this.index = index;
+        public SearchFrom(int from, int gapSize) {
+            this.from = from;
             this.gapSize = gapSize;
+            takesStep = false;
         }
 
         @Override
         void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
-            if (!(algorithm instanceof ShellSort shellSort) || index - gapSize < 0) {
-                return;
-            }
+            if (from - gapSize < 0) return;
 
-            if (shellSort.list.get(index - gapSize) > shellSort.list.get(index)) {
-                display.writeIndex(index - gapSize);
-                display.writeIndex(index);
-                shellSort.swap(index - gapSize, index);
-                shellSort.addToStart(
-                        new ShellSearch(index - gapSize, gapSize)
+            if (algorithm.list.get(from - gapSize) > algorithm.list.get(from)) {
+                display.writeIndex(from, from - gapSize);
+                algorithm.addToStart(
+                        new Swap(from - gapSize, from),
+                        new SearchFrom(from - gapSize, gapSize)
                 );
             } else {
-                display.readIndex(index - gapSize);
-                display.readIndex(index);
+                display.readIndex(from, from - gapSize);
             }
         }
 
         @Override
         public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
-            if (!(algorithm instanceof ShellSort shellSort) || index - gapSize < 0) {
+            if (!(algorithm instanceof ShellSort shellSort) || from - gapSize < 0) {
                 return;
             }
 
-            display.comparing(index, index - gapSize);
-            if (shellSort.list.get(index - gapSize) > shellSort.list.get(index)) {
-                shellSort.swap(index - gapSize, index);
-                display.swap(index - gapSize, index);
+            display.comparing(from, from - gapSize);
+            if (shellSort.list.get(from - gapSize) > shellSort.list.get(from)) {
+                shellSort.swap(from - gapSize, from);
+                display.swap(from - gapSize, from);
                 shellSort.addToStart(
-                        new ShellSearch(index - gapSize, gapSize)
+                        new SearchFrom(from - gapSize, gapSize)
                 );
             }
+
+//            if (from - gapSize < 0) return;
+//
+             // I think this is for ALL_K mode
+//            algorithm.addToStart(
+//                    new AnimationAction(
+//                            ((ShellSortV2) algorithm).arrow.moveToIndexTimeline(from, 0),
+//                            display.highlightAnimation(i -> Math.abs(i - from) % gapSize == 0)
+//                    ),
+//                    new LaterAction(() -> display.reading(from - gapSize, from), true)
+//            );
+//            if (algorithm.getArray().get(from - gapSize) > algorithm.getArray().get(from)) {
+//                algorithm.addToStart(
+//                        new Swap(from - gapSize, from),
+//                        new ShellSortV2.SearchFrom(gapSize, from - gapSize)
+//                );
+//            }
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //    void shellSort() {
 //        do {
@@ -203,27 +226,5 @@ public class ShellSort extends ActionSortingAlgorithm {
 //            searchFrom(left);
 //        }
 //    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

@@ -279,7 +279,8 @@ public class AlgorithmContainer {
                 createMenuItem("Exchange Sort", "Exchange"),
                 createMenuItem("Strand Sort", "Strand"),
                 createMenuItem("Shell Sort 2", "Shell2"),
-                createMenuItem("Cycle Sort", "Cycle")
+                createMenuItem("Cycle Sort", "Cycle"),
+                createMenuItem("Selection2 Sort", "Selection2")
                 );
 
         Menu jokeAlgorithms = new Menu(

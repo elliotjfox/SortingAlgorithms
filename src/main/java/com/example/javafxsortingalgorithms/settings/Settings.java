@@ -2,6 +2,7 @@ package com.example.javafxsortingalgorithms.settings;
 
 import com.example.javafxsortingalgorithms.algorithms.*;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.*;
+import com.example.javafxsortingalgorithms.betteralgorithms.BetterSelectionSort;
 import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -48,6 +49,7 @@ public class Settings {
             case "Stooge":      yield new GenericAlgorithmSettings<>("Stooge Sort", StoogeSort::new);
             case "Strand":      yield new GenericAlgorithmSettings<>("Strand Sort", StrandSort::new);
             case "Shell2":      yield new GenericAlgorithmSettings<>("Strand Sort", ShellSortV2::new);
+            case "Selection2":  yield new GenericAlgorithmSettings<>("Selection2", BetterSelectionSort::new);
             case "Cycle":       yield new GenericAlgorithmSettings<>("Strand Sort", CycleSort::new);
             default:            yield new GenericAlgorithmSettings<>("Gnome Sort", GnomeSort::new);
         };
@@ -144,14 +146,9 @@ public class Settings {
 
             new Thread(task).start();
         } else {
-            ArrayList<Integer> tmp = new ArrayList<>();
             for (int i = 0; i < size; i++) {
-                tmp.add(i);
+                array.add(i);
             }
-
-//            for (int i = 0; i < size; i++) {
-//                array.add(tmp.remove(random.nextInt(tmp.size())));
-//            }
 
             Collections.shuffle(array);
 

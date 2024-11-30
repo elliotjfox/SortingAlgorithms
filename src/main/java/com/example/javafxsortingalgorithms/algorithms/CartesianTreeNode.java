@@ -3,7 +3,6 @@ package com.example.javafxsortingalgorithms.algorithms;
 public class CartesianTreeNode {
 
     private int value;
-    private int index;
     private CartesianTreeNode left;
     private CartesianTreeNode right;
     private CartesianTreeNode parent;
@@ -12,9 +11,8 @@ public class CartesianTreeNode {
 
     }
 
-    public CartesianTreeNode(int value, int index) {
+    public CartesianTreeNode(int value) {
         this.value = value;
-        this.index = index;
     }
 
     public void setLeft(CartesianTreeNode left) {
@@ -33,12 +31,16 @@ public class CartesianTreeNode {
         this.value = n;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
     public void setParent(CartesianTreeNode parent) {
         this.parent = parent;
+    }
+
+    public void removeChild(CartesianTreeNode child) {
+        if (left == child) {
+            setLeft(null);
+        } else if (right == child) {
+            setRight(null);
+        }
     }
 
     public CartesianTreeNode getLeft() {
@@ -49,14 +51,27 @@ public class CartesianTreeNode {
         return right;
     }
 
-    public CartesianTreeNode getRightmost() {
-        if (right == null) return this;
-        return right.getRightmost();
+    public CartesianTreeNode getParent() {
+        return parent;
     }
 
+    public CartesianTreeNode getBottom() {
+        if (right == null && left == null) return this;
+        else if (right == null) return left.getBottom();
+        else return right.getBottom();
+    }
 
-    public int getIndex() {
-        return index;
+//    public CartesianTreeNode getSmallest() {
+//        if (right == null && left == null) return this;
+//        else if (right == null) return left;
+//        else if (left == null) return right;
+//
+//    }
+
+    public CartesianTreeNode getLargestChild() {
+        if (right == null) return left;
+        else if (left == null) return right;
+        else return left.getValue() > right.getValue() ? left : right;
     }
 
     public int getValue() {
@@ -65,7 +80,7 @@ public class CartesianTreeNode {
 
     @Override
     public String toString() {
-        return STR."CartesianTreeNode{value=\{value}, index=\{index}\{'}'}";
+        return STR."CartesianTreeNode{value=\{value}{'}'}";
     }
 
     public static void swapChildren(CartesianTreeNode node1, CartesianTreeNode node2) {
@@ -77,9 +92,9 @@ public class CartesianTreeNode {
         node2.setRight(tmpRight);
     }
 
-    public static void swapIndex(CartesianTreeNode node1, CartesianTreeNode node2) {
-        int tmp = node1.getIndex();
-        node1.setIndex(node2.index);
-        node2.setIndex(tmp);
+    public static void swapValues(CartesianTreeNode node1, CartesianTreeNode node2) {
+        int tmp = node1.getValue();
+        node1.setValue(node2.getValue());
+        node2.setValue(tmp);
     }
 }

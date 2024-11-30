@@ -174,15 +174,23 @@ public class ShellSort extends ActionSortingAlgorithm {
 
         @Override
         public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
-            if (!(algorithm instanceof ShellSort shellSort) || from - gapSize < 0) {
+            if (from - gapSize < 0) {
                 return;
             }
 
-            display.comparing(from, from - gapSize);
-            if (shellSort.list.get(from - gapSize) > shellSort.list.get(from)) {
-                shellSort.swap(from - gapSize, from);
-                display.swap(from - gapSize, from);
-                shellSort.addToStart(
+            // TODO: Still need to fix this up a bit
+            algorithm.addToStart(
+                    new AnimationAction(
+                            ((ShellSort) algorithm).arrow.moveToIndexTimeline(from, 0),
+                            display.highlightAnimation(i -> Math.abs(i - from) % gapSize == 0)
+                    ),
+                    new Wait(),
+                    new LaterAction(() -> display.reading(from - gapSize, from))
+            );
+
+            if (algorithm.list.get(from - gapSize) > algorithm.list.get(from)) {
+                algorithm.addToStart(
+                        new Swap(from - gapSize, from),
                         new SearchFrom(from - gapSize, gapSize)
                 );
             }

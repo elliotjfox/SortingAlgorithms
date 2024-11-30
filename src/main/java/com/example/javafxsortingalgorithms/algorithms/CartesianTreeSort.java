@@ -17,17 +17,10 @@ public class CartesianTreeSort extends ActionSortingAlgorithm {
 
 //        rootNode = new CartesianTreeNode();
         actions.add(new FindHighest(0, list.size() - 1));
-        actions.add(new LaterAction(() -> {
-            System.out.println("Root: " + rootNode);
-            System.out.println("Left: " + rootNode.getLeft());
-            System.out.println("Right: " + rootNode.getRight());
-        }));
-        actions.add(new ExtractMax());
-        actions.add(new LaterAction(() -> {
-            System.out.println("Root: " + rootNode);
-            System.out.println("Left: " + rootNode.getLeft());
-            System.out.println("Right: " + rootNode.getRight());
-        }));
+
+        for (int i = list.size() - 1; i >= 0; i--) {
+            actions.add(new ExtractMax(i));
+        }
     }
 
     @Override
@@ -74,6 +67,7 @@ public class CartesianTreeSort extends ActionSortingAlgorithm {
         private int highestIndex;
         private CartesianTreeNode node;
         private CartesianTreeNode parent;
+        private FindHighest parentAction;
 
         // Inclusive, [from,to]
         public FindHighest(int from, int to) {
@@ -88,6 +82,11 @@ public class CartesianTreeSort extends ActionSortingAlgorithm {
             this.parent = parent;
         }
 
+        public FindHighest(int from, int to, FindHighest parentAction) {
+            this(from, to, parentAction.parent);
+            this.parentAction = parentAction;
+        }
+
         @Override
         public void perform(CartesianTreeSort cartesianTreeSort, ArrayDisplay display) {
             for (int i = from + 1; i <= to; i++) {
@@ -95,7 +94,8 @@ public class CartesianTreeSort extends ActionSortingAlgorithm {
             }
             cartesianTreeSort.addToStart(
                     new LaterAction(() -> {
-                        node = new CartesianTreeNode(cartesianTreeSort.list.get(highestIndex), highestIndex);
+                        node = new CartesianTreeNode(cartesianTreeSort.list.get(highestIndex));
+
                         if (parent == null) {
                             cartesianTreeSort.rootNode = node;
                         } else if (parent.getLeft() == null) {
@@ -122,19 +122,26 @@ public class CartesianTreeSort extends ActionSortingAlgorithm {
             cartesianTreeSort.addToStart(
                     new LaterAction(() -> {
                         cartesianTreeSort.cartesianTree.lowerOthers(highestIndex, from, to);
-                        node = new CartesianTreeNode(cartesianTreeSort.list.get(highestIndex), highestIndex);
-                        if (parent == null) {
-                            cartesianTreeSort.rootNode = node;
-                        } else if (parent.getLeft() == null) {
-                            parent.setLeft(node);
-                        } else {
-                            parent.setRight(node);
+                        node = new CartesianTreeNode(cartesianTreeSort.list.get(highestIndex));
+
+                        if (parentAction != null) {
+                            cartesianTreeSort.addToStart(
+                                    new Wait(),
+                                    new LaterAction(() -> {
+                                        cartesianTreeSort.cartesianTree.drawLine(parentAction.highestIndex, highestIndex);
+                                    })
+                            );
                         }
+
+                        if (parent == null) cartesianTreeSort.rootNode = node;
+                        else if (parent.getLeft() == null) parent.setLeft(node);
+                        else parent.setRight(node);
+
                         if (highestIndex > from) {
-                            cartesianTreeSort.addToStart(new FindHighest(from, highestIndex - 1, node));
+                            cartesianTreeSort.addToStart(new FindHighest(from, highestIndex - 1, this));
                         }
                         if (highestIndex < to) {
-                            cartesianTreeSort.addToStart(new FindHighest(highestIndex + 1, to, node));
+                            cartesianTreeSort.addToStart(new FindHighest(highestIndex + 1, to, this));
                         }
                     })
             );
@@ -169,19 +176,22 @@ public class CartesianTreeSort extends ActionSortingAlgorithm {
 
     private static class ExtractMax extends CartesianTreeAction {
 
+        private final int destination;
+
+        public ExtractMax(int destination) {
+            this.destination = destination;
+        }
+
         @Override
         public void perform(CartesianTreeSort cartesianTreeSort, ArrayDisplay display) {
-            CartesianTreeNode rightMost = cartesianTreeSort.rootNode.getRightmost();
-            int index = rightMost.getIndex();
-            System.out.println(index);
-            cartesianTreeSort.addToStart(new Swap(cartesianTreeSort.rootNode.getIndex(), index));
-
-            CartesianTreeNode.swapIndex(cartesianTreeSort.rootNode, rightMost);
-            CartesianTreeNode.swapChildren(cartesianTreeSort.rootNode, rightMost);
-
-            CartesianTreeNode tmp = cartesianTreeSort.rootNode;
-            cartesianTreeSort.rootNode = rightMost;
-            cartesianTreeSort.rootNode.getRightmost().setRight(tmp);
+            CartesianTreeNode bottom = cartesianTreeSort.rootNode.getBottom();
+            cartesianTreeSort.addToStart(new Set(destination, cartesianTreeSort.rootNode.getValue()));
+            CartesianTreeNode.swapValues(cartesianTreeSort.rootNode, bottom);
+            cartesianTreeSort.addToStart(new MaxHeapify(cartesianTreeSort.rootNode));
+            if (bottom.getParent() == null) {
+                return;
+            }
+            bottom.getParent().removeChild(bottom);
         }
 
         @Override
@@ -200,41 +210,23 @@ public class CartesianTreeSort extends ActionSortingAlgorithm {
 
         @Override
         public void perform(CartesianTreeSort cartesianTreeSort, ArrayDisplay display) {
-            if (node.getLeft() == null && node.getRight() == null) {
-                return;
-            }
+            CartesianTreeNode largestChild = node.getLargestChild();
+            if (largestChild == null) return;
 
-            if (node.getLeft() != null && node.getRight() != null) {
-                if (node.getValue() >= node.getLeft().getValue() && node.getValue() >= node.getRight().getValue()) {
-                    return;
-                }
-                CartesianTreeNode nodeToSwap = node.getLeft().getValue() >= node.getRight().getValue() ? node.getLeft() : node.getRight();
-                CartesianTreeNode.swapChildren(node, nodeToSwap);
-                cartesianTreeSort.addToStart(new MaxHeapify(nodeToSwap));
-            } else if (node.getLeft() != null && node.getLeft().getValue() > node.getValue()) {
-                CartesianTreeNode.swapChildren(node, node.getLeft());
-            } else if (node.getRight() != null && node.getRight().getValue() > node.getValue()) {
-                CartesianTreeNode.swapChildren(node, node.getRight());
+            if (largestChild.getValue() > node.getValue()) {
+                CartesianTreeNode.swapValues(node, largestChild);
+                cartesianTreeSort.addToStart(new MaxHeapify(largestChild));
             }
         }
 
         @Override
         public void performDetailed(CartesianTreeSort cartesianTreeSort, ArrayAnimatedDisplay display) {
-            if (node.getLeft() == null && node.getRight() == null) {
-                return;
-            }
+            CartesianTreeNode largestChild = node.getLargestChild();
+            if (largestChild == null) return;
 
-            if (node.getLeft() != null && node.getRight() != null) {
-                if (node.getValue() >= node.getLeft().getValue() && node.getValue() >= node.getRight().getValue()) {
-                    return;
-                }
-                CartesianTreeNode nodeToSwap = node.getLeft().getValue() >= node.getRight().getValue() ? node.getLeft() : node.getRight();
-                CartesianTreeNode.swapChildren(node, nodeToSwap);
-                cartesianTreeSort.addToStart(new MaxHeapify(nodeToSwap));
-            } else if (node.getLeft() != null && node.getLeft().getValue() > node.getValue()) {
-                CartesianTreeNode.swapChildren(node, node.getLeft());
-            } else if (node.getRight() != null && node.getRight().getValue() > node.getValue()) {
-                CartesianTreeNode.swapChildren(node, node.getRight());
+            if (largestChild.getValue() > node.getValue()) {
+                CartesianTreeNode.swapValues(node, largestChild);
+                cartesianTreeSort.addToStart(new MaxHeapify(largestChild));
             }
         }
     }

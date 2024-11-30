@@ -1,17 +1,22 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MergeSort extends ActionSortingAlgorithm {
 
     private static final double SECTION_OFFSET = 25 * Math.sin(Math.toRadians(60)) + 10;
 
-    public MergeSort(List<Integer> arrayList, boolean isInstant) {
+    private final boolean inPlace;
+
+    public MergeSort(List<Integer> arrayList, boolean isInstant, boolean inPlace) {
         super(arrayList, isInstant);
+        this.inPlace = inPlace;
 
         if (!isInstant) actions.add(new Divide(0, arrayList.size()));
     }
@@ -79,9 +84,14 @@ public class MergeSort extends ActionSortingAlgorithm {
                 int half = (min + max) / 2;
                 algorithm.addToStart(
                         new Divide(min, half),
-                        new Divide(half, max),
-                        new Merge(min, max)
+                        new Divide(half, max)
                 );
+                if (((MergeSort) algorithm).inPlace) {
+                    algorithm.addToStart(new InPlaceMerge(min, max));
+                } else {
+                    algorithm.addToStart(new Merge(min, half, max));
+                }
+
             }
         }
 
@@ -114,7 +124,7 @@ public class MergeSort extends ActionSortingAlgorithm {
                             display.animate(display.highlightAnimation(i -> i >= min && i < max));
                             display.onPlay(() -> display.setCurrentTask(STR."Merging [\{min}, \{half - 1}] and [\{half}, \{max - 1}]"));
                         }),
-                        new Merge(min, max),
+                        new InPlaceMerge(min, max),
                         new LaterAction(() -> {
                             leftSection.setFill(Color.BLACK);
                             rightSection.setFill(Color.BLACK);
@@ -135,13 +145,13 @@ public class MergeSort extends ActionSortingAlgorithm {
         }
     }
 
-    private static class Merge extends AlgorithmAction {
+    private static class InPlaceMerge extends AlgorithmAction {
         private int leftSide;
         private int rightSide;
         private final int end;
         private int i;
 
-        public Merge(int leftSide, int end) {
+        public InPlaceMerge(int leftSide, int end) {
             this.leftSide = leftSide;
             this.rightSide = (leftSide + end) / 2;
             this.end = end;
@@ -205,6 +215,53 @@ public class MergeSort extends ActionSortingAlgorithm {
                         display.removeItem(rightArrow);
                     })
             );
+        }
+    }
+
+    private static class Merge extends AlgorithmAction {
+
+        private final int leftSide;
+        private final int rightSide;
+        private final int end;
+        private int pos;
+
+        private final List<Integer> left;
+        private final List<Integer> right;
+
+        public Merge(int leftSide, int rightSide, int end) {
+            this.leftSide = leftSide;
+            this.rightSide = rightSide;
+            this.end = end;
+            this.pos = leftSide;
+
+            left = new ArrayList<>();
+            right = new ArrayList<>();
+        }
+
+        @Override
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+            for (int i = leftSide; i < rightSide; i++) {
+                left.add(algorithm.list.get(i));
+                algorithm.addToStart(new Wait());
+            }
+            for (int i = rightSide; i < end; i++) {
+                right.add(algorithm.list.get(i));
+                algorithm.addToStart(new Wait());
+            }
+
+            while (!right.isEmpty() && !left.isEmpty()) {
+                if (left.getFirst() <= right.getFirst()) {
+                    algorithm.addToStart(new Set(pos, left.removeFirst()));
+                } else {
+                    algorithm.addToStart(new Set(pos, right.removeFirst()));
+                }
+                pos++;
+            }
+            List<Integer> emptyList = right.isEmpty() ? left : right;
+            while (!emptyList.isEmpty()) {
+                algorithm.addToStart(new Set(pos, emptyList.removeFirst()));
+                pos++;
+            }
         }
     }
 

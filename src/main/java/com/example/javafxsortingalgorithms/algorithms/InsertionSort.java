@@ -253,9 +253,9 @@ public class InsertionSort extends ActionSortingAlgorithm {
             algorithm.searchSection.moveToIndex(from, algorithm.sectionHeight);
             display.animate(algorithm.searchSection.resizeTimeline((to - from + 1) * 25));
             display.updateInfoWhenDone(SearchType.RIGHT_LINEAR.index, to);
-            display.updateInfoWhenDone(SearchType.RIGHT_LINEAR.value, algorithm.getArray().get(to));
+            display.updateInfoWhenDone(SearchType.RIGHT_LINEAR.value, algorithm.getList().get(to));
             display.updateInfoWhenDone("Current index", index);
-            display.updateInfoWhenDone("Current value", algorithm.getArray().get(index));
+            display.updateInfoWhenDone("Current value", algorithm.getList().get(index));
             display.newGroup();
             display.comparing(index, to);
 

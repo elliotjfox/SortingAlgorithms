@@ -85,7 +85,7 @@ public abstract class SortingAlgorithm {
         list.add(targetIndex, list.remove(index));
     }
 
-    public List<Integer> getArray() {
+    public List<Integer> getList() {
         return list;
     }
 

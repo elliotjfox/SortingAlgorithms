@@ -117,9 +117,9 @@ public class HeapSort extends ActionSortingAlgorithm {
             // If both children are in range
             if (i * 2 + 2 < heapSort.length) {
                 // If the current one is less than one of its children
-                if (heapSort.getArray().get(i) < heapSort.getArray().get(i * 2 + 1) || heapSort.getArray().get(i) < heapSort.getArray().get(i * 2 + 2)) {
+                if (heapSort.getList().get(i) < heapSort.getList().get(i * 2 + 1) || heapSort.getList().get(i) < heapSort.getList().get(i * 2 + 2)) {
                     // Swap is with the larger child
-                    int largestChild = heapSort.getArray().get(i * 2 + 1) > heapSort.getArray().get(i * 2 + 2) ? i * 2 + 1 : i * 2 + 2;
+                    int largestChild = heapSort.getList().get(i * 2 + 1) > heapSort.getList().get(i * 2 + 2) ? i * 2 + 1 : i * 2 + 2;
                     heapSort.addToStart(
                             new Swap(i, largestChild),
                             new MaxHeapify(largestChild)
@@ -127,7 +127,7 @@ public class HeapSort extends ActionSortingAlgorithm {
                 }
             } else if (i * 2 + 1 < heapSort.length) {
                 // One of the children is in range, check if it is bigger
-                if (heapSort.getArray().get(i) < heapSort.getArray().get(i * 2 + 1)) {
+                if (heapSort.getList().get(i) < heapSort.getList().get(i * 2 + 1)) {
                     heapSort.addToStart(new Swap(i, i * 2 + 1));
                     // Don't need to call max heapify, since the child was at the edge of the
                 }
@@ -151,9 +151,9 @@ public class HeapSort extends ActionSortingAlgorithm {
                 display.comparing(i * 2 + 1, i * 2 + 2);
                 display.animate(heapSort.tree.read(i * 2 + 1), heapSort.tree.read(i * 2 + 2));
                 // If the current one is less than one of its children
-                if (heapSort.getArray().get(i) < heapSort.getArray().get(i * 2 + 1) || heapSort.getArray().get(i) < heapSort.getArray().get(i * 2 + 2)) {
+                if (heapSort.getList().get(i) < heapSort.getList().get(i * 2 + 1) || heapSort.getList().get(i) < heapSort.getList().get(i * 2 + 2)) {
                     // Swap is with the larger child
-                    int largestChild = heapSort.getArray().get(i * 2 + 1) > heapSort.getArray().get(i * 2 + 2) ? i * 2 + 1 : i * 2 + 2;
+                    int largestChild = heapSort.getList().get(i * 2 + 1) > heapSort.getList().get(i * 2 + 2) ? i * 2 + 1 : i * 2 + 2;
                     heapSort.addToStart(
                             new LaterAction(() -> display.getElementAnimationGroup().addTimelines(heapSort.tree.animateSwap(i, largestChild))),
                             new Swap(i, largestChild),
@@ -170,7 +170,7 @@ public class HeapSort extends ActionSortingAlgorithm {
                 display.animate(heapSort.tree.read(i * 2 + 1));
 
                 // One of the children is in range, check if it is bigger
-                if (heapSort.getArray().get(i) < heapSort.getArray().get(i * 2 + 1)) {
+                if (heapSort.getList().get(i) < heapSort.getList().get(i * 2 + 1)) {
                     heapSort.addToStart(
                             new LaterAction(() -> display.getElementAnimationGroup().addTimelines(heapSort.tree.animateSwap(i, i * 2 + 1))),
                             new Swap(i, i * 2 + 1)

@@ -169,6 +169,22 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
         }
     }
 
+    protected static class Set extends AlgorithmAction {
+
+        private final int index;
+        private final int value;
+
+        public Set(int index, int value) {
+            this.index = index;
+            this.value = value;
+        }
+
+        @Override
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+            algorithm.getList().set(index, value);
+        }
+    }
+
     /**
      * An action that runs a {@link Runnable} when executed.
      */

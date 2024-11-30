@@ -37,7 +37,7 @@ public class Settings {
             case "Gravity":     yield new GenericAlgorithmSettings<>("Gravity Sort", GravitySort::new);
             case "Heap":        yield new GenericAlgorithmSettings<>("Heap Sort", HeapSort::new);
             case "Insertion":   yield new InsertionSortSettings();
-            case "Merge":       yield new GenericAlgorithmSettings<>("Merge Sort", MergeSort::new);
+            case "Merge":       yield new MergeSortSettings();
             case "OddEven":     yield new GenericAlgorithmSettings<>("Odd-Even Sort", OddEvenSort::new);
             case "QuantumBogo": yield new GenericAlgorithmSettings<>("Quantum Bogo Sort", QuantumBogoSort::new);
             case "Quick":       yield new QuickSortSettings();
@@ -48,7 +48,7 @@ public class Settings {
             case "Stooge":      yield new GenericAlgorithmSettings<>("Stooge Sort", StoogeSort::new);
             case "Strand":      yield new GenericAlgorithmSettings<>("Strand Sort", StrandSort::new);
             case "Cycle":       yield new GenericAlgorithmSettings<>("Strand Sort", CycleSort::new);
-            default:            yield new GenericAlgorithmSettings<>("Gnome Sort", GnomeSort::new);
+            default:            yield new GenericAlgorithmSettings<>("Unknown Algorithm", GnomeSort::new);
         };
     }
 

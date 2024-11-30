@@ -38,6 +38,16 @@ public class AnimatedCartesianTree extends AnimatedItem {
         }
     }
 
+    public void drawLine(int from, int to) {
+        Line line = new Line();
+        line.setStartX(treeItems.get(from).getLayoutX() + display.getElementWidth() / 2);
+        line.setStartY(treeItems.get(from).getLayoutY() + display.getElementWidth());
+        line.setEndX(treeItems.get(to).getLayoutX() + display.getElementWidth() / 2);
+        line.setEndY(treeItems.get(to).getLayoutY());
+        getChildren().add(line);
+        lines.add(line);
+    }
+
     private Timeline lowerOthersTimeline(int highestIndex, int from, int to) {
         found.set(highestIndex, true);
         List<KeyValue> keyValues = new ArrayList<>();

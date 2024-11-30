@@ -32,7 +32,7 @@ public class Settings {
             case "Cartesian":   yield new GenericAlgorithmSettings<>("Cartesian Tree Sort", CartesianTreeSort::new);
             case "Cocktail":    yield new GenericAlgorithmSettings<>("Cocktail Shaker Sort", CocktailShakerSort::new);
             case "Comb":        yield new CombSortSettings();
-            case "Exchange":    yield new GenericAlgorithmSettings<>("Exchange Sort", ExchangeSort::new);
+            case "Exchange":    yield new ExchangeSortSettings();
             case "Gnome":       yield new GenericAlgorithmSettings<>("Gnome Sort", GnomeSort::new);
             case "Gravity":     yield new GenericAlgorithmSettings<>("Gravity Sort", GravitySort::new);
             case "Heap":        yield new GenericAlgorithmSettings<>("Heap Sort", HeapSort::new);

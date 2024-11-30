@@ -7,21 +7,28 @@ import java.util.List;
 
 public class ExchangeSort extends SortingAlgorithm {
 
-   private int sorted;
-   private int curIndex;
+    public enum Direction {
+        UP,
+        DOWN
+    }
 
-    public ExchangeSort(List<Integer> list, boolean isInstant) {
+    private int sorted;
+    private int curIndex;
+    private final Direction direction;
+
+    public ExchangeSort(List<Integer> list, boolean isInstant, Direction direction) {
         super(list, isInstant);
 
         sorted = 0;
-        curIndex = 1;
+        curIndex = direction == Direction.UP ? 1 : list.size() - 1;
+        this.direction = direction;
     }
 
     @Override
     protected void runAlgorithm(ArrayDisplay display) {
-        if (curIndex >= list.size()) {
+        if (curIndex >= list.size() || curIndex <= sorted) {
             sorted++;
-            curIndex = sorted + 1;
+            curIndex = direction == Direction.UP ? sorted + 1 : list.size() - 1;
 
             if (sorted >= list.size()) {
                 isDone = true;
@@ -39,7 +46,11 @@ public class ExchangeSort extends SortingAlgorithm {
             display.readIndex(sorted);
         }
 
-        curIndex++;
+        if (direction == Direction.UP) {
+            curIndex++;
+        } else {
+            curIndex--;
+        }
     }
 
     @Override

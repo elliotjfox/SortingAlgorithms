@@ -1,81 +1,105 @@
 package com.example.javafxsortingalgorithms.settings;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.IntegerPropertyBase;
 import javafx.scene.control.Label;
 
 public class DisplaySettings extends SettingsSection {
 
-    private int numberElements;
-    private int borderWidth;
-    private int elementWidth;
-    private int maxHeight;
-    private int minHeight;
+    private final IntegerPropertyBase numberElements;
+    private final IntegerPropertyBase borderWidth;
+    private final IntegerPropertyBase elementWidth;
+    private final IntegerPropertyBase height;
 
     private final IntegerInputBox numberElementsBox;
     private final IntegerInputBox arrayBorderBox;
     private final IntegerInputBox elementWidthBox;
-    private final IntegerInputBox maxHeightBox;
-    private final IntegerInputBox minHeightBox;
+    private final IntegerInputBox heightBox;
 
     private static final String numberElementsInfo = "The number of elements (numbers) that the algorithm has to sort.";
     private static final String borderWidthInfo = "The width of the border around the elements.";
     private static final String elementWidthInfo = "The width of each element.";
-    private static final String maxHeightInfo = "The maximum height the highest element can be.";
-    private static final String minHeightInfo = "The minimum height the highest element can be.";
+    private static final String heightInfo = "The height of the array display.";
 
     public DisplaySettings() {
         super();
 
-        numberElementsBox = new IntegerInputBox(() -> numberElements, (i) -> numberElements = i);
-        arrayBorderBox = new IntegerInputBox(() -> borderWidth, (i) -> borderWidth = i);
-        elementWidthBox = new IntegerInputBox(() -> elementWidth, (i) -> elementWidth = i);
-        maxHeightBox = new IntegerInputBox(() -> maxHeight, (i) -> maxHeight = Math.max(i, minHeight));
-        minHeightBox = new IntegerInputBox(() -> minHeight, (i) -> minHeight = Math.min(i, maxHeight));
+        numberElements = createProperty("Number Elements");
+        borderWidth = createProperty("Border Width");
+        elementWidth = createProperty("Element Width");
+        height = createProperty("Height");
+
+        numberElementsBox = new IntegerInputBox(numberElements::getValue, numberElements::setValue);
+        arrayBorderBox = new IntegerInputBox(borderWidth::getValue, borderWidth::setValue);
+        elementWidthBox = new IntegerInputBox(elementWidth::getValue, elementWidth::setValue);
+        heightBox = new IntegerInputBox(height::getValue, height::setValue);
 
         addSetting(new Label("Number of Elements"), numberElementsBox, numberElementsInfo);
         addSetting(new Label("Array Border"), arrayBorderBox, borderWidthInfo);
         addSetting(new Label("Element Width"), elementWidthBox, elementWidthInfo);
-        addSetting(new Label("Max height"), maxHeightBox, maxHeightInfo);
-        addSetting(new Label("Min height"), minHeightBox, minHeightInfo);
+        addSetting(new Label("Height"), heightBox, heightInfo);
 
         addSetting(buildResetButton());
+
+        resetSettings();
     }
 
     @Override
     public void resetSettings() {
-        numberElements = Settings.defaultNumberElements;
-        borderWidth = Settings.defaultArrayBorder;
-        elementWidth = Settings.defaultElementWidth;
-        maxHeight = Settings.defaultMaxHeight;
-        minHeight = Settings.defaultMinHeight;
+        if (numberElements != null) numberElements.setValue(Settings.defaultNumberElements);
+        if (borderWidth != null) borderWidth.setValue(Settings.defaultArrayBorder);
+        if (elementWidth != null) elementWidth.setValue(Settings.defaultElementWidth);
+        if (height != null) height.setValue(Settings.defaultHeight);
 
         if (numberElementsBox != null) numberElementsBox.updateValue();
         if (arrayBorderBox != null) arrayBorderBox.updateValue();
         if (elementWidthBox != null) elementWidthBox.updateValue();
-        if (maxHeightBox != null) maxHeightBox.updateValue();
-        if (minHeightBox != null) minHeightBox.updateValue();
+        if (heightBox != null) heightBox.updateValue();
     }
 
     public int getNumberElements() {
-        return numberElements;
+        return numberElements.getValue();
     }
 
     public int getBorderWidth() {
-        return borderWidth;
+        return borderWidth.getValue();
     }
 
     public int getElementWidth() {
+        return elementWidth.getValue();
+    }
+
+    public int getDisplayHeight() {
+        return height.getValue();
+    }
+
+    public IntegerProperty numberElements() {
+        return numberElements;
+    }
+
+    public IntegerProperty borderWidth() {
+        return borderWidth;
+    }
+
+    public IntegerProperty elementWidth() {
         return elementWidth;
     }
 
-    public int getDisplayMaxHeight() {
-        return maxHeight;
+    public IntegerProperty height() {
+        return height;
     }
 
-    public int getDisplayMinHeight() {
-        return minHeight;
-    }
+    private IntegerPropertyBase createProperty(String name) {
+        return new IntegerPropertyBase() {
+            @Override
+            public Object getBean() {
+                return this;
+            }
 
-//    public ArrayDisplay createArrayDisplay(AlgorithmDisplay algorithmDisplay) {
-//        return displayType.createArrayDisplay(algorithmDisplay);
-//    }
+            @Override
+            public String getName() {
+                return name;
+            }
+        };
+    }
 }

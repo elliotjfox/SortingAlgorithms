@@ -1,10 +1,10 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDetailedDisplay;
+import com.example.javafxsortingalgorithms.arraydisplay.ArrayAnimatedDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.DetailedArrow;
-import com.example.javafxsortingalgorithms.arraydisplay.DetailedSection;
+import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrow;
+import com.example.javafxsortingalgorithms.arraydisplay.AnimatedSection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +14,9 @@ public class OddEvenSort extends SortingAlgorithm {
     private static final double SECTION_HEIGHT = -7;
     private static final double ARROW_HEIGHT = -15;
 
-    private List<DetailedSection> sections;
-    private DetailedArrow leftArrow;
-    private DetailedArrow rightArrow;
+    private List<AnimatedSection> sections;
+    private AnimatedArrow leftArrow;
+    private AnimatedArrow rightArrow;
 
     private boolean hasMadeSwap;
     private int currentPos;
@@ -62,16 +62,16 @@ public class OddEvenSort extends SortingAlgorithm {
     }
 
     @Override
-    public void startDetailed(ArrayDetailedDisplay display) {
-        leftArrow = new DetailedArrow(display, true);
+    public void startAnimated(ArrayAnimatedDisplay display) {
+        leftArrow = new AnimatedArrow(display, true);
         display.addItem(leftArrow, 0, ARROW_HEIGHT);
 
-        rightArrow = new DetailedArrow(display, true);
+        rightArrow = new AnimatedArrow(display, true);
         display.addItem(rightArrow, 1, ARROW_HEIGHT);
 
         sections = new ArrayList<>();
         for (int i = 0; i < list.size() / 2; i++) {
-            DetailedSection section = new DetailedSection(display, 25.0, true);
+            AnimatedSection section = new AnimatedSection(display, 25.0, true);
             sections.add(section);
             display.addItem(section);
 //            display.addItem(section, display.getX(i * 2 + (currentPos % 2 == 0 ? 0 : 1)) + 12.5, SECTION_HEIGHT);
@@ -86,7 +86,7 @@ public class OddEvenSort extends SortingAlgorithm {
     }
 
     @Override
-    public void iterateDetailed(ArrayDetailedDisplay display) {
+    public void iterateAnimated(ArrayAnimatedDisplay display) {
         if (currentPos + 1 >= list.size()) {
             if (isListSorted(list)) {
                 isDone = true;
@@ -132,7 +132,7 @@ public class OddEvenSort extends SortingAlgorithm {
         currentPos += 2;
     }
 
-    private void updateInfoWhenDone(ArrayDetailedDisplay display) {
+    private void updateInfoWhenDone(ArrayAnimatedDisplay display) {
         display.updateInfoWhenDone("Left index", currentPos);
         display.updateInfoWhenDone("Left value", list.get(currentPos));
         display.updateInfoWhenDone("Right index", currentPos + 1);

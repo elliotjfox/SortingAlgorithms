@@ -22,7 +22,7 @@ public class BogoSort extends ActionSortingAlgorithm {
                 actions.add(new Randomize());
             }
             currentAction = actions.getFirst();
-            currentAction.perform(this, display);
+            currentAction.execute(this, display);
             actions.remove(currentAction);
             actions.addAll(0, toAdd);
             toAdd.clear();
@@ -53,7 +53,7 @@ public class BogoSort extends ActionSortingAlgorithm {
     private static class Randomize extends AlgorithmAction {
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             for (int i = 0; i < algorithm.list.size(); i++) {
                 algorithm.addToStart(new Swap(i, (int) (Math.random() * (algorithm.list.size() - i)) + i));
             }

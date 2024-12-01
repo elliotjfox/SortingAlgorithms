@@ -19,8 +19,7 @@ public class Settings {
     public static int defaultNumberElements = 250;
     public static int defaultArrayBorder = 15;
     public static int defaultElementWidth = 4;
-    public static int defaultMaxHeight = 600;
-    public static int defaultMinHeight = 600;
+    public static int defaultHeight = 600;
 
     public static int defaultTestSize = 5000;
 
@@ -31,14 +30,15 @@ public class Settings {
             case "Bitonic":     yield new BitonicSettings();
             case "Bogo":        yield new GenericAlgorithmSettings<>("Bogo Sort", BogoSort::new);
             case "Bubble":      yield new GenericAlgorithmSettings<>("Bubble Sort", BubbleSort::new);
+            case "Cartesian":   yield new GenericAlgorithmSettings<>("Cartesian Tree Sort", CartesianTreeSort::new);
             case "Cocktail":    yield new GenericAlgorithmSettings<>("Cocktail Shaker Sort", CocktailShakerSort::new);
             case "Comb":        yield new CombSortSettings();
-            case "Exchange":    yield new GenericAlgorithmSettings<>("Exchange Sort", ExchangeSort::new);
+            case "Exchange":    yield new ExchangeSortSettings();
             case "Gnome":       yield new GenericAlgorithmSettings<>("Gnome Sort", GnomeSort::new);
             case "Gravity":     yield new GenericAlgorithmSettings<>("Gravity Sort", GravitySort::new);
             case "Heap":        yield new GenericAlgorithmSettings<>("Heap Sort", HeapSort::new);
             case "Insertion":   yield new InsertionSortSettings();
-            case "Merge":       yield new GenericAlgorithmSettings<>("Merge Sort", MergeSort::new);
+            case "Merge":       yield new MergeSortSettings();
             case "OddEven":     yield new GenericAlgorithmSettings<>("Odd-Even Sort", OddEvenSort::new);
             case "QuantumBogo": yield new GenericAlgorithmSettings<>("Quantum Bogo Sort", QuantumBogoSort::new);
             case "Quick":       yield new QuickSortSettings();
@@ -48,10 +48,9 @@ public class Settings {
             case "Shell":       yield new ShellSortSettings();
             case "Stooge":      yield new GenericAlgorithmSettings<>("Stooge Sort", StoogeSort::new);
             case "Strand":      yield new GenericAlgorithmSettings<>("Strand Sort", StrandSort::new);
-            case "Shell2":      yield new GenericAlgorithmSettings<>("Strand Sort", ShellSortV2::new);
             case "Selection2":  yield new GenericAlgorithmSettings<>("Selection2", BetterSelectionSort::new);
             case "Cycle":       yield new GenericAlgorithmSettings<>("Strand Sort", CycleSort::new);
-            default:            yield new GenericAlgorithmSettings<>("Gnome Sort", GnomeSort::new);
+            default:            yield new GenericAlgorithmSettings<>("Unknown Algorithm", GnomeSort::new);
         };
     }
 
@@ -65,51 +64,50 @@ public class Settings {
         return list;
     }
 
-    public static ArrayList<Integer> getRandomUniformArray(int size) {
-        ArrayList<Integer> array = new ArrayList<>();
+    public static List<Integer> getRandomUniformList(int size) {
+        List<Integer> list = new ArrayList<>();
 
+        // Very arbitrary value lol
         if (size >= 5000) {
-            System.out.println("Warning: suspiciously large number for normal array size");
+            System.out.println("Warning: suspiciously large number for normal list size, returning size 5000");
+            return getRandomUniformList(5000);
         }
 
         for (int i = 0; i < size; i++) {
-            array.add(i);
+            list.add(i);
         }
 
-//        for (int i = size; i > 1; i--) {
-//            array.set(i - 1, array.set(random.nextInt(i), array.get(i - 1)));
-//        }
-        Collections.shuffle(array);
+        Collections.shuffle(list, random);
 
-        return array;
+        return list;
     }
 
-    public static ArrayList<Integer> getRandom(int size) {
-        ArrayList<Integer> array = new ArrayList<>();
+    public static List<Integer> getRandomList(int size) {
+        List<Integer> array = new ArrayList<>();
 
         for (int i = 0; i < size; i++) {
             array.add(random.nextInt(size));
         }
 
-        Collections.shuffle(array);
+        Collections.shuffle(array, random);
 
         return array;
     }
 
-    public static ArrayList<Integer> getArray(int size, int min, int max) {
-        ArrayList<Integer> array = new ArrayList<>();
+    public static List<Integer> getRangeList(int size, int min, int max) {
+        List<Integer> array = new ArrayList<>();
 
         for (int i = 0; i < size; i++) {
             int tmp = random.nextInt(max - min) + min;
 //            System.out.println(tmp);
             array.add(tmp);
         }
-        Collections.shuffle(array);
+        Collections.shuffle(array, random);
         return array;
     }
 
     public static void getTestList(int size, Consumer<List<Integer>> whenDone) {
-        ArrayList<Integer> array = new ArrayList<>();
+        List<Integer> array = new ArrayList<>();
 
         if (size >= 500000) {
             Stage dialog = new Stage();
@@ -150,7 +148,7 @@ public class Settings {
                 array.add(i);
             }
 
-            Collections.shuffle(array);
+            Collections.shuffle(array, random);
 
             whenDone.accept(array);
         }

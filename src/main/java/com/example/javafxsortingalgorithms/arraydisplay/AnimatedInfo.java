@@ -5,17 +5,17 @@ import javafx.scene.control.Label;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class DetailedInfo extends Label {
+public class AnimatedInfo extends Label {
 
     public static final String OUT_OF_BOUNDS_INDEX = "N/A";
     public static final String OUT_OF_BOUND_VALUE = "N/A";
 
     private final Map<String, String> info;
 
-    public DetailedInfo() {
+    public AnimatedInfo() {
         info = new LinkedHashMap<>();
         setWrapText(true);
-        setPrefWidth(200);
+        setPrefWidth(300);
     }
 
     public void updateInfo(String key, Object value) {

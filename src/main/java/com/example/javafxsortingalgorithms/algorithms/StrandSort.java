@@ -36,15 +36,15 @@ public class StrandSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             int k = 0;
             int i = start;
             int last = i;
 
             algorithm.addToStart(new Move(i, k));
             i++;
-            while (i < algorithm.getArray().size()) {
-                if (algorithm.getArray().get(i) >= algorithm.getArray().get(last)) {
+            while (i < algorithm.getList().size()) {
+                if (algorithm.getList().get(i) >= algorithm.getList().get(last)) {
                     algorithm.addToStart(new Move(i, k + 1));
                     k++;
                     last = i;
@@ -60,7 +60,7 @@ public class StrandSort extends ActionSortingAlgorithm {
                 algorithm.addToStart(new MergeStrand(0,  k + 1, start + k));
             }
 
-            if (start + k + 1 < algorithm.getArray().size()) {
+            if (start + k + 1 < algorithm.getList().size()) {
                 algorithm.addToStart(new FindStrand(start + k + 1, true));
             }
         }
@@ -79,11 +79,11 @@ public class StrandSort extends ActionSortingAlgorithm {
 
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             int i = left;
             while (left < right && right <= end) {
 //                System.out.print(STR."\{left}/\{right}/\{end}");
-                if (algorithm.getArray().get(left) > algorithm.getArray().get(right)) {
+                if (algorithm.getList().get(left) > algorithm.getList().get(right)) {
                     algorithm.addToStart(new Move(right, i));
                     right++;
                 } else {

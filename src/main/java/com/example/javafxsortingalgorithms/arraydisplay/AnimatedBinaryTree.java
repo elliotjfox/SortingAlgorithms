@@ -3,29 +3,32 @@ package com.example.javafxsortingalgorithms.arraydisplay;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.scene.Group;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DetailedBinaryTree extends DetailedItem {
+public class AnimatedBinaryTree extends AnimatedItem {
 
-    private final List<DetailedBinaryTreeItem> treeItems;
+    private final List<AnimatedBinaryTreeItem> treeItems;
     private final List<Line> lines;
 
-    public DetailedBinaryTree(ArrayDetailedDisplay display, List<Integer> list) {
+    // TODO: Make this adaptable to different sizes maybe?
+    public AnimatedBinaryTree(ArrayAnimatedDisplay display, List<Integer> list) {
         super(display);
         treeItems = new ArrayList<>();
         lines = new ArrayList<>();
 
         for (Integer i : list) {
-            DetailedBinaryTreeItem item = new DetailedBinaryTreeItem(i, list.size());
+            AnimatedBinaryTreeItem item = new AnimatedBinaryTreeItem(i, list.size());
             treeItems.add(item);
             getChildren().add(item);
             lines.add(null);
@@ -51,19 +54,19 @@ public class DetailedBinaryTree extends DetailedItem {
         return (int) (Math.log(i + 1) / Math.log(2));
     }
 
-    private void lineBetween(DetailedBinaryTreeItem upper, DetailedBinaryTreeItem lower) {
+    private void lineBetween(AnimatedBinaryTreeItem upper, AnimatedBinaryTreeItem lower) {
         Line line = new Line(upper.getLayoutX() + 12.5, upper.getLayoutY() + 25, lower.getLayoutX() + 12.5, lower.getLayoutY());
         getChildren().add(line);
         lines.set(treeItems.indexOf(lower), line);
     }
 
     public Timeline animateSwap(int first, int second) {
-        DetailedBinaryTreeItem firstItem = treeItems.get(first);
-        DetailedBinaryTreeItem secondItem = treeItems.get(second);
+        AnimatedBinaryTreeItem firstItem = treeItems.get(first);
+        AnimatedBinaryTreeItem secondItem = treeItems.get(second);
         treeItems.set(first, treeItems.set(second, treeItems.get(first)));
         return new Timeline(
                 new KeyFrame(
-                        Duration.millis(ArrayDetailedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
                         new KeyValue(firstItem.layoutXProperty(), secondItem.getLayoutX()),
                         new KeyValue(firstItem.layoutYProperty(), secondItem.getLayoutY()),
                         new KeyValue(secondItem.layoutXProperty(), firstItem.getLayoutX()),
@@ -72,15 +75,14 @@ public class DetailedBinaryTree extends DetailedItem {
         );
     }
 
-    // TODO: Make this happen at the same time as the bars moving
     public Timeline extractItem(int toRemove, int toReplace) {
-        DetailedBinaryTreeItem toRemoveItem = treeItems.get(toRemove);
+        AnimatedBinaryTreeItem toRemoveItem = treeItems.get(toRemove);
         Line toRemoveLine = lines.get(toReplace);
-        DetailedBinaryTreeItem toReplaceItem = treeItems.get(toReplace);
+        AnimatedBinaryTreeItem toReplaceItem = treeItems.get(toReplace);
 
         Timeline timeline = new Timeline(
                 new KeyFrame(
-                        Duration.millis(ArrayDetailedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
                         new KeyValue(toReplaceItem.layoutXProperty(), toRemoveItem.getLayoutX()),
                         new KeyValue(toReplaceItem.layoutYProperty(), toRemoveItem.getLayoutY()),
                         new KeyValue(toRemoveItem.layoutXProperty(), toReplaceItem.getLayoutX()),
@@ -99,7 +101,7 @@ public class DetailedBinaryTree extends DetailedItem {
     }
 
     public Timeline read(int index) {
-        Polygon arrow = ArrayDetailedDisplay.createReadArrow();
+        Polygon arrow = ArrayAnimatedDisplay.createReadArrow();
         arrow.setLayoutX(treeItems.get(index).getLayoutX());
         arrow.setLayoutY(treeItems.get(index).getLayoutY() + 25);
         Timeline timeline = new Timeline(
@@ -108,7 +110,7 @@ public class DetailedBinaryTree extends DetailedItem {
                         event -> getChildren().add(arrow)
                 ),
                 new KeyFrame(
-                        Duration.millis(ArrayDetailedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
                         new KeyValue(arrow.layoutYProperty(), treeItems.get(index).getLayoutY())
                 )
         );
@@ -116,14 +118,15 @@ public class DetailedBinaryTree extends DetailedItem {
         return timeline;
     }
 
-    private static class DetailedBinaryTreeItem extends Group {
-        public DetailedBinaryTreeItem(int i, int max) {
+    private static class AnimatedBinaryTreeItem extends StackPane {
+        public AnimatedBinaryTreeItem(int i, int max) {
+            setAlignment(Pos.CENTER);
             Rectangle rectangle = new Rectangle(25, 25, Color.hsb(360.0 * i / max, 1.0, 1.0));
+            rectangle.setStroke(Color.BLACK);
             getChildren().add(rectangle);
             Label label = new Label(Integer.toString(i));
-            label.layoutXProperty().bind(label.widthProperty().divide(2));
-            label.layoutYProperty().bind(label.heightProperty().divide(2));
             getChildren().add(label);
+            label.setTextAlignment(TextAlignment.CENTER);
         }
     }
 }

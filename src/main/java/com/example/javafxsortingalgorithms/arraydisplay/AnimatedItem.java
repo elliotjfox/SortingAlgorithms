@@ -6,22 +6,12 @@ import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.util.Duration;
 
-public class DetailedItem extends Group {
+public class AnimatedItem extends Group {
 
-    protected final ArrayDetailedDisplay display;
+    protected final ArrayAnimatedDisplay display;
 
-    public DetailedItem(ArrayDetailedDisplay display) {
+    public AnimatedItem(ArrayAnimatedDisplay display) {
         this.display = display;
-    }
-
-    public DetailedItem(ArrayDetailedDisplay display, int index, double y) {
-        this(display);
-        setIndex(index, y);
-    }
-
-    public DetailedItem(ArrayDetailedDisplay display, double x, double y) {
-        this(display);
-        setPosition(x, y);
     }
 
     public void setIndex(int index, double y) {
@@ -45,7 +35,7 @@ public class DetailedItem extends Group {
     public Timeline moveToIndexTimeline(int index, double y) {
         return new Timeline(
                 new KeyFrame(
-                        Duration.millis(ArrayDetailedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
                         new KeyValue(layoutXProperty(), index * display.getElementWidth()),
                         new KeyValue(layoutYProperty(), display.getMaxValue() * display.getHeightMultiplier() - y)
                 )
@@ -55,7 +45,7 @@ public class DetailedItem extends Group {
     public Timeline moveToPositionTimeline(double x, double y) {
         return new Timeline(
                 new KeyFrame(
-                        Duration.millis(ArrayDetailedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
                         new KeyValue(layoutXProperty(), x),
                         new KeyValue(layoutYProperty(), display.getMaxValue() * display.getHeightMultiplier() - y)
                 )

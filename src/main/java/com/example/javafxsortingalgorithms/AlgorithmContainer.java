@@ -13,20 +13,19 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class AlgorithmContainer {
 
-    // TODO: Finish getting detailed working
+    // TODO: Finish getting animated working
     public enum AlgorithmMode {
         NORMAL,
-        DETAILED,
+        ANIMATED,
         TESTING,
-        COMPARING; // TODO: Might not be needed
+        COMPARING // TODO: Might not be needed
     }
 
     // TODO: Could just use a boolean
-    private enum DetailedMode {
+    private enum AnimatedMode {
         ITERATE,
         ANIMATIONS
     }
@@ -36,14 +35,14 @@ public class AlgorithmContainer {
     private SettingsPane settingsPane;
     private ArrayDisplay display;
     private final Timeline normarlTimeline;
-    private final Timeline detailedTimeline;
+    private final Timeline animatedTimeline;
     private final Menu algorithmMenu;
     private final MenuBar menuBar;
     private final Button settingsButton;
     private Timeline currentTimeline;
 
     private AlgorithmMode mode;
-    private DetailedMode detailedMode;
+    private AnimatedMode animatedMode;
 
     public AlgorithmContainer() {
         normarlTimeline = new Timeline(
@@ -54,19 +53,19 @@ public class AlgorithmContainer {
         );
         normarlTimeline.setCycleCount(Animation.INDEFINITE);
 
-        detailedTimeline = new Timeline(
+        animatedTimeline = new Timeline(
                 new KeyFrame(
-                        Duration.millis(ArrayDetailedDisplay.ANIMATION_LENGTH + ArrayDetailedDisplay.ANIMATION_COOLDOWN),
-                        event -> iterateDetailed()
+                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH + ArrayAnimatedDisplay.ANIMATION_COOLDOWN),
+                        event -> iterateAnimated()
                 )
         );
-        detailedTimeline.setCycleCount(Animation.INDEFINITE);
+        animatedTimeline.setCycleCount(Animation.INDEFINITE);
 
 
         settingsPane = new SettingsPane();
         createArray(settingsPane.getDisplaySettings().getNumberElements());
         // Change this type
-        display = new ArrayBarDisplay(list, settingsPane);
+        display = new ArrayColourfulDisplay(list, settingsPane);
 
         algorithmMenu = createAlgorithmSelector();
         menuBar = new MenuBar(algorithmMenu);
@@ -77,26 +76,26 @@ public class AlgorithmContainer {
 //        settingsPane.setAlgorithmSettings(Settings.createSettings(algorithmSelector.getSelectionModel().getSelectedItem()));
 
         mode = AlgorithmMode.NORMAL;
-        detailedMode = DetailedMode.ITERATE;
+        animatedMode = AnimatedMode.ITERATE;
         currentTimeline = normarlTimeline;
     }
 
     public void createAlgorithm() {
         algorithm = settingsPane.getAlgorithmSettings().createAlgorithm(list);
-        if (mode == AlgorithmMode.DETAILED) {
-            if (display instanceof ArrayDetailedDisplay) {
-                algorithm.startDetailed((ArrayDetailedDisplay) display);
+        if (mode == AlgorithmMode.ANIMATED) {
+            if (display instanceof ArrayAnimatedDisplay) {
+                algorithm.startAnimated((ArrayAnimatedDisplay) display);
             } else {
-                System.out.println("Display is not a detailed display when it should be!");
+                System.out.println("Display is not a animated display when it should be!");
             }
         }
     }
 
     public void createArray(int size) {
-        list = Settings.getRandomUniformArray(size);
+        list = Settings.getRandomUniformList(size);
 //        list = Settings.getArray(size, 0, 25);
 //        list = Settings.getRandom(size);
-        if (display != null) display.setArray(list);
+        if (display != null) display.setList(list);
     }
 
     public void play() {
@@ -115,7 +114,7 @@ public class AlgorithmContainer {
         if (!hasCreatedAlgorithm()) createAlgorithm();
         switch (mode) {
             case NORMAL -> iterateNormal(1);
-            case DETAILED -> iterateDetailed();
+            case ANIMATED -> iterateAnimated();
             default -> System.out.println("Tried to step, but can't");
         }
     }
@@ -129,7 +128,7 @@ public class AlgorithmContainer {
     public void reset(List<Integer> list) {
         stop();
         this.list = new ArrayList<>(list);
-        if (display != null) display.setArray(this.list);
+        if (display != null) display.setList(this.list);
         resetAlgorithm();
     }
 
@@ -139,7 +138,7 @@ public class AlgorithmContainer {
 
     public void finish() {
         stop();
-        display.onFinish();
+        display.playFinish();
         resetAlgorithm();
     }
 
@@ -171,34 +170,34 @@ public class AlgorithmContainer {
         display.drawArray();
     }
 
-    public void iterateDetailed() {
-        if (!(display instanceof ArrayDetailedDisplay detailedDisplay)) {
-            System.out.println("Display is not a detailed display!!");
+    public void iterateAnimated() {
+        if (!(display instanceof ArrayAnimatedDisplay animatedDisplay)) {
+            System.out.println("Display is not a animated display!!");
             return;
         }
 
         // So that iterating doesn't take any time
-        if (detailedMode == DetailedMode.ITERATE) {
+        if (animatedMode == AnimatedMode.ITERATE) {
             // Only check if we would be iterating
             if (algorithm.isDone()) {
                 finish();
                 return;
             }
-            detailedDisplay.newGroup();
-            algorithm.iterateDetailed(detailedDisplay);
-            if (detailedDisplay.hasAnimations() || detailedDisplay.needsToMoveElements()) {
-                detailedMode = DetailedMode.ANIMATIONS;
+            animatedDisplay.newGroup();
+            algorithm.iterateAnimated(animatedDisplay);
+            if (animatedDisplay.hasAnimations() || animatedDisplay.needsToMoveElements()) {
+                animatedMode = AnimatedMode.ANIMATIONS;
             }
         }
 
-        if (detailedDisplay.hasAnimations()) {
-            detailedDisplay.playAnimations();
-        } else if (detailedDisplay.needsToMoveElements()) {
-            detailedDisplay.playFinalAnimations();
+        if (animatedDisplay.hasAnimations()) {
+            animatedDisplay.playAnimations();
+        } else if (animatedDisplay.needsToMoveElements()) {
+            animatedDisplay.playFinalAnimations();
         }
 
-        if (!detailedDisplay.hasAnimations() && !detailedDisplay.needsToMoveElements()) {
-            detailedMode = DetailedMode.ITERATE;
+        if (!animatedDisplay.hasAnimations() && !animatedDisplay.needsToMoveElements()) {
+            animatedMode = AnimatedMode.ITERATE;
         }
     }
 
@@ -207,14 +206,14 @@ public class AlgorithmContainer {
         stop();
         mode = AlgorithmMode.NORMAL;
         currentTimeline = normarlTimeline;
-        display = new ArrayBarDisplay(list, settingsPane);
+        display = new ArrayColourfulDisplay(list, settingsPane);
     }
 
-    public void enterDetailedMode() {
+    public void enterAnimatedMode() {
         stop();
-        mode = AlgorithmMode.DETAILED;
-        currentTimeline = detailedTimeline;
-        display = new ArrayDetailedDisplay(settingsPane);
+        mode = AlgorithmMode.ANIMATED;
+        currentTimeline = animatedTimeline;
+        display = new ArrayAnimatedDisplay(settingsPane);
         reset();
     }
 
@@ -278,7 +277,7 @@ public class AlgorithmContainer {
                 createMenuItem("Odd Even Sort", "OddEven"),
                 createMenuItem("Exchange Sort", "Exchange"),
                 createMenuItem("Strand Sort", "Strand"),
-                createMenuItem("Shell Sort 2", "Shell2"),
+                createMenuItem("Cartesian Tree Sort", "Cartesian"),
                 createMenuItem("Cycle Sort", "Cycle"),
                 createMenuItem("Selection2 Sort", "Selection2")
                 );

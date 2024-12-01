@@ -16,7 +16,7 @@ public class QuickSort extends ActionSortingAlgorithm {
         MIDDLE
     }
 
-    private DetailedSection section;
+    private AnimatedSection section;
 
     public QuickSort(List<Integer> arrayList, boolean isInstant, PartitionType partitionType) {
         super(arrayList, isInstant);
@@ -34,11 +34,11 @@ public class QuickSort extends ActionSortingAlgorithm {
     }
 
     @Override
-    public void startDetailed(ArrayDetailedDisplay display) {
-        section = new DetailedSection(display, list.size(), true);
+    public void startAnimated(ArrayAnimatedDisplay display) {
+        section = new AnimatedSection(display, list.size(), true);
         display.addItem(section, 0, -SECTION_OFFSET);
         section.setFill(Color.rgb(44, 199, 88));
-        actions.add(new AnimationAction(display.recolourAnimation()));
+        actions.add(new AnimationAction(display.recolourTimeline()));
     }
 
     @Override
@@ -63,7 +63,7 @@ public class QuickSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             int k = end;
             for (int i = end; i > start; i--) {
                 if (algorithm.list.get(i) > algorithm.list.get(start)) {
@@ -78,15 +78,15 @@ public class QuickSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(ActionSortingAlgorithm algorithm, ArrayDetailedDisplay display) {
-            DetailedArrow kArrow = new DetailedArrow(display, true);
+        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+            AnimatedArrow kArrow = new AnimatedArrow(display, true);
             display.addItem(kArrow, end, 0);
 
-            DetailedArrow iArrow = new DetailedArrow(display, true);
+            AnimatedArrow iArrow = new AnimatedArrow(display, true);
             iArrow.setFill(Color.rgb(25, 53, 145));
             display.addItem(iArrow, end, 0);
 
-            DetailedArrow minArrow = new DetailedArrow(display, true);
+            AnimatedArrow minArrow = new AnimatedArrow(display, true);
             minArrow.setFill(Color.LIGHTGREEN);
             display.addItem(minArrow, start, 0);
 
@@ -123,12 +123,12 @@ public class QuickSort extends ActionSortingAlgorithm {
             boolean makingLeft = start < k - 1;
             boolean makingRight = k + 1 < end;
 
-            DetailedSection leftSection;
-            DetailedSection rightSection;
+            AnimatedSection leftSection;
+            AnimatedSection rightSection;
 
             // Initialize
             if (makingLeft) {
-                leftSection = new DetailedSection(display, end - start + 1, true);
+                leftSection = new AnimatedSection(display, end - start + 1, true);
                 leftSection.setFill(Color.rgb(44, 199, 88));
                 algorithm.addToStart(new LaterAction(() -> display.addItem(leftSection, start, -depth * 15 - SECTION_OFFSET)));
             } else {
@@ -136,7 +136,7 @@ public class QuickSort extends ActionSortingAlgorithm {
             }
 
             if (makingRight) {
-                rightSection = new DetailedSection(display, end - start + 1, true);
+                rightSection = new AnimatedSection(display, end - start + 1, true);
                 rightSection.setFill(Color.rgb(44, 199, 88));
                 algorithm.addToStart(new LaterAction(() -> display.addItem(rightSection, start, -depth * 15 - SECTION_OFFSET)));
             } else {
@@ -190,7 +190,7 @@ public class QuickSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             int k = start;
             for (int i = start; i < end; i++) {
                 if (algorithm.list.get(i) < algorithm.list.get(end)) {

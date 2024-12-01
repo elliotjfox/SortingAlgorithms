@@ -13,11 +13,18 @@ public class ShellSortSettings extends AlgorithmSettings {
     private ShellSort shellSort;
 
     private double shrinkFactor;
+    private ShellSort.ShellSortMode shellSortMode;
 
     private final GeneralInputBox<Double> shrinkFactorInput;
+    private final ComboBox<ShellSort.ShellSortMode> shellSortModeSelector;
 
     public ShellSortSettings() {
         super("Shell Sort");
+
+        shellSortModeSelector = new ComboBox<>(FXCollections.observableArrayList(ShellSort.ShellSortMode.values()));
+        shellSortModeSelector.getSelectionModel().select(shellSortMode);
+        shellSortModeSelector.getSelectionModel().selectedItemProperty().addListener((_, _, newValue) -> shellSortMode = newValue);
+        addSetting("Shell Sort Mode", shellSortModeSelector);
 
 //        searchTypeSelector = new ComboBox<>(FXCollections.observableArrayList(ShellSort.SearchType.values()));
 //        searchTypeSelector.getSelectionModel().select(searchType);
@@ -48,19 +55,21 @@ public class ShellSortSettings extends AlgorithmSettings {
 
 //        searchType = ShellSort.SearchType.RIGHT_LINEAR;
         shrinkFactor = 2.3;
+        shellSortMode = ShellSort.ShellSortMode.ONE_BY_ONE;
 
 //        if (searchTypeSelector != null) searchTypeSelector.getSelectionModel().select(searchType);
         if (shrinkFactorInput != null) shrinkFactorInput.resetValue();
+        if (shellSortModeSelector != null) shellSortModeSelector.getSelectionModel().select(shellSortMode);
     }
 
     @Override
     public SortingAlgorithm createAlgorithm(List<Integer> array) {
-        return shellSort = new ShellSort(array, false, shrinkFactor);
+        return shellSort = new ShellSort(array, false, shrinkFactor, shellSortMode);
     }
 
     @Override
     public SortingAlgorithm createInstantAlgorithm(List<Integer> array) {
-        return shellSort = new ShellSort(array, true, shrinkFactor);
+        return shellSort = new ShellSort(array, true, shrinkFactor, shellSortMode);
     }
 
     @Override

@@ -6,34 +6,40 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.List;
 
-public class ArrayPlotDisplay extends ArrayBarDisplay {
+public class ArrayPlotDisplay extends ArrayElementDisplay<Rectangle> {
     public ArrayPlotDisplay(List<Integer> arrayList, SettingsPane settingsPane) {
         super(arrayList, settingsPane);
+    }
+
+    @Override
+    protected Rectangle createElement() {
+        return new Rectangle();
     }
 
     @Override
     public void drawArray() {
         if (elements == null) return;
 
-        setHeightMultiplier();
         for (int i = 0; i < elements.size(); i++) {
-            double height = array.get(i) * heightMultiplier;
-            double bottom = maxValue * heightMultiplier;
+            double height = list.get(i) * getHeightMultiplier();
+            double bottom = maxValue * getHeightMultiplier();
 
             Rectangle rect = elements.get(i);
-            if (colourActions.containsKey(i)) {
-                if (colourActions.get(i) == ColourAction.READ) {
-                    rect.setFill(Color.hsb(0, 0, 0.25));
-                } else if (colourActions.get(i) == ColourAction.WRITE) {
-                    rect.setFill(Color.hsb(0, 0, 0.5));
-                }
-            } else {
-                rect.setFill(Color.hsb(0, 0, 0));
-            }
-            rect.setX(settingsPane.getDisplaySettings().getElementWidth() * i);
+//            if (colourActions.containsKey(i)) {
+//                if (colourActions.get(i) == ColourAction.READ) {
+//                    rect.setFill(Color.hsb(0, 0, 0.25));
+//                } else if (colourActions.get(i) == ColourAction.WRITE) {
+//                    rect.setFill(Color.hsb(0, 0, 0.5));
+//                }
+//            } else {
+//                rect.setFill(Color.hsb(0, 0, 0));
+//            }
+
+            rect.setFill(Color.hsb(0, 0, 0));
+            rect.setX(getElementWidth() * i);
             rect.setY(bottom - height);
-            rect.setWidth(settingsPane.getDisplaySettings().getElementWidth());
-            rect.setHeight(settingsPane.getDisplaySettings().getElementWidth());
+            rect.setWidth(getElementWidth());
+            rect.setHeight(getElementWidth());
         }
         colourActions.clear();
     }

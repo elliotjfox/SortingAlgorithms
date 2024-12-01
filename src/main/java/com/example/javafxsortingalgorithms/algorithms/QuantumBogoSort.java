@@ -5,11 +5,8 @@ import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -40,7 +37,7 @@ public class QuantumBogoSort extends ActionSortingAlgorithm {
                 }
             }
             currentAction = actions.getFirst();
-            currentAction.perform(this, display);
+            currentAction.execute(this, display);
             actions.remove(currentAction);
             actions.addAll(0, toAdd);
             toAdd.clear();
@@ -102,7 +99,7 @@ public class QuantumBogoSort extends ActionSortingAlgorithm {
     private static class Randomize extends AlgorithmAction {
 
         @Override
-        void perform(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
             for (int i = 0; i < algorithm.list.size(); i++) {
                 algorithm.addToStart(new Swap(i, (int) (Math.random() * (algorithm.list.size() - i)) + i));
             }

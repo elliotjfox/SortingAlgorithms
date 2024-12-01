@@ -12,14 +12,14 @@ import javafx.util.Duration;
 import java.util.*;
 
 // TODO: Add coloured boxes around sections
-public class DetailedSortingNetwork extends DetailedItem {
+public class AnimatedSortingNetwork extends AnimatedItem {
 
     private final List<Integer> list;
     private final List<List<Integer>> allComparisons;
     private final List<List<Node>> visuals;
     private final List<Line> lines;
 
-    public DetailedSortingNetwork(ArrayDetailedDisplay display, List<Integer> list) {
+    public AnimatedSortingNetwork(ArrayAnimatedDisplay display, List<Integer> list) {
         super(display);
         this.list = list;
         allComparisons = new ArrayList<>();
@@ -51,7 +51,7 @@ public class DetailedSortingNetwork extends DetailedItem {
         }
         timeline.getKeyFrames().addAll(
                 new KeyFrame(
-                        Duration.millis(ArrayDetailedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
                         "",
                         event -> {},
                         values
@@ -71,7 +71,7 @@ public class DetailedSortingNetwork extends DetailedItem {
                         }
                 ),
                 new KeyFrame(
-                        Duration.millis(ArrayDetailedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
                         event -> {}
                 )
         );

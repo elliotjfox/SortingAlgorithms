@@ -13,9 +13,9 @@ public class CombSort extends SortingAlgorithm {
     private int gapSize;
     private final double shrinkFactor;
 
-    private DetailedArrow leftArrow;
-    private DetailedArrow rightArrow;
-    private DetailedSection section;
+    private AnimatedArrow leftArrow;
+    private AnimatedArrow rightArrow;
+    private AnimatedSection section;
 
     private final double sectionHeight = -10;
     private final double arrowHeight = -20;
@@ -71,14 +71,14 @@ public class CombSort extends SortingAlgorithm {
     }
 
     @Override
-    public void startDetailed(ArrayDetailedDisplay display) {
-        leftArrow = new DetailedArrow(display, true);
+    public void startAnimated(ArrayAnimatedDisplay display) {
+        leftArrow = new AnimatedArrow(display, true);
         display.addItem(leftArrow, 0, arrowHeight);
 
-        rightArrow = new DetailedArrow(display, true);
+        rightArrow = new AnimatedArrow(display, true);
         display.addItem(rightArrow, gapSize, arrowHeight);
 
-        section = new DetailedSection(display, gapSize + 1, true);
+        section = new AnimatedSection(display, gapSize + 1, true);
         display.addItem(section, 0, sectionHeight);
 
         display.updateInfo("Gap size", gapSize);
@@ -89,7 +89,7 @@ public class CombSort extends SortingAlgorithm {
     }
 
     @Override
-    public void iterateDetailed(ArrayDetailedDisplay display) {
+    public void iterateAnimated(ArrayAnimatedDisplay display) {
         // Check if we will compare outside the array, and reset if we need to. This uses a step.
         if (lastPos + gapSize >= list.size()) {
             if (isListSorted(list)) {

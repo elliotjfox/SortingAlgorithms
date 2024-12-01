@@ -1,6 +1,5 @@
 package com.example.javafxsortingalgorithms.arraydisplay;
 
-import com.example.javafxsortingalgorithms.settings.DisplaySettings;
 import com.example.javafxsortingalgorithms.settings.SettingsPane;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -14,25 +13,25 @@ import javafx.util.Duration;
 import java.util.*;
 import java.util.function.Function;
 
-public class ArrayDetailedDisplay extends ArrayDisplay {
+public class ArrayAnimatedDisplay extends ArrayDisplay {
 
     public static final double ANIMATION_LENGTH = 400;
     public static final double ANIMATION_COOLDOWN = 75;
 
-    private final List<DetailedItem> items;
-    private final ArrayList<DetailedElement> elements;
+    private final List<AnimatedItem> items;
+    private final ArrayList<AnimatedElement> elements;
     private boolean needsToMoveElements;
     private final List<AnimationGroup> animationGroups;
     private final AnimationGroup elementAnimationGroup;
 
     private final BorderPane borderPane;
     private final Pane centerPane;
-    private final DetailedInfo detailedInfo;
+    private final AnimatedInfo animatedInfo;
 
     private AnimationGroup currentAnimationGroup;
 
 
-    public ArrayDetailedDisplay(SettingsPane settingsPane) {
+    public ArrayAnimatedDisplay(SettingsPane settingsPane) {
         super(settingsPane);
 
         items = new ArrayList<>();
@@ -41,8 +40,8 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
         animationGroups = new ArrayList<>();
         elementAnimationGroup = new AnimationGroup();
 //        currentTask = new Label();
-        detailedInfo = new DetailedInfo();
-        detailedInfo.updateInfo("Current task", "");
+        animatedInfo = new AnimatedInfo();
+        animatedInfo.updateInfo("Current task", "");
 
 
         borderPane = new BorderPane();
@@ -54,59 +53,59 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
         borderPane.setTop(top);
         borderPane.setCenter(centerPane);
 
-        borderPane.setLeft(detailedInfo);
-        detailedInfo.setViewOrder(-1);
+        borderPane.setLeft(animatedInfo);
+        animatedInfo.setViewOrder(-1);
 
         getChildren().add(borderPane);
     }
 
     @Override
-    public void setArray(List<Integer> list) {
-        this.array = list;
+    public void setList(List<Integer> list) {
+        this.list = list;
         resetMax();
+        bindHeight();
         if (!elements.isEmpty()) {
             centerPane.getChildren().removeAll(elements);
             elements.clear();
         }
-        setHeightMultiplier();
         for (int i = 0; i < list.size(); i++) {
-            DetailedElement element = new DetailedElement(this, i);
-            element.setElementHeight(list.get(i) * heightMultiplier, maxValue * heightMultiplier);
+            AnimatedElement element = new AnimatedElement(this, i);
+            element.setElementHeight(list.get(i) * getHeightMultiplier(), maxValue * getHeightMultiplier());
             elements.add(element);
             centerPane.getChildren().add(element);
         }
-        centerPane.setPrefWidth(list.size() * settingsPane.getDisplaySettings().getElementWidth());
+        centerPane.setPrefWidth(list.size() * getElementWidth());
     }
 
     @Override
-    public void onFinish() {
-        detailedInfo.finish();
+    public void playFinish() {
+        animatedInfo.finish();
         centerPane.getChildren().removeAll(items);
     }
 
-    public void addItem(DetailedItem item) {
+    public void addItem(AnimatedItem item) {
         centerPane.getChildren().add(item);
         items.add(item);
     }
 
-    public void addItem(DetailedItem item, double x, double y) {
+    public void addItem(AnimatedItem item, double x, double y) {
         centerPane.getChildren().add(item);
         items.add(item);
         item.setPosition(x, y);
     }
 
-    public void addItem(DetailedItem item, int index, double y) {
+    public void addItem(AnimatedItem item, int index, double y) {
         centerPane.getChildren().add(item);
         items.add(item);
         item.setIndex(index, y);
     }
 
-    public void removeItem(DetailedItem item) {
+    public void removeItem(AnimatedItem item) {
         centerPane.getChildren().remove(item);
     }
 
     @Override
-    public void createElements(int count) {
+    public void initializeElements(int count) {
         System.out.println("asked to create elements " + count);
     }
 
@@ -136,7 +135,7 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
     }
 
     public void swap(int firstIndex, int secondIndex) {
-        DetailedElement tmp = elements.get(firstIndex);
+        AnimatedElement tmp = elements.get(firstIndex);
         elements.set(firstIndex, elements.get(secondIndex));
         elements.set(secondIndex, tmp);
         needsToMoveElements = true;
@@ -153,7 +152,7 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
         List<KeyValue> keyValues = new ArrayList<>();
         for (int i = 0; i < elements.size(); i++) {
             if (condition.apply(i)) {
-                keyValues.add(new KeyValue(elements.get(i).colourProperty(), DetailedElement.calculateColour(array.get(i), maxValue)));
+                keyValues.add(new KeyValue(elements.get(i).colourProperty(), AnimatedElement.calculateColour(list.get(i), maxValue)));
             } else {
                 keyValues.add(new KeyValue(elements.get(i).colourProperty(), Color.LIGHTGRAY));
             }
@@ -169,7 +168,7 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
         );
     }
 
-    public Timeline recolourAnimation() {
+    public Timeline recolourTimeline() {
         return highlightAnimation(i -> true);
     }
 
@@ -178,12 +177,13 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
      * @param index The index that is read
      */
     public void reading(int index) {
-        currentAnimationGroup.addTimelines(createReadAnimation(index, array.get(index)));
+        currentAnimationGroup.addTimelines(createReadAnimation(index, list.get(index)));
     }
 
     public void reading(int... indices) {
         for (int index : indices) {
-            currentAnimationGroup.addTimelines(createReadAnimation(index, array.get(index)));
+            if (index < 0 || index >= list.size()) continue;
+            currentAnimationGroup.addTimelines(createReadAnimation(index, list.get(index)));
         }
     }
 
@@ -205,28 +205,28 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
     public void animate(Timeline... timelines) {
         for (Timeline timeline : timelines) {
             // Accounting for the read animations being 1 more
-            double timeLineLength = timeline.getKeyFrames().getLast().getTime().toMillis();
-            if (timeLineLength - 1 > ANIMATION_LENGTH) {
-                System.out.println(STR."Timeline is longer than animation length! (\{timeLineLength} > \{ANIMATION_LENGTH})");
+            double timelineLength = timeline.getKeyFrames().getLast().getTime().toMillis();
+            if (timelineLength - 1 > ANIMATION_LENGTH) {
+                System.out.println("Timeline is longer than animation length! (" + timelineLength + " > " + ANIMATION_LENGTH + ")");
             }
         }
         currentAnimationGroup.addTimelines(timelines);
     }
 
     public void setCurrentTask(String task) {
-        detailedInfo.updateInfo("Current task", task);
+        animatedInfo.updateInfo("Current task", task);
     }
 
     public void updateInfoWhenDone(String key, Object value) {
-        whenDone(() -> detailedInfo.updateInfo(key, value));
+        whenDone(() -> animatedInfo.updateInfo(key, value));
     }
 
     public void updateInfoOnPlay(String key, Object value) {
-        onPlay(() -> detailedInfo.updateInfo(key, value));
+        onPlay(() -> animatedInfo.updateInfo(key, value));
     }
 
     public void updateInfo(String key, Object value) {
-        detailedInfo.updateInfo(key, value);
+        animatedInfo.updateInfo(key, value);
     }
 
     public void onPlay(Runnable runnable) {
@@ -252,10 +252,10 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
      * @param height The height of the element at the index when the animation should play
      * @return The timeline animation
      */
-    private Timeline createReadAnimation(int index, double height) {
+    public Timeline createReadAnimation(int index, double height) {
         Polygon arrow = createReadArrow();
         arrow.setLayoutX(getX(settingsPane, index));
-        arrow.setLayoutY(maxValue * heightMultiplier);
+        arrow.setLayoutY(maxValue * getHeightMultiplier());
         return new Timeline(
                 new KeyFrame(
                         Duration.ZERO,
@@ -264,7 +264,7 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
                 new KeyFrame(
                         // TODO: Fine tune this, because the tallest one will instantly disappear when it reaches the top
                         Duration.millis(height / maxValue * ANIMATION_LENGTH),
-                        new KeyValue(arrow.layoutYProperty(), heightMultiplier * (maxValue - height))
+                        new KeyValue(arrow.layoutYProperty(), getHeightMultiplier() * (maxValue - height))
                 ),
                 new KeyFrame(
                         Duration.millis(ANIMATION_LENGTH + 1),
@@ -285,16 +285,12 @@ public class ArrayDetailedDisplay extends ArrayDisplay {
         return elementAnimationGroup;
     }
 
-    public DetailedInfo getDetailedInfo() {
-        return detailedInfo;
+    public AnimatedInfo getDetailedInfo() {
+        return animatedInfo;
     }
 
     public SettingsPane getSettings() {
         return settingsPane;
-    }
-
-    public double getElementWidth() {
-        return settingsPane.getDisplaySettings().getElementWidth();
     }
 
     public static double getX(SettingsPane settingsPane, int index) {

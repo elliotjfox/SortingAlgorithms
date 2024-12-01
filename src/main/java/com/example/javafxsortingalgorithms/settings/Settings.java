@@ -2,6 +2,7 @@ package com.example.javafxsortingalgorithms.settings;
 
 import com.example.javafxsortingalgorithms.algorithms.*;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.*;
+import com.example.javafxsortingalgorithms.betteralgorithms.BetterSelectionSort;
 import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -47,6 +48,7 @@ public class Settings {
             case "Shell":       yield new ShellSortSettings();
             case "Stooge":      yield new GenericAlgorithmSettings<>("Stooge Sort", StoogeSort::new);
             case "Strand":      yield new GenericAlgorithmSettings<>("Strand Sort", StrandSort::new);
+            case "Selection2":  yield new GenericAlgorithmSettings<>("Selection2", BetterSelectionSort::new);
             case "Cycle":       yield new GenericAlgorithmSettings<>("Strand Sort", CycleSort::new);
             default:            yield new GenericAlgorithmSettings<>("Unknown Algorithm", GnomeSort::new);
         };

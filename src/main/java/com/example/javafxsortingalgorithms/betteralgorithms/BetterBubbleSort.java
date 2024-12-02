@@ -8,18 +8,18 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.List;
-import java.util.Scanner;
 
-public class BetterSelectionSort extends SortingAlgorithm {
+public class BetterBubbleSort extends SortingAlgorithm {
 
     private AlgorithmSpace space;
-    private SelectionSortSpace selectionSort;
+    private BubbleSortSpace bubbleSort;
 
-    public BetterSelectionSort(List<Integer> list, boolean isInstant) {
+    public BetterBubbleSort(List<Integer> list, boolean isInstant) {
         super(list, isInstant);
-        space = new AlgorithmSpace(list, new Bounds(0, list.size()));
 
-        selectionSort = new SelectionSortSpace(space, new Bounds(0, list.size()));
+        space = new AlgorithmSpace(list);
+
+        bubbleSort = new BubbleSortSpace(space, new Bounds(0, list.size()));
 
         Stage dialog = new Stage();
         dialog.initModality(Modality.NONE);
@@ -40,11 +40,11 @@ public class BetterSelectionSort extends SortingAlgorithm {
 
     @Override
     public boolean isDone() {
-        return selectionSort.isDone();
+        return bubbleSort.isDone();
     }
 
     @Override
     public String getName() {
-        return null;
+        return "";
     }
 }

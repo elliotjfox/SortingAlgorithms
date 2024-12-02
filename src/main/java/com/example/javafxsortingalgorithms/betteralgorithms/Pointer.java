@@ -13,11 +13,11 @@ public class Pointer extends BoundAlgorithmSpaceObject {
     private HBox hBox;
     private Label label;
 
-    public Pointer(int value, Bounds... bounds) {
+    public Pointer(int value, Bounds bounds) {
         this("Unnamed Pointer", value, bounds);
     }
 
-    public Pointer(String name, int value, Bounds... bounds) {
+    public Pointer(String name, int value, Bounds bounds) {
         super(bounds);
         this.name = name;
         this.value = value;
@@ -36,7 +36,7 @@ public class Pointer extends BoundAlgorithmSpaceObject {
         lastValue = value;
         value++;
         updateLabel();
-        if (!isWithinBounds()) {
+        if (!bounds.isWithinBounds(value)) {
             if (atEnd != null) {
                 atEnd.run();
             } else {
@@ -49,7 +49,13 @@ public class Pointer extends BoundAlgorithmSpaceObject {
         lastValue = value;
         value--;
         updateLabel();
-        checkWithinBounds();
+        if (!bounds.isWithinBounds(value)) {
+            if (atEnd != null) {
+                atEnd.run();
+            } else {
+                undo();
+            }
+        }
     }
 
     public void setValue(int value) {
@@ -69,21 +75,13 @@ public class Pointer extends BoundAlgorithmSpaceObject {
     }
 
     public void checkWithinBounds() {
-        if (!isWithinBounds()) {
+        if (!bounds.isWithinBounds(value)) {
             undo();
         }
     }
 
     private void updateLabel() {
         label.setText("Value: " + value);
-    }
-
-    @Override
-    public boolean isWithinBounds() {
-        for (Bounds bound : bounds) {
-            if (!bound.isWithinBounds(value)) return false;
-        }
-        return true;
     }
 
     @Override

@@ -278,8 +278,7 @@ public class AlgorithmContainer {
                 createMenuItem("Exchange Sort", "Exchange"),
                 createMenuItem("Strand Sort", "Strand"),
                 createMenuItem("Cartesian Tree Sort", "Cartesian"),
-                createMenuItem("Cycle Sort", "Cycle"),
-                createMenuItem("Selection2 Sort", "Selection2")
+                createMenuItem("Cycle Sort", "Cycle")
                 );
 
         Menu jokeAlgorithms = new Menu(
@@ -291,8 +290,15 @@ public class AlgorithmContainer {
                 createMenuItem("Gravity Sort", "Gravity")
         );
 
+        Menu spaceAlgorithms = new Menu(
+                "Space Algorithms", null,
+                createMenuItem("Selection2 Sort", "Selection2"),
+                createMenuItem("Bubble Sort", "BubbleSpace")
+        );
+
         return new Menu(
                 "Algorithms", null,
+                spaceAlgorithms,
                 basic,
                 improved,
                 recursive,

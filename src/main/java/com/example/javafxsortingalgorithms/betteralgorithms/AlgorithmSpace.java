@@ -36,6 +36,17 @@ public class AlgorithmSpace {
         }
     }
 
+    protected void swap(int firstIndex, int secondIndex) {
+        if (firstIndex < 0 || firstIndex >= list.size() || secondIndex < 0 || secondIndex >= list.size() || firstIndex == secondIndex) return;
+        list.set(firstIndex, list.set(secondIndex, list.get(firstIndex)));
+    }
+
+    protected void move(int index, int targetIndex) {
+        if (index < 0 || index >= list.size() || targetIndex < 0 || targetIndex >= list.size() || index == targetIndex) return;
+        list.add(targetIndex, list.remove(index));
+    }
+
+
     public void addIterator(Iterator iterator) {
         iterators.add(iterator);
     }
@@ -44,6 +55,18 @@ public class AlgorithmSpace {
         for (Iterator iterator : iterators) {
             iterator.run();
         }
+    }
+
+    public List<Integer> getList() {
+        return list;
+    }
+
+    public int get(int i) {
+        if (i < 0 || i >= list.size()) {
+            System.out.println("Tried to access outside element! (" + i + ")");
+            return -1;
+        }
+        return list.get(i);
     }
 
     public VBox getVisuals() {

@@ -33,6 +33,22 @@ public class Bounds extends AlgorithmSpaceObject {
         else return i > lower && i < upper;
     }
 
+    public Bounds shrink(int lowerShrink, int upperShrink) {
+        return new Bounds(lower + lowerShrink, upper - upperShrink, lowerInclusive, upperInclusive);
+    }
+
+    public Bounds grow(int lowerGrow, int upperGrow) {
+        return new Bounds(lower - lowerGrow, upper + upperGrow, lowerInclusive, upperInclusive);
+    }
+
+    public int getLower() {
+        return lower;
+    }
+
+    public int getUpper() {
+        return upper;
+    }
+
     @Override
     public String toString() {
         return "Bounds" + (lowerInclusive ? '[' : '(') + lower + ", " + upper + (upperInclusive ? ']' : ')');

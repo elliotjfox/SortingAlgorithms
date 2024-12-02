@@ -273,6 +273,7 @@ public class AlgorithmContainer {
 
         Menu miscellaneous = new Menu(
                 "Miscellaneous", null,
+                createMenuItem("Tim Sort", "Tim"),
                 createMenuItem("Radix Sort", "Radix"),
                 createMenuItem("Odd Even Sort", "OddEven"),
                 createMenuItem("Exchange Sort", "Exchange"),

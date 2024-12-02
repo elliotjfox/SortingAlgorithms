@@ -240,6 +240,25 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
         }
     }
 
+    protected static class Flip extends AlgorithmAction {
+
+        private final int from;
+        private final int to;
+
+        // Inclusive [from, to]
+        public Flip(int from, int to) {
+            this.from = from;
+            this.to = to;
+        }
+
+        @Override
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+            for (int i = 0; i < (to - from) / 2; i++) {
+                algorithm.addToStart(new Swap(from + i, to - i));
+            }
+        }
+    }
+
     protected static class CheckIfSorted extends AlgorithmAction {
 
         @Override

@@ -9,6 +9,8 @@ import java.util.List;
 public class QuickSort extends ActionSortingAlgorithm {
 
     private static final double SECTION_OFFSET = 25 * Math.sin(Math.toRadians(60)) + 10;
+    private static final Color FINISHED_COLOUR = Color.rgb(44, 199, 88);
+    private static final Color IN_PROGRESS_COLOUR = Color.rgb(110, 110, 110);
 
     public enum PartitionType {
         LEFT,
@@ -18,9 +20,12 @@ public class QuickSort extends ActionSortingAlgorithm {
 
     private AnimatedSection section;
 
+    private final PartitionType partitionType;
+
     public QuickSort(List<Integer> arrayList, boolean isInstant, PartitionType partitionType) {
         super(arrayList, isInstant);
 
+        this.partitionType = partitionType;
         switch (partitionType) {
             case LEFT -> actions.add(new LeftPartition(0, arrayList.size() - 1));
             case RIGHT -> actions.add(new RightPartition(0, arrayList.size() - 1));
@@ -30,20 +35,42 @@ public class QuickSort extends ActionSortingAlgorithm {
 
     @Override
     protected void instantAlgorithm(TestEntry entry) {
+        leftPartition(0, list.size() - 1, entry);
+    }
 
+    private void leftPartition(int from, int to, TestEntry entry) {
+        int k = to;
+        for (int i = to; i > from; i--) {
+            if (list.get(i) > list.get(from)) {
+                swap(i, k);
+                entry.addWrite(2);
+                k--;
+            }
+            entry.addRead(2);
+        }
+        swap(k, from);
+        entry.addWrite(2);
+        if (from < k - 1) {
+            leftPartition(from, k - 1, entry);
+        } else {
+            entry.updateProgress((double) k / list.size());
+        }
+        if (k + 1 < to) leftPartition(k + 1, to, entry);
     }
 
     @Override
     public void startAnimated(ArrayAnimatedDisplay display) {
         section = new AnimatedSection(display, list.size(), true);
         display.addItem(section, 0, -SECTION_OFFSET);
-        section.setFill(Color.rgb(44, 199, 88));
+        section.setFill(IN_PROGRESS_COLOUR);
+        actions.add(new LaterAction(() -> section.setFill(FINISHED_COLOUR)));
         actions.add(new AnimationAction(display.recolourTimeline()));
     }
 
     @Override
     public String getName() {
-        return null;
+        return "Quick Sort\n" +
+                "Partition: " + partitionType;
     }
 
     protected static class LeftPartition extends AlgorithmAction {
@@ -90,21 +117,25 @@ public class QuickSort extends ActionSortingAlgorithm {
             minArrow.setFill(Color.LIGHTGREEN);
             display.addItem(minArrow, start, 0);
 
+            AnimatedSection partitionLimit = new AnimatedSection(display, end - start + 1, false);
+            display.addItem(partitionLimit, start, algorithm.list.get(start) * display.getHeightMultiplier());
+
             display.animate(display.highlightAnimation(i -> i >= start && i <= end));
+            display.onPlay(() -> display.setCurrentTask("Partitioning [" + start + ", " + end + "]"));
 
             int k = end;
             for (int i = end; i > start; i--) {
                 int finalI = i;
-                int finalK = k;
+                boolean needsToSwap = algorithm.list.get(i) > algorithm.list.get(start);
                 algorithm.addToStart(
-                        new LaterAction(() -> {
-                            iArrow.moveToIndex(finalI, 0);
-                            kArrow.moveToIndex(finalK, 0);
-                            display.newGroup();
-                            display.comparing(finalI, start);
-                        }, true)
+                        new AnimationAction(
+                                iArrow.moveToIndexTimeline(i, 0),
+                                kArrow.moveToIndexTimeline(k, 0)
+                        ),
+                        new Wait(),
+                        new LaterAction(() -> display.comparing(finalI, start), !needsToSwap || i == k) // Don't ask me how this logic is working
                 );
-                if (algorithm.list.get(i) > algorithm.list.get(start)) {
+                if (needsToSwap) {
                     // Don't swap if i == k
                     if (i != k) algorithm.addToStart(new Swap(i, k));
                     k--;
@@ -112,11 +143,16 @@ public class QuickSort extends ActionSortingAlgorithm {
             }
 
             algorithm.addToStart(
+                    new AnimationAction(
+                            iArrow.moveToIndexTimeline(start, 0),
+                            kArrow.moveToIndexTimeline(k, 0)
+                    ),
                     new Swap(k, start),
                     new LaterAction(() -> {
                         display.removeItem(kArrow);
                         display.removeItem(iArrow);
                         display.removeItem(minArrow);
+                        display.removeItem(partitionLimit);
                     })
             );
 
@@ -129,7 +165,6 @@ public class QuickSort extends ActionSortingAlgorithm {
             // Initialize
             if (makingLeft) {
                 leftSection = new AnimatedSection(display, end - start + 1, true);
-                leftSection.setFill(Color.rgb(44, 199, 88));
                 algorithm.addToStart(new LaterAction(() -> display.addItem(leftSection, start, -depth * 15 - SECTION_OFFSET)));
             } else {
                 leftSection = null;
@@ -137,7 +172,6 @@ public class QuickSort extends ActionSortingAlgorithm {
 
             if (makingRight) {
                 rightSection = new AnimatedSection(display, end - start + 1, true);
-                rightSection.setFill(Color.rgb(44, 199, 88));
                 algorithm.addToStart(new LaterAction(() -> display.addItem(rightSection, start, -depth * 15 - SECTION_OFFSET)));
             } else {
                 rightSection = null;
@@ -147,8 +181,8 @@ public class QuickSort extends ActionSortingAlgorithm {
             if (makingLeft && makingRight) {
                 algorithm.addToStart(new AnimationAction(
                         leftSection.moveToIndexTimeline(start, -(depth + 1) * 15 - SECTION_OFFSET),
-                        rightSection.moveToIndexTimeline(k + 1, -(depth + 1) * 15 - SECTION_OFFSET),
                         leftSection.resizeTimeline(k - start),
+                        rightSection.moveToIndexTimeline(k + 1, -(depth + 1) * 15 - SECTION_OFFSET),
                         rightSection.resizeTimeline(end - k)
                 ));
             } else if (makingLeft) {
@@ -165,15 +199,17 @@ public class QuickSort extends ActionSortingAlgorithm {
 
             if (makingLeft) {
                 algorithm.addToStart(
+                        new LaterAction(() -> leftSection.setFill(IN_PROGRESS_COLOUR)),
                         new LeftPartition(start, k - 1, depth + 1),
-                        new LaterAction(() -> leftSection.setFill(Color.rgb(52, 52, 52)))
+                        new LaterAction(() -> leftSection.setFill(FINISHED_COLOUR))
                 );
             }
 
             if (makingRight) {
                 algorithm.addToStart(
+                        new LaterAction(() -> rightSection.setFill(IN_PROGRESS_COLOUR)),
                         new LeftPartition(k + 1, end, depth + 1),
-                        new LaterAction(() -> rightSection.setFill(Color.rgb(52, 52, 52)))
+                        new LaterAction(() -> rightSection.setFill(FINISHED_COLOUR))
                 );
             }
         }
@@ -231,5 +267,22 @@ public class QuickSort extends ActionSortingAlgorithm {
 //            if (start < k - 1) algorithm.addToStart(new MiddlePartition(start, k - 1));
 //            if (k + 1 < end) algorithm.addToStart(new MiddlePartition(k + 1, end));
 //        }
+//    }
+
+//    void quickSort() {
+//        leftPartition(0, list.size() - 1);
+//    }
+//
+//    void leftPartition(int from, int to) {
+//        int k = to;
+//        for (int i = to; i > from; i--) {
+//            if (list.get(i) > list.get(from)) {
+//                swap(i, k);
+//                k--;
+//            }
+//        }
+//        swap(k, from);
+//        if (from < k - 1) leftPartition(from, k - 1);
+//        if (k + 1 < to) leftPartition(k + 1, to);
 //    }
 }

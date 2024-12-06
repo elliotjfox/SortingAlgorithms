@@ -3,6 +3,7 @@ package com.example.javafxsortingalgorithms.settings;
 import com.example.javafxsortingalgorithms.algorithms.*;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.*;
 import com.example.javafxsortingalgorithms.betteralgorithms.BetterBubbleSort;
+import com.example.javafxsortingalgorithms.betteralgorithms.BetterQuickSort;
 import com.example.javafxsortingalgorithms.betteralgorithms.BetterSelectionSort;
 import javafx.concurrent.Task;
 import javafx.scene.Scene;
@@ -51,6 +52,7 @@ public class Settings {
             case "Strand":      yield new GenericAlgorithmSettings<>("Strand Sort", StrandSort::new);
             case "Selection2":  yield new GenericAlgorithmSettings<>("Selection2", BetterSelectionSort::new);
             case "BubbleSpace":  yield new GenericAlgorithmSettings<>("Bubble Space", BetterBubbleSort::new);
+            case "QuickSpace":  yield new GenericAlgorithmSettings<>("Quick Sort Space", BetterQuickSort::new);
             case "Cycle":       yield new GenericAlgorithmSettings<>("Strand Sort", CycleSort::new);
             default:            yield new GenericAlgorithmSettings<>("Unknown Algorithm", GnomeSort::new);
         };

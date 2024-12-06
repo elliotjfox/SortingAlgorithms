@@ -9,17 +9,17 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
-public class BetterBubbleSort extends SortingAlgorithm {
+public class BetterQuickSort extends SortingAlgorithm {
 
     private AlgorithmSpace space;
-    private BubbleSortSpace bubbleSort;
+    private QuickSortSpace quickSort;
 
-    public BetterBubbleSort(List<Integer> list, boolean isInstant) {
+    public BetterQuickSort(List<Integer> list, boolean isInstant) {
         super(list, isInstant);
 
-        space = new AlgorithmSpace(list);
+        space = new AlgorithmSpace(list, new Bounds(0, list.size()));
 
-        bubbleSort = new BubbleSortSpace(space, new Bounds(0, list.size()));
+        quickSort = new QuickSortSpace(space, new Bounds(0, list.size() - 1, true, true));
 
         Stage dialog = new Stage();
         dialog.initModality(Modality.NONE);

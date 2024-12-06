@@ -1,10 +1,12 @@
 package com.example.javafxsortingalgorithms.betteralgorithms;
 
+import java.util.Objects;
+
 public class BubbleSortSpace extends Algorithm {
 
     private final Pointer count;
     private final Pointer i;
-    private final Iterator iterator;
+    private final Ticker ticker;
 
     public BubbleSortSpace(AlgorithmSpace space, Bounds bounds) {
         super("Bubble Sort", space, bounds);
@@ -18,16 +20,16 @@ public class BubbleSortSpace extends Algorithm {
             i.setBounds(new Bounds(0, count.getValue()));
         });
 
-        count.onEnd(this::finish);
+        count.onEnd(space::finish);
 
-        iterator = new Iterator(() -> {
-            if (space.get(i.getValue()) > space.get(i.getValue() + 1)) {
+        ticker = new Ticker(() -> {
+            if (space.compare(i.getValue(), i.getValue() + 1) instanceof Result.GreaterThan) {
                 swap(i.getValue(), i.getValue() + 1);
             }
             i.increment();
         });
 
         space.addAlgorithmSpaceObject(count, i);
-        space.addIterator(iterator);
+        space.addTicker(ticker);
     }
 }

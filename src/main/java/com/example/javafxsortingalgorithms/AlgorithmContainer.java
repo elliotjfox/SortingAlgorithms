@@ -293,7 +293,8 @@ public class AlgorithmContainer {
         Menu spaceAlgorithms = new Menu(
                 "Space Algorithms", null,
                 createMenuItem("Selection2 Sort", "Selection2"),
-                createMenuItem("Bubble Sort", "BubbleSpace")
+                createMenuItem("Bubble Sort", "BubbleSpace"),
+                createMenuItem("Quick Sort", "QuickSpace")
         );
 
         return new Menu(

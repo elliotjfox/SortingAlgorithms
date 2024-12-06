@@ -3,14 +3,14 @@ package com.example.javafxsortingalgorithms.betteralgorithms;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 
-public class Iterator extends AlgorithmSpaceObject {
+public class Ticker extends AlgorithmSpaceObject {
 
     private final Runnable runnable;
     private final Label label;
 
-    public Iterator(Runnable runnable) {
+    public Ticker(Runnable runnable) {
         this.runnable = runnable;
-        label = new Label("Iterator");
+        label = new Label("Unnamed Ticker");
     }
 
     public void run() {

@@ -5,7 +5,7 @@ public class SelectionSortSpace extends Algorithm {
     private final Pointer outerPointer;
     private final Pointer innerPointer;
     private final Pointer minIndex;
-    private final Iterator iterator;
+    private final Ticker ticker;
 
     public SelectionSortSpace(AlgorithmSpace space, Bounds bounds) {
         super("Selection Sort", space, bounds);
@@ -14,21 +14,19 @@ public class SelectionSortSpace extends Algorithm {
         outerPointer = new Pointer("Count", 0, bounds.shrink(0, 1));
         innerPointer = new Pointer("Inner", 0, bounds);
         minIndex = new Pointer("Min value", 0, bounds);
-        iterator = new Iterator(() -> {
-            if (space.get(innerPointer.getValue()) < space.get(minIndex.getValue())) {
+        ticker = new Ticker(() -> {
+            if (space.compare(innerPointer.getValue(), minIndex.getValue()) instanceof Result.LessThan) {
                 minIndex.setValue(innerPointer.getValue());
             }
             innerPointer.increment();
         });
 
-        System.out.println(outerPointer.getBounds());
-
-        outerPointer.onEnd(this::finish);
+        outerPointer.onEnd(space::finish);
 
         innerPointer.onEnd(this::reset);
 
         space.addAlgorithmSpaceObject(outerPointer, innerPointer, minIndex);
-        space.addIterator(iterator);
+        space.addTicker(ticker);
     }
 
     private void reset() {

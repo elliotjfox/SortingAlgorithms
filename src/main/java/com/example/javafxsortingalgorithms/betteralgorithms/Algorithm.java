@@ -6,18 +6,16 @@ import javafx.scene.layout.HBox;
 
 public class Algorithm extends BoundAlgorithmSpaceObject {
 
-    private final AlgorithmSpace space;
+    protected final AlgorithmSpace space;
     protected final HBox visual;
-    protected boolean isDone;
 
     public Algorithm(String name, AlgorithmSpace space, Bounds bounds) {
         super(bounds);
 
         this.space = space;
-        isDone = false;
 
         visual = new HBox(5);
-        visual.getChildren().addAll(new Label(name));
+        visual.getChildren().addAll(new Label(name), new Label(bounds.toString()));
 
         space.addAlgorithmSpaceObject(this);
     }
@@ -28,14 +26,6 @@ public class Algorithm extends BoundAlgorithmSpaceObject {
 
     protected void move(int index, int targetIndex) {
         space.move(index, targetIndex);
-    }
-
-    protected void finish() {
-        isDone = true;
-    }
-
-    public boolean isDone() {
-        return isDone;
     }
 
     @Override

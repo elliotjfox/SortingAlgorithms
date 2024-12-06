@@ -49,6 +49,14 @@ public class Bounds extends AlgorithmSpaceObject {
         return upper;
     }
 
+    public int getLowestValue() {
+        return lowerInclusive ? lower : lower + 1;
+    }
+
+    public int getHighestValue() {
+        return upperInclusive ? upper : upper - 1;
+    }
+
     @Override
     public String toString() {
         return "Bounds" + (lowerInclusive ? '[' : '(') + lower + ", " + upper + (upperInclusive ? ']' : ')');

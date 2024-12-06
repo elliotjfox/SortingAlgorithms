@@ -9,7 +9,6 @@ public class Pointer extends BoundAlgorithmSpaceObject {
     private String name;
     private int lastValue;
     private int value;
-    private Runnable atEnd;
     private HBox hBox;
     private Label label;
 
@@ -37,8 +36,8 @@ public class Pointer extends BoundAlgorithmSpaceObject {
         value++;
         updateLabel();
         if (!bounds.isWithinBounds(value)) {
-            if (atEnd != null) {
-                atEnd.run();
+            if (runnable != null) {
+                runnable.run();
             } else {
                 undo();
             }
@@ -50,8 +49,8 @@ public class Pointer extends BoundAlgorithmSpaceObject {
         value--;
         updateLabel();
         if (!bounds.isWithinBounds(value)) {
-            if (atEnd != null) {
-                atEnd.run();
+            if (runnable != null) {
+                runnable.run();
             } else {
                 undo();
             }
@@ -63,10 +62,6 @@ public class Pointer extends BoundAlgorithmSpaceObject {
         this.value = value;
         updateLabel();
         checkWithinBounds();
-    }
-
-    public void onEnd(Runnable onEnd) {
-        this.atEnd = onEnd;
     }
 
     public void undo() {

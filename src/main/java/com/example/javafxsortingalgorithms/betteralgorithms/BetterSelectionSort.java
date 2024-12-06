@@ -40,7 +40,7 @@ public class BetterSelectionSort extends SortingAlgorithm {
 
     @Override
     public boolean isDone() {
-        return selectionSort.isDone();
+        return space.isDone();
     }
 
     @Override

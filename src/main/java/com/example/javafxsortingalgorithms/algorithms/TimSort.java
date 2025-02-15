@@ -39,11 +39,11 @@ public class TimSort extends ActionSortingAlgorithm {
         for (int i = 0; i < list.size(); i += minrun) {
             actions.add(new FindRun(i));
         }
-        actions.add(new LaterAction(() -> {
-            while (stack.size() > 1) {
-                addMerge(stack.get(stack.size() - 2), stack.getLast());
-            }
-        }));
+//        actions.add(new LaterAction(() -> {
+//            while (stack.size() > 1) {
+//                addMerge(stack.get(stack.size() - 2), stack.getLast());
+//            }
+//        }));
     }
 
     @Override
@@ -73,6 +73,7 @@ public class TimSort extends ActionSortingAlgorithm {
         System.out.println("verifying");
         System.out.println(stack);
         if (!needsToMerge()) return;
+        System.out.println("Do need to merge");
 
         if (stack.size() == 2) {
             addMerge(stack.getFirst(), stack.getLast());
@@ -87,11 +88,11 @@ public class TimSort extends ActionSortingAlgorithm {
     }
 
     private void addMerge(Sublist sublist1, Sublist sublist2) {
-        int index = stack.indexOf(sublist1);
-        stack.remove(sublist1);
+        stack.set(stack.indexOf(sublist1), new Sublist(sublist1.left, sublist2.right));
+//        stack.remove(sublist1);
         stack.remove(sublist2);
         addToStart(new Merge(sublist1.left, sublist2.left, sublist2.right));
-        stack.add(index, new Sublist(sublist1.left, sublist2.right));
+//        stack.add(index, new Sublist(sublist1.left, sublist2.right));
     }
 
     private boolean needsToMerge() {

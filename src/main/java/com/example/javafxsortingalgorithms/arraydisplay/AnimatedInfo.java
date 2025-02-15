@@ -24,7 +24,7 @@ public class AnimatedInfo extends Label {
 
     public void updateInfo(String key, String value) {
         if (!info.containsKey(key)) {
-            System.out.println(STR."Adding \"\{key}\" to the map");
+            System.out.println("Adding \"" + key + "\" to the map");
         }
         info.put(key, value);
         updateText();

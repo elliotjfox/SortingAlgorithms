@@ -247,14 +247,26 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
 
         // Inclusive [from, to]
         public Flip(int from, int to) {
+            this(from, to, true);
+        }
+
+        // Inclusive [from, to]
+        public Flip(int from, int to, boolean takesStep) {
             this.from = from;
             this.to = to;
+            this.takesStep = takesStep;
         }
 
         @Override
         void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
-            for (int i = 0; i < (to - from) / 2; i++) {
-                algorithm.addToStart(new Swap(from + i, to - i));
+            if (takesStep) {
+                for (int i = 0; i <= (to - from) / 2; i++) {
+                    algorithm.addToStart(new Swap(from + i, to - i));
+                }
+            } else {
+                for (int i = 0; i <= (to - from) / 2; i++) {
+                    algorithm.swap(from + i, to - i);
+                }
             }
         }
     }

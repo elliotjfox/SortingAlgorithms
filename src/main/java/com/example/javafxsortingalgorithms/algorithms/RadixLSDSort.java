@@ -14,7 +14,7 @@ import java.util.List;
  * the auxiliary array and put it in the correct section, incrementing the indices of the section
  * we add it too. Then we do it again, but instead sort by the next digit. Since this is a stable
  * sorting algorithm, after the first sort, all the ones that end in zero are at the start, then one, then two, etc.
- * After the second, all the ones that end in 10 are at the start, then 11, 12, etc.
+ * After the second, all the ones that end in 00 are at the start, then 01, 02, etc.
  * <br> <br>
  * <h4>Time Complexity</h4>
  * The time complexity of Radix Sort depends on the biggest digit, r. <br>
@@ -133,7 +133,8 @@ public class RadixLSDSort extends SortingAlgorithm {
                         isDone = true;
                     }
                 }
-            } case IN_PLACE -> {
+            }
+            case IN_PLACE -> {
                 if (counter >= list.size()) {
                     counter = 0;
                     digit++;
@@ -159,6 +160,7 @@ public class RadixLSDSort extends SortingAlgorithm {
 
     @Override
     protected void instantAlgorithm(TestEntry entry) {
+//        radixSort();
         if (state == SortState.IN_PLACE) {
             int instantDigit = 0;
             // Setting up progress keeping ability
@@ -169,7 +171,7 @@ public class RadixLSDSort extends SortingAlgorithm {
 
             ArrayList<Integer> instantIndices = new ArrayList<>();
             for (int i = 0; i < base; i++) instantIndices.add(0);
-            while (!isDone()) {
+            while (Math.pow(base, instantDigit) < maxDigit) {
 //            System.out.println("Going through " + instantDigit);
                 for (int i = 0; i < list.size(); i++) {
                     entry.addRead();
@@ -178,7 +180,7 @@ public class RadixLSDSort extends SortingAlgorithm {
                     move(i, instantIndices.get(currentDigit));
                     incrementFollowing(instantIndices, currentDigit);
                     // TODO: This doesn't work properly
-                    entry.updateProgress((double) instantDigit / numPasses + (double) i / list.size() / numPasses);
+//                    entry.updateProgress((double) instantDigit / numPasses + (double) i / list.size() / numPasses);
                 }
                 instantDigit++;
                 for (int i = 0; i < base; i++) instantIndices.set(i, 0);
@@ -241,5 +243,28 @@ public class RadixLSDSort extends SortingAlgorithm {
         }
         return "Radix Sort\nBase: " + base;
     }
+
+//    private void radixSort() {
+//        int currentDigit = 0;
+//
+//        int maxDigit = list.getFirst();
+//        for (Integer i : list) if (i > maxDigit) maxDigit = i;
+//
+//        int[] indices = new int[base];
+//
+//        while (Math.pow(base, currentDigit) < maxDigit) {
+//            for (int i = 0; i < list.size(); i++) {
+//                int digit = getDigit(list.get(i), currentDigit);
+//                move(i, indices[digit]);
+//
+//                // Increment indices from digit onward
+//                for (int j = digit; j < base; j++) indices[j]++;
+//            }
+//            currentDigit++;
+//            // Reset indices
+//            indices = new int[base];
+//        }
+//    }
+
 }
 

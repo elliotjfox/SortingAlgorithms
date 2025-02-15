@@ -31,7 +31,7 @@ public class StoogeSort extends ActionSortingAlgorithm {
 
     @Override
     public String getName() {
-        return null;
+        return "Stooge Sort";
     }
 
     private static class StoogeSortAction extends AlgorithmAction {

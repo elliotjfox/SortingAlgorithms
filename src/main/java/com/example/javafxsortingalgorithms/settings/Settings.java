@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class Settings {
 
@@ -39,6 +40,8 @@ public class Settings {
             case "Insertion":   yield new InsertionSortSettings();
             case "Merge":       yield new MergeSortSettings();
             case "OddEven":     yield new GenericAlgorithmSettings<>("Odd-Even Sort", OddEvenSort::new);
+            case "OddEvenMerge":     yield new GenericAlgorithmSettings<>("Odd-Even Merge Sort", OddEvenMergeSort::new);
+            case "Pancake":     yield new PancakeSortSettings();
             case "QuantumBogo": yield new GenericAlgorithmSettings<>("Quantum Bogo Sort", QuantumBogoSort::new);
             case "Quick":       yield new QuickSortSettings();
             case "Radix":       yield new RadixSortSettings();
@@ -103,6 +106,46 @@ public class Settings {
         }
         Collections.shuffle(array, random);
         return array;
+    }
+
+    // TODO: Fix this
+    public static List<Integer> getApproxList(int size, Function<Integer, Integer> function, int initialRange) {
+        List<Integer> list = new ArrayList<>();
+        List<Integer> candidates = new ArrayList<>();
+        int[] arr = new int[size];
+        for (int i = 0; i < size; i++) arr[i] = i;
+
+        for (int i = 0; i < size; i++) {
+            int target = function.apply(i);
+            for (int j = target - initialRange; j <= target + initialRange; j++) {
+                addCandidate(arr, candidates, j);
+            }
+
+            int range = initialRange + 1;
+            while (candidates.isEmpty()) {
+                addCandidate(arr, candidates, target - range);
+                addCandidate(arr, candidates, target + range);
+                range++;
+            }
+
+            System.out.println("Selecting for i=" + i + ", out of " + candidates.size() + " candidates (" + candidates + ")");
+            int selected = candidates.get(random.nextInt(candidates.size()));
+            list.add(selected);
+            arr[selected] = -1;
+            candidates.clear();
+        }
+
+        return list;
+    }
+
+//    private static void addCandidates(int[] arr, List<Integer> candidates, int from, int distance) {
+//        if (from - distance )
+//    }
+
+    private static void addCandidate(int[] arr, List<Integer> candidates, int x) {
+        if (x >= 0 && x < arr.length && arr[x] != -1) {
+            candidates.add(x);
+        }
     }
 
     public static void getTestList(int size, Consumer<List<Integer>> whenDone) {

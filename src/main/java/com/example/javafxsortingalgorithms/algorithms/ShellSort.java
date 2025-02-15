@@ -88,7 +88,7 @@ public class ShellSort extends ActionSortingAlgorithm {
 
     @Override
     public String getName() {
-        return STR."Shell Sort\nShrink Factor: \{shrinkFactor}";
+        return "Shell Sort\nShrink Factor: " + shrinkFactor;
     }
 
     public void shrinkGap() {
@@ -137,7 +137,7 @@ public class ShellSort extends ActionSortingAlgorithm {
                             new AnimationAction(shellSort.arrow.moveToIndexTimeline(j, 0)),
                             new LaterAction(() -> {
                                 display.updateInfoOnPlay("Offset", finalI);
-                                display.updateInfoWhenDone("Current task", STR."Searching from \{finalJ}");
+                                display.updateInfoWhenDone("Current task", "Searching from " + finalJ);
                             }, true),
                             new SearchFrom(j, gap)
                     );

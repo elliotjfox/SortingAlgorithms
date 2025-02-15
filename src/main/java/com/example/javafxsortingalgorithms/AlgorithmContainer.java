@@ -95,6 +95,8 @@ public class AlgorithmContainer {
         list = Settings.getRandomUniformList(size);
 //        list = Settings.getArray(size, 0, 25);
 //        list = Settings.getRandom(size);
+//        list = Settings.getApproxList(size, x -> x, size / 10);
+//        list = Settings.getApproxList(size, x -> -Math.abs(size / 2 - x) + size, size / 10);
         if (display != null) display.setList(list);
     }
 
@@ -268,7 +270,8 @@ public class AlgorithmContainer {
 
         Menu sortingNetworks = new Menu(
                 "Sorting Networks", null,
-                createMenuItem("Bitonic Sort", "Bitonic")
+                createMenuItem("Bitonic Sort", "Bitonic"),
+                createMenuItem("Odd Even Merge Sort", "OddEvenMerge")
         );
 
         Menu miscellaneous = new Menu(
@@ -279,7 +282,8 @@ public class AlgorithmContainer {
                 createMenuItem("Exchange Sort", "Exchange"),
                 createMenuItem("Strand Sort", "Strand"),
                 createMenuItem("Cartesian Tree Sort", "Cartesian"),
-                createMenuItem("Cycle Sort", "Cycle")
+                createMenuItem("Cycle Sort", "Cycle"),
+                createMenuItem("Pancake Sort", "Pancake")
                 );
 
         Menu jokeAlgorithms = new Menu(

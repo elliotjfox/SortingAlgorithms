@@ -29,22 +29,22 @@ public abstract class SettingsSection extends GridPane {
         return resetButton;
     }
 
-    protected void addSetting(Node setting) {
+    public void addSetting(Node setting) {
         add(setting, 0, rows, 3, 1);
         rows++;
     }
 
-    protected void addSetting(String settingName, Node setting) {
+    public void addSetting(String settingName, Node setting) {
         addSetting(new Label(settingName), setting);
     }
 
-    protected void addSetting(Node settingName, Node setting) {
+    public void addSetting(Node settingName, Node setting) {
         add(settingName, 0, rows);
         add(setting, 1, rows);
         rows++;
     }
 
-    protected void addSetting(Node settingsName, Node setting, String settingInfo) {
+    public void addSetting(Node settingsName, Node setting, String settingInfo) {
         add(settingsName, 0, rows);
         add(setting, 1, rows);
         add(createInfoButton(settingInfo), 2, rows);

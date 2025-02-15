@@ -1,12 +1,16 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.FunctionalAlgorithmSettings;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.SettingsComboBox;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 
 import java.util.List;
 
 public class ExchangeSort extends SortingAlgorithm {
 
+    // TODO: Does this need to be an enum?
     public enum Direction {
         UP,
         DOWN
@@ -61,5 +65,15 @@ public class ExchangeSort extends SortingAlgorithm {
     @Override
     public String getName() {
         return null;
+    }
+
+    public static AlgorithmSettings getSettings() {
+        SettingsComboBox<Direction> directionSetting = new SettingsComboBox<>("Direction", Direction.values(), Direction.DOWN);
+
+        return new FunctionalAlgorithmSettings<>(
+                "Exchange Sort",
+                (l, b) -> new ExchangeSort(l, b, directionSetting.getValue()),
+                directionSetting
+        );
     }
 }

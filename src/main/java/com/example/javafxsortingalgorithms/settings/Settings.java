@@ -27,30 +27,31 @@ public class Settings {
 
     public static AlgorithmSettings createAlgorithmSettings(String algorithmName) {
         return switch (algorithmName) {
-            case "Bitonic":     yield new BitonicSettings();
+            case "Bitonic":     yield BitonicSort.getSettings();
+            // Could switch these GenericAlgorithmSettings to FunctionalAlgorithmSettings instead, same behaviour
             case "Bogo":        yield new GenericAlgorithmSettings<>("Bogo Sort", BogoSort::new);
             case "Bubble":      yield new GenericAlgorithmSettings<>("Bubble Sort", BubbleSort::new);
             case "Cartesian":   yield new GenericAlgorithmSettings<>("Cartesian Tree Sort", CartesianTreeSort::new);
             case "Cocktail":    yield new GenericAlgorithmSettings<>("Cocktail Shaker Sort", CocktailShakerSort::new);
             case "Comb":        yield new CombSortSettings();
-            case "Exchange":    yield new ExchangeSortSettings();
+            case "Exchange":    yield ExchangeSort.getSettings();
             case "Gnome":       yield new GenericAlgorithmSettings<>("Gnome Sort", GnomeSort::new);
             case "Gravity":     yield new GenericAlgorithmSettings<>("Gravity Sort", GravitySort::new);
             case "Heap":        yield new GenericAlgorithmSettings<>("Heap Sort", HeapSort::new);
-            case "Insertion":   yield new InsertionSortSettings();
-            case "Merge":       yield new MergeSortSettings();
+            case "Insertion":   yield InsertionSort.getSettings();
+            case "Merge":       yield MergeSort.getSettings();
             case "OddEven":     yield new GenericAlgorithmSettings<>("Odd-Even Sort", OddEvenSort::new);
-            case "OddEvenMerge":     yield new GenericAlgorithmSettings<>("Odd-Even Merge Sort", OddEvenMergeSort::new);
-            case "Pancake":     yield new PancakeSortSettings();
+            case "OddEvenMerge":yield new GenericAlgorithmSettings<>("Odd-Even Merge Sort", OddEvenMergeSort::new);
+            case "Pancake":     yield PancakeSort.getSettings();
             case "QuantumBogo": yield new GenericAlgorithmSettings<>("Quantum Bogo Sort", QuantumBogoSort::new);
-            case "Quick":       yield new QuickSortSettings();
+            case "Quick":       yield QuickSort.getSettings();
             case "Radix":       yield new RadixSortSettings();
-            case "Selection":   yield new SelectionSortSettings();
+            case "Selection":   yield SelectionSort.getSettings();
             case "Sleep":       yield new GenericAlgorithmSettings<>("Sleep Sort", SleepSort::new);
             case "Shell":       yield new ShellSortSettings();
             case "Stooge":      yield new GenericAlgorithmSettings<>("Stooge Sort", StoogeSort::new);
             case "Strand":      yield new GenericAlgorithmSettings<>("Strand Sort", StrandSort::new);
-            case "Tim":      yield new GenericAlgorithmSettings<>("Tim Sort", TimSort::new);
+            case "Tim":         yield new GenericAlgorithmSettings<>("Tim Sort", TimSort::new);
             case "Cycle":       yield new GenericAlgorithmSettings<>("Strand Sort", CycleSort::new);
             default:            yield new GenericAlgorithmSettings<>("Unknown Algorithm", GnomeSort::new);
         };

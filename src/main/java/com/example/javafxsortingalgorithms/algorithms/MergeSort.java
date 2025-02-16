@@ -2,8 +2,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
-import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.FunctionalAlgorithmSettings;
-import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.SettingsCheckBox;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithnSettingsCheckBox;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 import javafx.scene.paint.Color;
 
@@ -267,10 +266,10 @@ public class MergeSort extends ActionSortingAlgorithm {
         }
     }
 
-    public static AlgorithmSettings getSettings() {
-        SettingsCheckBox inPlaceSetting = new SettingsCheckBox("Merge In Place", true);
+    public static AlgorithmSettings<MergeSort> getSettings() {
+        AlgorithnSettingsCheckBox inPlaceSetting = new AlgorithnSettingsCheckBox("Merge In Place", true);
 
-        return new FunctionalAlgorithmSettings<>(
+        return new AlgorithmSettings<>(
                 "Merge Sort",
                 (l, b) -> new MergeSort(l, b, inPlaceSetting.getValue()),
                 inPlaceSetting

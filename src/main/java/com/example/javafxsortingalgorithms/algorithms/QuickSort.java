@@ -2,8 +2,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
-import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.FunctionalAlgorithmSettings;
-import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.SettingsComboBox;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 import javafx.scene.paint.Color;
 
@@ -272,10 +271,10 @@ public class QuickSort extends ActionSortingAlgorithm {
 //        }
 //    }
 
-    public static AlgorithmSettings getSettings() {
-        SettingsComboBox<PartitionType> partitionSetting = new SettingsComboBox<>("Partition Type", PartitionType.values(), PartitionType.LEFT);
+    public static AlgorithmSettings<QuickSort> getSettings() {
+        AlgorithmSettingsComboBox<PartitionType> partitionSetting = new AlgorithmSettingsComboBox<>("Partition Type", PartitionType.values(), PartitionType.LEFT);
 
-        return new FunctionalAlgorithmSettings<>(
+        return new AlgorithmSettings<>(
                 "Quick Sort",
                 (l, b) -> new QuickSort(l, b, partitionSetting.getValue()),
                 partitionSetting

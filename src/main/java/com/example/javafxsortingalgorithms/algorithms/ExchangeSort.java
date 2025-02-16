@@ -2,8 +2,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
-import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.FunctionalAlgorithmSettings;
-import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.SettingsComboBox;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 
 import java.util.List;
@@ -67,10 +66,10 @@ public class ExchangeSort extends SortingAlgorithm {
         return null;
     }
 
-    public static AlgorithmSettings getSettings() {
-        SettingsComboBox<Direction> directionSetting = new SettingsComboBox<>("Direction", Direction.values(), Direction.DOWN);
+    public static AlgorithmSettings<ExchangeSort> getSettings() {
+        AlgorithmSettingsComboBox<Direction> directionSetting = new AlgorithmSettingsComboBox<>("Direction", Direction.values(), Direction.DOWN);
 
-        return new FunctionalAlgorithmSettings<>(
+        return new AlgorithmSettings<>(
                 "Exchange Sort",
                 (l, b) -> new ExchangeSort(l, b, directionSetting.getValue()),
                 directionSetting

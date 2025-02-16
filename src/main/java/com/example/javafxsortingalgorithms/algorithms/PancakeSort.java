@@ -87,10 +87,10 @@ public class PancakeSort extends ActionSortingAlgorithm {
         }
     }
 
-    public static AlgorithmSettings getSettings() {
-        SettingsCheckBox instantFlipsSetting = new SettingsCheckBox("Instant Flip", false);
+    public static AlgorithmSettings<PancakeSort> getSettings() {
+        AlgorithnSettingsCheckBox instantFlipsSetting = new AlgorithnSettingsCheckBox("Instant Flip", false);
 
-        return new FunctionalAlgorithmSettings<>(
+        return new AlgorithmSettings<>(
                 "Pancake Sort",
                 (l, b) -> new PancakeSort(l, b, instantFlipsSetting.getValue()),
                 instantFlipsSetting

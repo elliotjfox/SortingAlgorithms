@@ -4,7 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 
-public class SettingsComboBox<T> extends ComboBox<T> implements AlgorithmSettingObject {
+public class AlgorithmSettingsComboBox<T> extends ComboBox<T> implements AlgorithmSettingObject {
 
     private final String name;
     private final String description;
@@ -12,11 +12,11 @@ public class SettingsComboBox<T> extends ComboBox<T> implements AlgorithmSetting
 
     private T value;
 
-    public SettingsComboBox(String name, T[] values, T initialValue) {
+    public AlgorithmSettingsComboBox(String name, T[] values, T initialValue) {
         this(name, "", values, initialValue);
     }
 
-    public SettingsComboBox(String name, String description, T[] values, T initialValue) {
+    public AlgorithmSettingsComboBox(String name, String description, T[] values, T initialValue) {
         super(FXCollections.observableArrayList(values));
 
         this.name = name;

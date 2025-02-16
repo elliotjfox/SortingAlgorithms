@@ -2,8 +2,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
-import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.FunctionalAlgorithmSettings;
-import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.SettingsComboBox;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 
 import java.util.List;
@@ -360,10 +359,10 @@ public class InsertionSort extends ActionSortingAlgorithm {
         }
     }
 
-    public static AlgorithmSettings getSettings() {
-        SettingsComboBox<SearchType> searchSetting = new SettingsComboBox<>("Search Type", SearchType.description, SearchType.values(), SearchType.RIGHT_LINEAR);
+    public static AlgorithmSettings<InsertionSort> getSettings() {
+        AlgorithmSettingsComboBox<SearchType> searchSetting = new AlgorithmSettingsComboBox<>("Search Type", SearchType.description, SearchType.values(), SearchType.RIGHT_LINEAR);
 
-        return new FunctionalAlgorithmSettings<>(
+        return new AlgorithmSettings<>(
                 "Insertion Sort",
                 (l, b) -> new InsertionSort(l, b, searchSetting.getValue()),
                 searchSetting

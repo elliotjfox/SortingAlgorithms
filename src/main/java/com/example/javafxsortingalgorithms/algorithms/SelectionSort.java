@@ -2,8 +2,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
-import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.FunctionalAlgorithmSettings;
-import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.SettingsComboBox;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayAnimatedDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrow;
@@ -445,10 +444,10 @@ public class SelectionSort extends SortingAlgorithm {
         return str.toString();
     }
 
-    public static AlgorithmSettings getSettings() {
-        SettingsComboBox<SelectionMode> selectionSetting = new SettingsComboBox<>("Selection Mode", SelectionMode.values(), SelectionMode.MIN);
+    public static AlgorithmSettings<SelectionSort> getSettings() {
+        AlgorithmSettingsComboBox<SelectionMode> selectionSetting = new AlgorithmSettingsComboBox<>("Selection Mode", SelectionMode.values(), SelectionMode.MIN);
 
-        return new FunctionalAlgorithmSettings<>(
+        return new AlgorithmSettings<>(
                 "Selection Sort",
                 (l, b) -> new SelectionSort(l, b, selectionSetting.getValue()),
                 selectionSetting

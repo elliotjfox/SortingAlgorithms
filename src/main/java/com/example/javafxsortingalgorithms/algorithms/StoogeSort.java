@@ -1,7 +1,7 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayAnimatedDisplay;
+import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrayDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.AnimatedSection;
 import com.example.javafxsortingalgorithms.arraydisplay.AnimatedSectionList;
@@ -24,7 +24,7 @@ public class StoogeSort extends ActionSortingAlgorithm {
     }
 
     @Override
-    public void startAnimated(ArrayAnimatedDisplay display) {
+    public void startAnimated(AnimatedArrayDisplay display) {
         sectionList = new AnimatedSectionList(display);
         display.addItem(sectionList, 0, 0);
     }
@@ -68,7 +68,7 @@ public class StoogeSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
             if (from >= to) return;
 
             if (algorithm instanceof StoogeSort stoogeSort) {

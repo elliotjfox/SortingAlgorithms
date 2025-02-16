@@ -1,7 +1,7 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayAnimatedDisplay;
+import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrayDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrow;
 import com.example.javafxsortingalgorithms.arraydisplay.AnimatedSection;
@@ -62,7 +62,7 @@ public class OddEvenSort extends SortingAlgorithm {
     }
 
     @Override
-    public void startAnimated(ArrayAnimatedDisplay display) {
+    public void startAnimated(AnimatedArrayDisplay display) {
         leftArrow = new AnimatedArrow(display, true);
         display.addItem(leftArrow, 0, ARROW_HEIGHT);
 
@@ -86,7 +86,7 @@ public class OddEvenSort extends SortingAlgorithm {
     }
 
     @Override
-    public void iterateAnimated(ArrayAnimatedDisplay display) {
+    public void iterateAnimated(AnimatedArrayDisplay display) {
         if (currentPos + 1 >= list.size()) {
             if (isListSorted(list)) {
                 isDone = true;
@@ -132,7 +132,7 @@ public class OddEvenSort extends SortingAlgorithm {
         currentPos += 2;
     }
 
-    private void updateInfoWhenDone(ArrayAnimatedDisplay display) {
+    private void updateInfoWhenDone(AnimatedArrayDisplay display) {
         display.updateInfoWhenDone("Left index", currentPos);
         display.updateInfoWhenDone("Left value", list.get(currentPos));
         display.updateInfoWhenDone("Right index", currentPos + 1);

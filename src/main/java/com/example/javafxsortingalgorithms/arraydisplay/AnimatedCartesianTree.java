@@ -21,7 +21,7 @@ public class AnimatedCartesianTree extends AnimatedItem {
     private final List<Boolean> found;
     private final List<Line> lines;
 
-    public AnimatedCartesianTree(ArrayAnimatedDisplay display, List<Integer> list) {
+    public AnimatedCartesianTree(AnimatedArrayDisplay display, List<Integer> list) {
         super(display);
 
         treeItems = new ArrayList<>();
@@ -57,7 +57,7 @@ public class AnimatedCartesianTree extends AnimatedItem {
         }
         return new Timeline(
                 new KeyFrame(
-                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),
                         "",
                         event -> {},
                         keyValues

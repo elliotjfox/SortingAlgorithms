@@ -1,6 +1,6 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayAnimatedDisplay;
+import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrayDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 import javafx.animation.Timeline;
 
@@ -11,7 +11,7 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
 
     protected ArrayList<AlgorithmAction> actions;
     protected ArrayList<AlgorithmAction> toAdd;
-    protected ArrayAnimatedDisplay display;
+    protected AnimatedArrayDisplay display;
 
     public ActionSortingAlgorithm(List<Integer> arrayList, boolean isInstant) {
         super(arrayList, isInstant);
@@ -37,7 +37,7 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
     }
 
     @Override
-    public void iterateAnimated(ArrayAnimatedDisplay display) {
+    public void iterateAnimated(AnimatedArrayDisplay display) {
         AlgorithmAction currentAction;
         do {
             if (actions.isEmpty()) {
@@ -63,7 +63,7 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
 
     /**
      * A class representing an action that an algorithm would take. There are two methods to override,{@link #execute(ActionSortingAlgorithm, ArrayDisplay) execute(algorithm, display)}
-     * and {@link #executeAnimated(ActionSortingAlgorithm, ArrayAnimatedDisplay) executeAnimated(algorithm, animatedDisplay)}.
+     * and {@link #executeAnimated(ActionSortingAlgorithm, AnimatedArrayDisplay) executeAnimated(algorithm, animatedDisplay)}.
      */
     protected static abstract class AlgorithmAction {
         protected boolean takesStep = true;
@@ -86,7 +86,7 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
          * @param algorithm The algorithm this action belongs to
          * @param display The animated display the algorithm belongs to
          */
-        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
             // TODO: Eventually make this abstract
             System.out.println("TODO: Should this action (" + getClass().getSimpleName() + ") have a detailed version?");
             execute(algorithm, display);
@@ -102,12 +102,12 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
         void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {}
 
         @Override
-        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {}
+        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {}
     }
 
     /**
      * An action that moves the element at a specified index to another specified index. When executed, automatically calls
-     * {@link ArrayDisplay#writeIndex(int) writeIndex()}, or {@link ArrayAnimatedDisplay#move(int, int) move()}, depending on
+     * {@link ArrayDisplay#writeIndex(int) writeIndex()}, or {@link AnimatedArrayDisplay#move(int, int) move()}, depending on
      * which mode.
      */
     protected static class Move extends AlgorithmAction {
@@ -131,7 +131,7 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
         }
 
         @Override
-        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
             algorithm.move(from, to);
             display.move(from, to);
         }
@@ -139,7 +139,7 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
 
     /**
      * An action that swaps two elements. When executed, automatically calls {@link ArrayDisplay#writeIndex(int) writeIndex()}
-     * for the two indices, or {@link ArrayAnimatedDisplay#swap(int, int) swap()} depending on which mode we are in.
+     * for the two indices, or {@link AnimatedArrayDisplay#swap(int, int) swap()} depending on which mode we are in.
      */
     protected static class Swap extends AlgorithmAction {
         private final int firstIndex;
@@ -163,7 +163,7 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
         }
 
         @Override
-        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
             algorithm.swap(firstIndex, secondIndex);
             display.swap(firstIndex, secondIndex);
         }
@@ -216,7 +216,7 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
         }
 
         @Override
-        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
             action.run();
         }
     }
@@ -235,7 +235,7 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
         }
 
         @Override
-        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
             display.animate(timelines);
         }
     }
@@ -284,7 +284,7 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
         }
 
         @Override
-        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
             for (int i = 0; i < algorithm.list.size() - 1; i++) {
                 display.comparing(i, i + 1);
                 if (algorithm.list.get(i) > algorithm.list.get(i + 1)) {

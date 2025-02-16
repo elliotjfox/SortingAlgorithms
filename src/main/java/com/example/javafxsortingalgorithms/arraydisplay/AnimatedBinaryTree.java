@@ -22,7 +22,7 @@ public class AnimatedBinaryTree extends AnimatedItem {
     private final List<Line> lines;
 
     // TODO: Make this adaptable to different sizes maybe?
-    public AnimatedBinaryTree(ArrayAnimatedDisplay display, List<Integer> list) {
+    public AnimatedBinaryTree(AnimatedArrayDisplay display, List<Integer> list) {
         super(display);
         treeItems = new ArrayList<>();
         lines = new ArrayList<>();
@@ -66,7 +66,7 @@ public class AnimatedBinaryTree extends AnimatedItem {
         treeItems.set(first, treeItems.set(second, treeItems.get(first)));
         return new Timeline(
                 new KeyFrame(
-                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),
                         new KeyValue(firstItem.layoutXProperty(), secondItem.getLayoutX()),
                         new KeyValue(firstItem.layoutYProperty(), secondItem.getLayoutY()),
                         new KeyValue(secondItem.layoutXProperty(), firstItem.getLayoutX()),
@@ -82,7 +82,7 @@ public class AnimatedBinaryTree extends AnimatedItem {
 
         Timeline timeline = new Timeline(
                 new KeyFrame(
-                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),
                         new KeyValue(toReplaceItem.layoutXProperty(), toRemoveItem.getLayoutX()),
                         new KeyValue(toReplaceItem.layoutYProperty(), toRemoveItem.getLayoutY()),
                         new KeyValue(toRemoveItem.layoutXProperty(), toReplaceItem.getLayoutX()),
@@ -101,7 +101,7 @@ public class AnimatedBinaryTree extends AnimatedItem {
     }
 
     public Timeline read(int index) {
-        Polygon arrow = ArrayAnimatedDisplay.createReadArrow();
+        Polygon arrow = AnimatedArrayDisplay.createReadArrow();
         arrow.setLayoutX(treeItems.get(index).getLayoutX());
         arrow.setLayoutY(treeItems.get(index).getLayoutY() + 25);
         Timeline timeline = new Timeline(
@@ -110,7 +110,7 @@ public class AnimatedBinaryTree extends AnimatedItem {
                         event -> getChildren().add(arrow)
                 ),
                 new KeyFrame(
-                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),
                         new KeyValue(arrow.layoutYProperty(), treeItems.get(index).getLayoutY())
                 )
         );

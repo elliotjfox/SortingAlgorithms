@@ -1,6 +1,6 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayAnimatedDisplay;
+import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrayDisplay;
 import com.example.javafxsortingalgorithms.TestDisplay;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
@@ -33,11 +33,11 @@ public abstract class SortingAlgorithm {
 
     protected abstract void instantAlgorithm(TestEntry entry);
 
-    public void startAnimated(ArrayAnimatedDisplay display) {
+    public void startAnimated(AnimatedArrayDisplay display) {
         System.out.println("TODO: Implement detailed start for this algorithm!");
     }
 
-    public void iterateAnimated(ArrayAnimatedDisplay display) {
+    public void iterateAnimated(AnimatedArrayDisplay display) {
         System.out.println("TODO: Implement detailed for this algorithm!");
     }
 

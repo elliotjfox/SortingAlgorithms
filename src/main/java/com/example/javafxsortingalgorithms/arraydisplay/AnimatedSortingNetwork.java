@@ -19,7 +19,7 @@ public class AnimatedSortingNetwork extends AnimatedItem {
     private final List<List<Node>> visuals;
     private final List<Line> lines;
 
-    public AnimatedSortingNetwork(ArrayAnimatedDisplay display, List<Integer> list) {
+    public AnimatedSortingNetwork(AnimatedArrayDisplay display, List<Integer> list) {
         super(display);
         this.list = list;
         allComparisons = new ArrayList<>();
@@ -51,7 +51,7 @@ public class AnimatedSortingNetwork extends AnimatedItem {
         }
         timeline.getKeyFrames().addAll(
                 new KeyFrame(
-                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),
                         "",
                         event -> {},
                         values
@@ -71,7 +71,7 @@ public class AnimatedSortingNetwork extends AnimatedItem {
                         }
                 ),
                 new KeyFrame(
-                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),
                         event -> {}
                 )
         );

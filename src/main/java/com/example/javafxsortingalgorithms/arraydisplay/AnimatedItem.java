@@ -8,9 +8,9 @@ import javafx.util.Duration;
 
 public class AnimatedItem extends Group {
 
-    protected final ArrayAnimatedDisplay display;
+    protected final AnimatedArrayDisplay display;
 
-    public AnimatedItem(ArrayAnimatedDisplay display) {
+    public AnimatedItem(AnimatedArrayDisplay display) {
         this.display = display;
     }
 
@@ -35,7 +35,7 @@ public class AnimatedItem extends Group {
     public Timeline moveToIndexTimeline(int index, double y) {
         return new Timeline(
                 new KeyFrame(
-                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),
                         new KeyValue(layoutXProperty(), index * display.getElementWidth()),
                         new KeyValue(layoutYProperty(), display.getMaxValue() * display.getHeightMultiplier() - y)
                 )
@@ -45,7 +45,7 @@ public class AnimatedItem extends Group {
     public Timeline moveToPositionTimeline(double x, double y) {
         return new Timeline(
                 new KeyFrame(
-                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),
                         new KeyValue(layoutXProperty(), x),
                         new KeyValue(layoutYProperty(), display.getMaxValue() * display.getHeightMultiplier() - y)
                 )

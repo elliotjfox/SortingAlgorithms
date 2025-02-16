@@ -61,7 +61,7 @@ public class QuickSort extends ActionSortingAlgorithm {
     }
 
     @Override
-    public void startAnimated(ArrayAnimatedDisplay display) {
+    public void startAnimated(AnimatedArrayDisplay display) {
         section = new AnimatedSection(display, list.size(), true);
         display.addItem(section, 0, -SECTION_OFFSET);
         section.setFill(IN_PROGRESS_COLOUR);
@@ -107,7 +107,7 @@ public class QuickSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
             AnimatedArrow kArrow = new AnimatedArrow(display, true);
             display.addItem(kArrow, end, 0);
 

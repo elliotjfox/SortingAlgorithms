@@ -1,7 +1,7 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayAnimatedDisplay;
+import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrayDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.AnimatedCartesianTree;
 
@@ -29,7 +29,7 @@ public class CartesianTreeSort extends ActionSortingAlgorithm {
     }
 
     @Override
-    public void startAnimated(ArrayAnimatedDisplay display) {
+    public void startAnimated(AnimatedArrayDisplay display) {
         cartesianTree = new AnimatedCartesianTree(display, list);
         display.addItem(cartesianTree, list.size(), 600);
     }
@@ -49,7 +49,7 @@ public class CartesianTreeSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
             if (algorithm instanceof CartesianTreeSort cartesianTreeSort) {
                 performDetailed(cartesianTreeSort, display);
             }
@@ -57,7 +57,7 @@ public class CartesianTreeSort extends ActionSortingAlgorithm {
 
         public abstract void perform(CartesianTreeSort cartesianTreeSort, ArrayDisplay display);
 
-        public abstract void performDetailed(CartesianTreeSort cartesianTreeSort, ArrayAnimatedDisplay display);
+        public abstract void performDetailed(CartesianTreeSort cartesianTreeSort, AnimatedArrayDisplay display);
     }
 
     private static class FindHighest extends CartesianTreeAction {
@@ -115,7 +115,7 @@ public class CartesianTreeSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(CartesianTreeSort cartesianTreeSort, ArrayAnimatedDisplay display) {
+        public void performDetailed(CartesianTreeSort cartesianTreeSort, AnimatedArrayDisplay display) {
             for (int i = from + 1; i <= to; i++) {
                 cartesianTreeSort.addToStart(new Compare(this, i));
             }
@@ -166,7 +166,7 @@ public class CartesianTreeSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(CartesianTreeSort cartesianTreeSort, ArrayAnimatedDisplay display) {
+        public void performDetailed(CartesianTreeSort cartesianTreeSort, AnimatedArrayDisplay display) {
             display.reading(findHighest.highestIndex, i);
             if (cartesianTreeSort.list.get(i) > cartesianTreeSort.list.get(findHighest.highestIndex)) {
                 findHighest.highestIndex = i;
@@ -195,7 +195,7 @@ public class CartesianTreeSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(CartesianTreeSort cartesianTreeSort, ArrayAnimatedDisplay display) {
+        public void performDetailed(CartesianTreeSort cartesianTreeSort, AnimatedArrayDisplay display) {
 
         }
     }
@@ -220,7 +220,7 @@ public class CartesianTreeSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void performDetailed(CartesianTreeSort cartesianTreeSort, ArrayAnimatedDisplay display) {
+        public void performDetailed(CartesianTreeSort cartesianTreeSort, AnimatedArrayDisplay display) {
             CartesianTreeNode largestChild = node.getLargestChild();
             if (largestChild == null) return;
 

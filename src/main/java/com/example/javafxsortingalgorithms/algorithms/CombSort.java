@@ -73,7 +73,7 @@ public class CombSort extends SortingAlgorithm {
     }
 
     @Override
-    public void startAnimated(ArrayAnimatedDisplay display) {
+    public void startAnimated(AnimatedArrayDisplay display) {
         leftArrow = new AnimatedArrow(display, true);
         display.addItem(leftArrow, 0, arrowHeight);
 
@@ -91,7 +91,7 @@ public class CombSort extends SortingAlgorithm {
     }
 
     @Override
-    public void iterateAnimated(ArrayAnimatedDisplay display) {
+    public void iterateAnimated(AnimatedArrayDisplay display) {
         // Check if we will compare outside the array, and reset if we need to. This uses a step.
         if (lastPos + gapSize >= list.size()) {
             if (isListSorted(list)) {

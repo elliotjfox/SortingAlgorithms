@@ -3,5 +3,5 @@ package com.example.javafxsortingalgorithms.algorithms.algorithmsettings;
 public interface AlgorithmSettingObject {
 
     void resetSetting();
-    void add(AlgorithmSettings settings);
+    void add(AlgorithmSettings<?> settings);
 }

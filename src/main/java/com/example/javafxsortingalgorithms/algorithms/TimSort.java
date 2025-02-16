@@ -1,13 +1,11 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayAnimatedDisplay;
+import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrayDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
-import javafx.geometry.Point2D;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 // TODO: Still some bugs
 public class TimSort extends ActionSortingAlgorithm {
@@ -114,7 +112,7 @@ public class TimSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
             if (algorithm instanceof TimSort timSort) {
                 executeAnimated(timSort, display);
             }
@@ -122,7 +120,7 @@ public class TimSort extends ActionSortingAlgorithm {
 
         abstract void execute(TimSort timSort, ArrayDisplay display);
 
-        abstract void executeAnimated(TimSort timSort, ArrayAnimatedDisplay display);
+        abstract void executeAnimated(TimSort timSort, AnimatedArrayDisplay display);
     }
 
     private static class FindRun extends TimSortAction {
@@ -158,7 +156,7 @@ public class TimSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        void executeAnimated(TimSort timSort, ArrayAnimatedDisplay display) {
+        void executeAnimated(TimSort timSort, AnimatedArrayDisplay display) {
 
         }
     }
@@ -208,7 +206,7 @@ public class TimSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        void executeAnimated(TimSort timSort, ArrayAnimatedDisplay display) {
+        void executeAnimated(TimSort timSort, AnimatedArrayDisplay display) {
 
         }
     }
@@ -243,7 +241,7 @@ public class TimSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        void executeAnimated(TimSort timSort, ArrayAnimatedDisplay display) {
+        void executeAnimated(TimSort timSort, AnimatedArrayDisplay display) {
 
         }
     }

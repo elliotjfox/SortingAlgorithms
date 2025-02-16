@@ -58,7 +58,7 @@ public class AlgorithmSettingsInputBox<T> extends TextField implements Algorithm
     }
 
     @Override
-    public void add(AlgorithmSettings settings) {
+    public void add(AlgorithmSettings<?> settings) {
         if (description.isBlank()) settings.addSetting(name, this);
         else settings.addSetting(new Label(name), this, description);
     }

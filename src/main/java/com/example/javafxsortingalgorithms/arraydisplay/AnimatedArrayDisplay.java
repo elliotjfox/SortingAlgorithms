@@ -13,7 +13,7 @@ import javafx.util.Duration;
 import java.util.*;
 import java.util.function.Function;
 
-public class ArrayAnimatedDisplay extends ArrayDisplay {
+public class AnimatedArrayDisplay extends ArrayDisplay {
 
     public static final double ANIMATION_LENGTH = 400;
     public static final double ANIMATION_COOLDOWN = 75;
@@ -31,7 +31,7 @@ public class ArrayAnimatedDisplay extends ArrayDisplay {
     private AnimationGroup currentAnimationGroup;
 
 
-    public ArrayAnimatedDisplay(SettingsPane settingsPane) {
+    public AnimatedArrayDisplay(SettingsPane settingsPane) {
         super(settingsPane);
 
         items = new ArrayList<>();
@@ -110,7 +110,7 @@ public class ArrayAnimatedDisplay extends ArrayDisplay {
     }
 
     @Override
-    public void drawArray() {
+    public void update() {
         System.out.println("Detailed is drawing...");
         for (int i = 0; i < elements.size(); i++) {
             elements.get(i).moveToIndex(i);

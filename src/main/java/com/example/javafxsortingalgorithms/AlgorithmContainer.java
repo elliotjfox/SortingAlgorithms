@@ -55,7 +55,7 @@ public class AlgorithmContainer {
 
         animatedTimeline = new Timeline(
                 new KeyFrame(
-                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH + ArrayAnimatedDisplay.ANIMATION_COOLDOWN),
+                        Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH + AnimatedArrayDisplay.ANIMATION_COOLDOWN),
                         event -> iterateAnimated()
                 )
         );
@@ -83,8 +83,8 @@ public class AlgorithmContainer {
     public void createAlgorithm() {
         algorithm = settingsPane.getAlgorithmSettings().createAlgorithm(list);
         if (mode == AlgorithmMode.ANIMATED) {
-            if (display instanceof ArrayAnimatedDisplay) {
-                algorithm.startAnimated((ArrayAnimatedDisplay) display);
+            if (display instanceof AnimatedArrayDisplay) {
+                algorithm.startAnimated((AnimatedArrayDisplay) display);
             } else {
                 System.out.println("Display is not a animated display when it should be!");
             }
@@ -169,11 +169,11 @@ public class AlgorithmContainer {
                 finish();
             }
         }
-        display.drawArray();
+        display.update();
     }
 
     public void iterateAnimated() {
-        if (!(display instanceof ArrayAnimatedDisplay animatedDisplay)) {
+        if (!(display instanceof AnimatedArrayDisplay animatedDisplay)) {
             System.out.println("Display is not a animated display!!");
             return;
         }
@@ -215,7 +215,7 @@ public class AlgorithmContainer {
         stop();
         mode = AlgorithmMode.ANIMATED;
         currentTimeline = animatedTimeline;
-        display = new ArrayAnimatedDisplay(settingsPane);
+        display = new AnimatedArrayDisplay(settingsPane);
         reset();
     }
 

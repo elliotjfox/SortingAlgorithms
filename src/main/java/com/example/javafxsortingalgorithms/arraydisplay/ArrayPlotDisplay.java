@@ -17,7 +17,7 @@ public class ArrayPlotDisplay extends ArrayElementDisplay<Rectangle> {
     }
 
     @Override
-    public void drawArray() {
+    public void update() {
         if (elements == null) return;
 
         for (int i = 0; i < elements.size(); i++) {

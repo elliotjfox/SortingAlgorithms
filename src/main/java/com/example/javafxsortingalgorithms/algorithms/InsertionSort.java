@@ -82,7 +82,7 @@ public class InsertionSort extends ActionSortingAlgorithm {
     }
 
     @Override
-    public void startAnimated(ArrayAnimatedDisplay display) {
+    public void startAnimated(AnimatedArrayDisplay display) {
         searchSection = new AnimatedSection(display, 1.0, true);
         display.addItem(searchSection, 0, sectionHeight);
         arrow = new AnimatedArrow(display, true);
@@ -124,7 +124,7 @@ public class InsertionSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
             if (!(algorithm instanceof InsertionSort insertionSort)) return;
             Function<Integer, InsertionSearchAction> addSearch = switch (insertionSort.searchType) {
                 case RIGHT_LINEAR -> (i) -> new RightSearch(i - 1, i);
@@ -162,7 +162,7 @@ public class InsertionSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void executeAnimated(ActionSortingAlgorithm algorithm, ArrayAnimatedDisplay display) {
+        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
             if (algorithm instanceof InsertionSort) {
                 searchDetailed((InsertionSort) algorithm, display);
             }
@@ -170,7 +170,7 @@ public class InsertionSort extends ActionSortingAlgorithm {
 
         protected abstract void search(InsertionSort algorithm, ArrayDisplay display);
 
-        protected abstract void searchDetailed(InsertionSort algorithm, ArrayAnimatedDisplay display);
+        protected abstract void searchDetailed(InsertionSort algorithm, AnimatedArrayDisplay display);
     }
 
     private static class LeftSearch extends InsertionSearchAction {
@@ -194,7 +194,7 @@ public class InsertionSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        protected void searchDetailed(InsertionSort algorithm, ArrayAnimatedDisplay display) {
+        protected void searchDetailed(InsertionSort algorithm, AnimatedArrayDisplay display) {
             if (from > to) {
                 algorithm.searchSection.moveToIndex(from, algorithm.sectionHeight);
                 display.animate(algorithm.searchSection.resizeTimeline((to - from + 1) * 25));
@@ -238,7 +238,7 @@ public class InsertionSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        public void searchDetailed(InsertionSort algorithm, ArrayAnimatedDisplay display) {
+        public void searchDetailed(InsertionSort algorithm, AnimatedArrayDisplay display) {
             if (to < 0) {
                 algorithm.searchSection.moveToIndex(from, algorithm.sectionHeight);
                 display.animate(algorithm.searchSection.resizeTimeline((to - from + 1) * 25));
@@ -305,7 +305,7 @@ public class InsertionSort extends ActionSortingAlgorithm {
         }
 
         @Override
-        protected void searchDetailed(InsertionSort algorithm, ArrayAnimatedDisplay display) {
+        protected void searchDetailed(InsertionSort algorithm, AnimatedArrayDisplay display) {
             if (from >= to) {
                 algorithm.searchSection.moveToIndex(from, algorithm.sectionHeight);
                 display.animate(algorithm.searchSection.resizeTimeline(to - from + 1));

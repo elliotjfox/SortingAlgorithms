@@ -11,7 +11,7 @@ public class SettingsPane extends Stage {
 
     DisplaySettings displaySettings;
     TestSettings testSettings;
-    AlgorithmSettings algorithmSettings;
+    AlgorithmSettings<?> algorithmSettings;
     TitledPane algorithmPane;
 
     public SettingsPane() {
@@ -31,7 +31,7 @@ public class SettingsPane extends Stage {
         setScene(new Scene(new VBox(accordion)));
     }
 
-    public void setAlgorithmSettings(AlgorithmSettings settings) {
+    public void setAlgorithmSettings(AlgorithmSettings<?> settings) {
         algorithmSettings = settings;
         algorithmPane.setContent(algorithmSettings);
     }
@@ -44,7 +44,7 @@ public class SettingsPane extends Stage {
         return testSettings;
     }
 
-    public AlgorithmSettings getAlgorithmSettings() {
+    public AlgorithmSettings<?> getAlgorithmSettings() {
         return algorithmSettings;
     }
 }

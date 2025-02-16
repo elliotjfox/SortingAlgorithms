@@ -19,11 +19,11 @@ public class AnimatedSection extends AnimatedItem {
     private Rectangle left;
     private Rectangle right;
 
-    public AnimatedSection(ArrayAnimatedDisplay display, int width, boolean hasEdges) {
+    public AnimatedSection(AnimatedArrayDisplay display, int width, boolean hasEdges) {
         this(display, display.getElementWidth() * width, hasEdges);
     }
 
-    public AnimatedSection(ArrayAnimatedDisplay display, double exactWidth, boolean hasEdges) {
+    public AnimatedSection(AnimatedArrayDisplay display, double exactWidth, boolean hasEdges) {
         super(display);
 
         this.width = exactWidth;
@@ -65,7 +65,7 @@ public class AnimatedSection extends AnimatedItem {
     public Timeline shrinkTimeline() {
         return new Timeline(
                 new KeyFrame(
-                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),
                         new KeyValue(scaleYProperty(), 0)
                 )
         );
@@ -74,7 +74,7 @@ public class AnimatedSection extends AnimatedItem {
     public Timeline unshrinkTimeline() {
         return new Timeline(
                 new KeyFrame(
-                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),
                         new KeyValue(scaleYProperty(), 1)
                 )
         );
@@ -97,7 +97,7 @@ public class AnimatedSection extends AnimatedItem {
         if (hasEdges) {
             timeline = new Timeline(
                     new KeyFrame(
-                            Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
+                            Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),
                             new KeyValue(rectangle.widthProperty(), exactWidth),
                             new KeyValue(right.layoutXProperty(), exactWidth - SECTION_THICKNESS)
                     )
@@ -105,7 +105,7 @@ public class AnimatedSection extends AnimatedItem {
         } else {
             timeline = new Timeline(
                     new KeyFrame(
-                            Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
+                            Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),
                             new KeyValue(rectangle.widthProperty(), exactWidth)
                     )
             );

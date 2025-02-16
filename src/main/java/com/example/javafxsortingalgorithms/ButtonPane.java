@@ -33,7 +33,7 @@ public class ButtonPane extends FlowPane {
         Button startTestButton = createButton("Start Test", event -> algorithmDisplay.startTest());
         Button openNormalButton = createButton(createBackIcon(), event -> algorithmDisplay.setMode(AlgorithmDisplay.Mode.NORMAL));
         Button openTestButton = createButton("Open Test", event -> algorithmDisplay.setMode(AlgorithmDisplay.Mode.TESTING));
-        Button openDetailedButton = createButton("Open Detailed", event -> algorithmDisplay.setMode(AlgorithmDisplay.Mode.DETAILED));
+        Button openDetailedButton = createButton("Open Detailed", event -> algorithmDisplay.setMode(AlgorithmDisplay.Mode.ANIMATED));
         Button openCompareButton = createButton("Open Compare", event -> algorithmDisplay.setMode(AlgorithmDisplay.Mode.COMPARING));
 
         normalPane = Arrays.asList(playButton, stopButton, stepButton, resetButton, reversedButton, openTestButton, openDetailedButton, openCompareButton);
@@ -50,7 +50,7 @@ public class ButtonPane extends FlowPane {
         switch (mode) {
             case NORMAL -> getChildren().addAll(normalPane);
             case TESTING -> getChildren().addAll(testPane);
-            case DETAILED -> getChildren().addAll(detailedPane);
+            case ANIMATED -> getChildren().addAll(detailedPane);
             case COMPARING -> getChildren().addAll(comparingPane);
         }
     }

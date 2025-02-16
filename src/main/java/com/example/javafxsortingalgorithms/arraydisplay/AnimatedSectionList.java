@@ -16,7 +16,7 @@ public class AnimatedSectionList extends AnimatedItem {
     private final List<AnimatedSection> sections;
     private final VBox vBox;
 
-    public AnimatedSectionList(ArrayAnimatedDisplay display) {
+    public AnimatedSectionList(AnimatedArrayDisplay display) {
         super(display);
         sections = new ArrayList<>();
         vBox = new VBox(10);
@@ -42,7 +42,7 @@ public class AnimatedSectionList extends AnimatedItem {
                         }
                 ),
                 new KeyFrame(
-                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),
                         keyValues
                 )
         );
@@ -57,7 +57,7 @@ public class AnimatedSectionList extends AnimatedItem {
                         event -> selectedSection.setSectionVisible(false)
                 ),
                 new KeyFrame(
-                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
+                        Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),
                         event -> vBox.getChildren().remove(selectedSection),
                         new KeyValue(selectedSection.scaleYProperty(), 0)
                 )

@@ -9,7 +9,7 @@ public class AlgorithmDisplay extends VBox {
     public enum Mode {
         NORMAL,
         TESTING,
-        DETAILED,
+        ANIMATED,
         // TODO: Implement
         COMPARING
     }
@@ -88,8 +88,8 @@ public class AlgorithmDisplay extends VBox {
                 arrayPane.getChildren().add(testDisplay);
                 buttonPane.addSelector(firstAlgorithm);
             }
-            case DETAILED -> {
-                System.out.println("Now detailed mode");
+            case ANIMATED -> {
+                System.out.println("Now animated mode");
                 firstAlgorithm.enterAnimatedMode();
                 arrayPane.getChildren().addAll(firstAlgorithm.getDisplay());
                 buttonPane.addSelector(firstAlgorithm);

@@ -9,11 +9,11 @@ public class AnimatedArrow extends AnimatedItem {
     private boolean pointingUp;
     private double length;
 
-    public AnimatedArrow(ArrayAnimatedDisplay display) {
+    public AnimatedArrow(AnimatedArrayDisplay display) {
         this(display, true);
     }
 
-    public AnimatedArrow(ArrayAnimatedDisplay display, boolean up) {
+    public AnimatedArrow(AnimatedArrayDisplay display, boolean up) {
         super(display);
 
         length = display.getElementWidth();

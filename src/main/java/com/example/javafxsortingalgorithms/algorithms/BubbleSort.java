@@ -85,7 +85,7 @@ public class BubbleSort extends SortingAlgorithm {
     }
 
     @Override
-    public void startAnimated(ArrayAnimatedDisplay display) {
+    public void startAnimated(AnimatedArrayDisplay display) {
         // TODO: Make this linked to the settings (element width)
         leftArrow = new AnimatedArrow(display, true);
         display.addItem(leftArrow, 0, 0);
@@ -101,7 +101,7 @@ public class BubbleSort extends SortingAlgorithm {
     }
 
     @Override
-    public void iterateAnimated(ArrayAnimatedDisplay display) {
+    public void iterateAnimated(AnimatedArrayDisplay display) {
         // Check if the next position would be outside the array, and reset if we need to.
         if (lastPos + 1 >= list.size() - sorted) {
             sorted++;
@@ -135,7 +135,7 @@ public class BubbleSort extends SortingAlgorithm {
         lastPos++;
     }
 
-    private void updateInfo(ArrayAnimatedDisplay display) {
+    private void updateInfo(AnimatedArrayDisplay display) {
         display.updateInfoWhenDone("Number sorted", sorted);
         display.updateInfoWhenDone("Left index", lastPos);
         display.updateInfoWhenDone("Left value", list.get(lastPos));

@@ -25,14 +25,14 @@ public class ArrayColourfulDisplay extends ArrayElementDisplay<Rectangle> {
                         Duration.millis(5),
                         event -> {
                             colourOffset += 1;
-                            drawArray();
+                            update();
                         }
                 )
         );
         finishTimeline.setCycleCount(360);
         finishTimeline.setOnFinished(event -> {
             colourOffset = 0;
-            drawArray();
+            update();
         });
     }
 
@@ -42,7 +42,7 @@ public class ArrayColourfulDisplay extends ArrayElementDisplay<Rectangle> {
     }
 
     @Override
-    public void drawArray() {
+    public void update() {
         if (elements == null) return;
 
         for (int i = 0; i < elements.size(); i++) {

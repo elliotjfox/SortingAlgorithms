@@ -11,16 +11,18 @@ import javafx.scene.layout.Pane;
 import java.util.HashMap;
 import java.util.List;
 
-// TODO: Fix this (when the array should be initialized and when it should be bound to this)
+// TODO: Maybe rewrite this class and subclasses
 public abstract class ArrayDisplay extends Pane {
 
     public enum ColourAction {
         READ, WRITE
     }
 
+    protected final SettingsPane settingsPane;
+
     protected List<Integer> list;
     protected int maxValue;
-    protected SettingsPane settingsPane;
+
     protected final HashMap<Integer, ColourAction> colourActions;
     private final DoubleProperty heightMultiplier;
     protected Timeline finishTimeline;
@@ -39,27 +41,23 @@ public abstract class ArrayDisplay extends Pane {
         };
         colourActions = new HashMap<>();
 
-        setSettingsPane(settingsPane);
+        this.settingsPane = settingsPane;
+        bindHeight();
     }
 
-    public ArrayDisplay(List<Integer> list, SettingsPane settingsPane) {
+    public ArrayDisplay(SettingsPane settingsPane, List<Integer> list) {
         this(settingsPane);
         setList(list);
     }
 
-    public void setSettingsPane(SettingsPane settingsPane) {
-        this.settingsPane = settingsPane;
-        // Does this need to be here?
-        bindHeight();
-    }
-
     public void setList(List<Integer> list) {
         this.list = list;
+
         stopFinishTimeline();
         resetMax();
         bindHeight();
         initializeElements(list.size());
-        drawArray();
+        update();
     }
 
     public void readIndex(int i) {
@@ -106,10 +104,6 @@ public abstract class ArrayDisplay extends Pane {
         }
     }
 
-    protected abstract void initializeElements(int count);
-
-    public abstract void drawArray();
-
     public void playFinish() {
         if (finishTimeline != null) {
             finishTimeline.playFromStart();
@@ -122,6 +116,10 @@ public abstract class ArrayDisplay extends Pane {
             finishTimeline.getOnFinished().handle(new ActionEvent());
         }
     }
+
+    protected abstract void initializeElements(int count);
+
+    public abstract void update();
 
     public int getMaxValue() {
         return maxValue;

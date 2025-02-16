@@ -1,6 +1,6 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayAnimatedDisplay;
+import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrayDisplay;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrow;
@@ -69,7 +69,7 @@ public class GnomeSort extends SortingAlgorithm {
     }
 
     @Override
-    public void startAnimated(ArrayAnimatedDisplay display) {
+    public void startAnimated(AnimatedArrayDisplay display) {
         leftArrow = new AnimatedArrow(display, true);
         display.addItem(leftArrow, 0, 0);
 
@@ -84,7 +84,7 @@ public class GnomeSort extends SortingAlgorithm {
     }
 
     @Override
-    public void iterateAnimated(ArrayAnimatedDisplay display) {
+    public void iterateAnimated(AnimatedArrayDisplay display) {
         leftArrow.moveToIndex(currentSpot, 0);
         rightArrow.moveToIndex(currentSpot + 1, 0);
 

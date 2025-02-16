@@ -19,7 +19,7 @@ public class AnimatedElement extends AnimatedItem {
     private final Rectangle rectangle;
     private final ObjectProperty<Paint> colourProperty;
 
-    public AnimatedElement(ArrayAnimatedDisplay display, int index) {
+    public AnimatedElement(AnimatedArrayDisplay display, int index) {
         super(display);
         this.settingsPane = display.getSettings();
         this.index = index;
@@ -38,7 +38,7 @@ public class AnimatedElement extends AnimatedItem {
         rectangle = new Rectangle();
         getChildren().add(rectangle);
 
-        setLayoutX(ArrayAnimatedDisplay.getX(settingsPane, index));
+        setLayoutX(AnimatedArrayDisplay.getX(settingsPane, index));
         rectangle.setWidth(settingsPane.getDisplaySettings().getElementWidth());
         rectangle.yProperty().bind(Bindings.multiply(-1, rectangle.heightProperty()));
         rectangle.fillProperty().bind(colourProperty);
@@ -74,8 +74,8 @@ public class AnimatedElement extends AnimatedItem {
         if (index == i) return;
         Timeline timeline = new Timeline(
                 new KeyFrame(
-                        Duration.millis(ArrayAnimatedDisplay.ANIMATION_LENGTH),
-                        new KeyValue(layoutXProperty(), ArrayAnimatedDisplay.getX(settingsPane, i))
+                        Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),
+                        new KeyValue(layoutXProperty(), AnimatedArrayDisplay.getX(settingsPane, i))
                 )
         );
         index = i;

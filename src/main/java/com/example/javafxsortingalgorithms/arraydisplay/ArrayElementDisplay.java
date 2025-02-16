@@ -4,7 +4,6 @@ import com.example.javafxsortingalgorithms.settings.SettingsPane;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,7 @@ public abstract class ArrayElementDisplay<T extends Node> extends ArrayDisplay {
     private final Pane centerPane;
 
     public ArrayElementDisplay(List<Integer> list, SettingsPane settingsPane) {
-        super(list, settingsPane);
+        super(settingsPane, list);
 
         elements = new ArrayList<>();
 
@@ -31,7 +30,7 @@ public abstract class ArrayElementDisplay<T extends Node> extends ArrayDisplay {
 
         initializeFinishTimeline();
         setList(list);
-        drawArray();
+        update();
     }
 
     protected void initializeFinishTimeline() {}

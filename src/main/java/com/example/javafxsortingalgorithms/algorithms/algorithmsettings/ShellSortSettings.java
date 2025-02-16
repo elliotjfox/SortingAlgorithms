@@ -23,7 +23,7 @@ public class ShellSortSettings extends AlgorithmSettings {
 
         shellSortModeSelector = new ComboBox<>(FXCollections.observableArrayList(ShellSort.ShellSortMode.values()));
         shellSortModeSelector.getSelectionModel().select(shellSortMode);
-        shellSortModeSelector.getSelectionModel().selectedItemProperty().addListener((_, _, newValue) -> shellSortMode = newValue);
+        shellSortModeSelector.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> shellSortMode = newValue);
         addSetting("Shell Sort Mode", shellSortModeSelector);
 
 //        searchTypeSelector = new ComboBox<>(FXCollections.observableArrayList(ShellSort.SearchType.values()));

@@ -150,7 +150,7 @@ public class CombSort extends SortingAlgorithm {
 
     @Override
     public String getName() {
-        return STR."Comb Sort \nShrink Factor: \{shrinkFactor}";
+        return "Comb Sort \nShrink Factor: " + shrinkFactor;
     }
 
 //    void combSort() {

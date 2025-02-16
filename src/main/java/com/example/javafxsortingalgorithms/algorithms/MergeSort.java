@@ -114,7 +114,7 @@ public class MergeSort extends ActionSortingAlgorithm {
                                     leftSection.resizeTimeline(half - min),
                                     rightSection.resizeTimeline(max - half)
                             );
-                            display.onPlay(() -> display.setCurrentTask(STR."Dividing [\{min}, \{max - 1}]"));
+                            display.onPlay(() -> display.setCurrentTask("Dividing [" + min + ", " + (max - 1) + "]"));
                         }, true),
                         new Divide(min, half, depth + 1),
                         new Divide(half, max, depth + 1),
@@ -122,7 +122,7 @@ public class MergeSort extends ActionSortingAlgorithm {
                             leftSection.setFill(Color.LIGHTGREEN);
                             rightSection.setFill(Color.LIGHTGREEN);
                             display.animate(display.highlightAnimation(i -> i >= min && i < max));
-                            display.onPlay(() -> display.setCurrentTask(STR."Merging [\{min}, \{half - 1}] and [\{half}, \{max - 1}]"));
+                            display.onPlay(() -> display.setCurrentTask("Merging [" + min + ", " + (half - 1) + "] and [" + half + ", " + (max - 1) + "]"));
                         }),
                         new InPlaceMerge(min, max),
                         new LaterAction(() -> {

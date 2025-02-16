@@ -80,7 +80,7 @@ public class CartesianTreeNode {
 
     @Override
     public String toString() {
-        return STR."CartesianTreeNode{value=\{value}{'}'}";
+        return "CartesianTreeNode{value=" + value + "}";
     }
 
     public static void swapChildren(CartesianTreeNode node1, CartesianTreeNode node2) {

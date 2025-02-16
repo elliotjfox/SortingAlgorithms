@@ -1,6 +1,8 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithnSettingsCheckBox;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayAnimatedDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.AnimatedSortingNetwork;
@@ -361,5 +363,15 @@ public class BitonicSort extends ActionSortingAlgorithm {
 
     public static double log2(double a) {
         return Math.log(a) / Math.log(2);
+    }
+
+    public static AlgorithmSettings<BitonicSort> getSettings() {
+        AlgorithnSettingsCheckBox fastModeSetting = new AlgorithnSettingsCheckBox("Fast Mode", false);
+
+        return new AlgorithmSettings<>(
+                "Bitonic Sort",
+                (l, b) -> new BitonicSort(l, b, fastModeSetting.getValue()),
+                fastModeSetting
+        );
     }
 }

@@ -1,6 +1,8 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 
 import java.util.List;
@@ -12,6 +14,8 @@ public class InsertionSort extends ActionSortingAlgorithm {
         LEFT_LINEAR("Left-most index", "Left-most value"),
         RIGHT_LINEAR("Right-most index", "Right-most value"),
         BINARY("Index", "Value");
+
+        private static final String description = "Select which search algorithm this insertion sort will use to insert each element.";
 
         private final String index;
         private final String value;
@@ -355,7 +359,15 @@ public class InsertionSort extends ActionSortingAlgorithm {
         }
     }
 
+    public static AlgorithmSettings<InsertionSort> getSettings() {
+        AlgorithmSettingsComboBox<SearchType> searchSetting = new AlgorithmSettingsComboBox<>("Search Type", SearchType.description, SearchType.values(), SearchType.RIGHT_LINEAR);
 
+        return new AlgorithmSettings<>(
+                "Insertion Sort",
+                (l, b) -> new InsertionSort(l, b, searchSetting.getValue()),
+                searchSetting
+        );
+    }
 
 
     // Right linear search

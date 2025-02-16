@@ -1,6 +1,7 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.*;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 
 import java.util.ArrayList;
@@ -41,6 +42,12 @@ import java.util.List;
  */
 // TODO: Compact some code into methods
 public class RadixLSDSort extends SortingAlgorithm {
+
+    private final String ALGORITHM_DESCRIPTION = """
+            Radix sort works by sorting the numbers first by the last digit, then the second last, and so on. This works because radix sort keeps the order the numbers were in. After the first pass through the array, all the numbers that end in 0 will be at the start, followed by the numbers that end in 1, and so on. After the second pass, it will move all the number with 0 in the tens spot to the front, preserving their order. This means that the first set of digits will end in 00, then 01, then 02, etc. We repeat this process until the array is sorted. The example used base 10, but any base can be used.\s
+            The time complexity of radix sort depends on how the biggest number, r, scales with the size of the array. In this program, r scales with n, O(n), meaning the overall time complexity is O(nlogn). If r is constant, the time complexity drops to O(n).
+            The space complexity depends on if you choose in-place or not. In-place would write the number directly back to the array as we figure out where they go, while not in-place copies them to an auxiliary array, the same size as the original array. In-place: O(1), not in-place: O(n)
+            """;
 
     private enum SortState {
         COPYING_TO_AUX,
@@ -242,6 +249,21 @@ public class RadixLSDSort extends SortingAlgorithm {
             return "In-Place Radix Sort\nBase: " + base;
         }
         return "Radix Sort\nBase: " + base;
+    }
+
+    public static AlgorithmSettings<RadixLSDSort> getSettings() {
+        AlgorithnSettingsCheckBox inPlaceSetting = new AlgorithnSettingsCheckBox("In Place", true);
+        AlgorithmSettingsInputBox<Integer> baseSetting = new AlgorithmSettingsInputBox<>(
+                "Base", 10,
+                Integer::parseInt, i -> i > 1
+        );
+
+        return new AlgorithmSettings<>(
+                "Radix Sort",
+                (l, b) -> new RadixLSDSort(l, b, baseSetting.getValue(), inPlaceSetting.getValue()),
+                baseSetting,
+                inPlaceSetting
+        );
     }
 
 //    private void radixSort() {

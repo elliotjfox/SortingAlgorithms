@@ -1,6 +1,8 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayAnimatedDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrow;
@@ -440,6 +442,16 @@ public class SelectionSort extends SortingAlgorithm {
             case BOTH -> str.append("\nMin and max selection mode");
         }
         return str.toString();
+    }
+
+    public static AlgorithmSettings<SelectionSort> getSettings() {
+        AlgorithmSettingsComboBox<SelectionMode> selectionSetting = new AlgorithmSettingsComboBox<>("Selection Mode", SelectionMode.values(), SelectionMode.MIN);
+
+        return new AlgorithmSettings<>(
+                "Selection Sort",
+                (l, b) -> new SelectionSort(l, b, selectionSetting.getValue()),
+                selectionSetting
+        );
     }
 
 //    void selectionSort() {

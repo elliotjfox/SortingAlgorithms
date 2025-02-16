@@ -1,46 +1,73 @@
 package com.example.javafxsortingalgorithms.algorithms.algorithmsettings;
 
-import com.example.javafxsortingalgorithms.TestDisplay;
 import com.example.javafxsortingalgorithms.algorithms.SortingAlgorithm;
-import com.example.javafxsortingalgorithms.settings.IntegerInputBox;
 import com.example.javafxsortingalgorithms.settings.SettingsSection;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 
-public abstract class AlgorithmSettings extends SettingsSection {
+public class AlgorithmSettings<T extends SortingAlgorithm> extends SettingsSection {
 
-    protected int speed;
-
-    private final IntegerInputBox speedBox;
+    private T algorithm;
+    protected final BiFunction<List<Integer>, Boolean, T> createAlgorithm;
+    protected final List<AlgorithmSettingObject> settings;
+    private AlgorithmSettingsInputBox<Integer> speedSetting;
 
     private static final String speedInfo = "This determines how many steps the algorithm takes per millisecond";
 
-    public AlgorithmSettings(String algorithmName) {
+    public AlgorithmSettings(String algorithmName, BiFunction<List<Integer>, Boolean, T> createAlgorithm, AlgorithmSettingObject... settings) {
         super();
 
-        speedBox = new IntegerInputBox(() -> speed, (i) -> speed = i);
+        this.createAlgorithm = createAlgorithm;
+        this.settings = new ArrayList<>();
 
         addSetting(new Label(algorithmName));
-        addSetting(new Label("Speed"), speedBox, speedInfo);
+
+        createSpeedSetting();
+        for (AlgorithmSettingObject setting : settings) {
+            this.settings.add(setting);
+            setting.add(this);
+        }
+
+        addSetting(buildResetButton());
+        resetSettings();
+    }
+
+    protected void createSpeedSetting() {
+        speedSetting = new AlgorithmSettingsInputBox<>(
+                "Speed", speedInfo, 1, Integer::parseInt, i -> i > 0
+        );
+
+        settings.add(speedSetting);
+        speedSetting.add(this);
     }
 
     public void resetSettings() {
-        speed = 1;
-
-        if (speedBox != null) speedBox.updateValue();
+        if (settings == null) return;
+        for (AlgorithmSettingObject setting : settings) {
+            setting.resetSetting();
+        }
     }
 
     public int getSpeed() {
-        return speed;
+        return speedSetting.getValue();
     }
 
-    public abstract SortingAlgorithm createAlgorithm(List<Integer> array);
+    public T createAlgorithm(List<Integer> array) {
+        return algorithm = createAlgorithm.apply(array, false);
+    }
 
-    public abstract SortingAlgorithm createInstantAlgorithm(List<Integer> array);
+    public T createInstantAlgorithm(List<Integer> array) {
+        return algorithm = createAlgorithm.apply(array, true);
+    }
 
-    public abstract SortingAlgorithm getAlgorithm();
+    public T getAlgorithm() {
+        return algorithm;
+    }
 
-    public abstract void resetAlgorithm();
+    public void resetAlgorithm() {
+        algorithm = null;
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.*;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 
 import java.util.List;
@@ -84,5 +85,16 @@ public class PancakeSort extends ActionSortingAlgorithm {
                     }, false)
             );
         }
+    }
+
+    public static AlgorithmSettings<PancakeSort> getSettings() {
+        AlgorithnSettingsCheckBox instantFlipsSetting = new AlgorithnSettingsCheckBox("Instant Flip", false);
+
+        return new AlgorithmSettings<>(
+                "Pancake Sort",
+                (l, b) -> new PancakeSort(l, b, instantFlipsSetting.getValue()),
+                instantFlipsSetting
+        );
+
     }
 }

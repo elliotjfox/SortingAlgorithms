@@ -1,6 +1,8 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsInputBox;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 
 import java.util.List;
@@ -151,6 +153,19 @@ public class CombSort extends SortingAlgorithm {
     @Override
     public String getName() {
         return "Comb Sort \nShrink Factor: " + shrinkFactor + "}";
+    }
+
+    public static AlgorithmSettings<CombSort> getSettings() {
+        AlgorithmSettingsInputBox<Double> shrinkFactorSetting = new AlgorithmSettingsInputBox<>(
+                "Shrink Factor", 1.3,
+                Double::parseDouble, d -> d > 1
+        );
+
+        return new AlgorithmSettings<>(
+                "Comb Sort",
+                (l, b) -> new CombSort(l, b, shrinkFactorSetting.getValue()),
+                shrinkFactorSetting
+        );
     }
 
 //    void combSort() {

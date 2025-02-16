@@ -1,6 +1,9 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsInputBox;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayAnimatedDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrow;
@@ -212,6 +215,23 @@ public class ShellSort extends ActionSortingAlgorithm {
 //                );
 //            }
         }
+    }
+
+    public static AlgorithmSettings<ShellSort> getSettings() {
+        AlgorithmSettingsInputBox<Double> shrinkFactorSetting = new AlgorithmSettingsInputBox<>(
+                "Shrink Factor", 2.3,
+                Double::parseDouble, d -> d > 1
+        );
+        AlgorithmSettingsComboBox<ShellSortMode> modeSetting = new AlgorithmSettingsComboBox<>(
+                "Shell Sort Mode", ShellSortMode.values(), ShellSortMode.ONE_BY_ONE
+        );
+
+        return new AlgorithmSettings<>(
+                "Shell Sort",
+                (l, b) -> new ShellSort(l, b, shrinkFactorSetting.getValue(), modeSetting.getValue()),
+                modeSetting,
+                shrinkFactorSetting
+        );
     }
 
 //    void shellSort() {

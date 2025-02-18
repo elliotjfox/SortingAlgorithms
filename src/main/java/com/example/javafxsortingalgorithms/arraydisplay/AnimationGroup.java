@@ -57,4 +57,8 @@ public class AnimationGroup {
     public boolean hasAnimations() {
         return !timelines.isEmpty();
     }
+
+    public boolean isEmpty() {
+        return onPlayActions.isEmpty() && whenDoneActions.isEmpty() && timelines.isEmpty();
+    }
 }

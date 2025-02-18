@@ -53,18 +53,18 @@ public class ArrayColourfulDisplay extends ArrayElementDisplay<Rectangle> {
             double hue = k * list.get(i) / maxValue + colourOffset;
 
             Rectangle rect = elements.get(i);
-//            if (colourActions.containsKey(i)) {
-//                if (colourActions.get(i) == ColourAction.READ) {
-//                    rect.setFill(Color.hsb(hue, 0.2, 1.0));
-//                } else {
-//                    rect.setFill(Color.hsb(hue, 0.4, 1.0));
-//                }
-//                colourActions.remove(i);
-//            } else {
-//                rect.setFill(Color.hsb(hue, 1.0, 1.0));
-//            }
+            if (colourActions.containsKey(i)) {
+                if (colourActions.get(i) == ColourAction.READ) {
+                    rect.setFill(Color.hsb(hue, 0.2, 1.0));
+                } else {
+                    rect.setFill(Color.hsb(hue, 0.4, 1.0));
+                }
+                colourActions.remove(i);
+            } else {
+                rect.setFill(Color.hsb(hue, 1.0, 1.0));
+            }
 
-            rect.setFill(Color.hsb(hue, 1.0, 1.0));
+//            rect.setFill(Color.hsb(hue, 1.0, 1.0));
             rect.setX(getElementWidth() * i);
             rect.setY(bottom - height);
             rect.setWidth(getElementWidth());

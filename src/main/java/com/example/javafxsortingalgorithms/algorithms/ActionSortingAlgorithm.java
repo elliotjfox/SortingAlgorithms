@@ -269,6 +269,20 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
                 }
             }
         }
+
+        @Override
+        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
+            if (takesStep) {
+                for (int i = 0; i <= (to - from) / 2; i++) {
+                    algorithm.addToStart(new Swap(from + i, to - i));
+                }
+            } else {
+                for (int i = 0; i <= (to - from) / 2; i++) {
+                    algorithm.swap(from + i, to - i);
+                    display.swap(from + i, to - i);
+                }
+            }
+        }
     }
 
     protected static class CheckIfSorted extends AlgorithmAction {

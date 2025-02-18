@@ -53,11 +53,11 @@ public abstract class ArrayDisplay extends Pane {
     public void setList(List<Integer> list) {
         this.list = list;
 
-        stopFinishTimeline();
         resetMax();
         bindHeight();
         initializeElements(list.size());
         update();
+        stopFinishTimeline();
     }
 
     public void readIndex(int i) {

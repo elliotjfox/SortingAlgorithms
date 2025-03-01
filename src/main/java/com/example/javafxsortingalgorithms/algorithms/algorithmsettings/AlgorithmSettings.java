@@ -13,6 +13,7 @@ public class AlgorithmSettings<T extends SortingAlgorithm> extends SettingsSecti
     private T algorithm;
     protected final BiFunction<List<Integer>, Boolean, T> createAlgorithm;
     protected final List<AlgorithmSettingObject> settings;
+
     private AlgorithmSettingsInputBox<Integer> speedSetting;
 
     private static final String speedInfo = "This determines how many steps the algorithm takes per millisecond";

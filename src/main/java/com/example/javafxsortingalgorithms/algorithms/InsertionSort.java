@@ -39,7 +39,7 @@ public class InsertionSort extends ActionSortingAlgorithm {
 
         this.searchType = searchType;
 
-        actions.add(new Root());
+        setInitialActions(new Root());
     }
 
     @Override

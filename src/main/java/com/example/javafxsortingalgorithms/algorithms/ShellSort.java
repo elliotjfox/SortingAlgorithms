@@ -43,16 +43,18 @@ public class ShellSort extends ActionSortingAlgorithm {
             shrinkGap();
             // For each element, sort it
             for (int i = gapSize; i < list.size(); i++) {
-                actions.add(new SearchFrom(i, gapSize));
+                addToStart(new SearchFrom(i, gapSize));
             }
         } while (gapSize > 1);
+        catchUpActions();
     }
 
     private void addOffsetFirstActions() {
         do {
             shrinkGap();
-            actions.add(new AddSearches(gapSize));
+            addToStart(new AddSearches(gapSize));
         } while (gapSize > 1);
+        catchUpActions();
     }
 
     @Override

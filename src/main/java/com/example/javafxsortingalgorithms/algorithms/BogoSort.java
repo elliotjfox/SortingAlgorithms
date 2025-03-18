@@ -11,7 +11,7 @@ public class BogoSort extends ActionSortingAlgorithm {
     public BogoSort(List<Integer> arrayList, boolean isInstant) {
         super(arrayList, isInstant);
 
-        actions.add(new Randomize());
+        setInitialActions(new Randomize());
     }
 
     @Override
@@ -21,11 +21,9 @@ public class BogoSort extends ActionSortingAlgorithm {
             if (actions.isEmpty()) {
                 actions.add(new Randomize());
             }
-            currentAction = actions.getFirst();
+            currentAction = actions.pop();
             currentAction.execute(this, display);
-            actions.remove(currentAction);
-            actions.addAll(0, toAdd);
-            toAdd.clear();
+            catchUpActions();
         } while (!currentAction.takesStep);
     }
 

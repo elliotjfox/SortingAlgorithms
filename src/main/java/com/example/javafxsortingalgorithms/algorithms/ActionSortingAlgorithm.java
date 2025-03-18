@@ -5,19 +5,21 @@ import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 import javafx.animation.Timeline;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 
 public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
 
-    protected ArrayList<AlgorithmAction> actions;
-    protected ArrayList<AlgorithmAction> toAdd;
+    protected final Stack<AlgorithmAction> actions;
+    protected final Stack<AlgorithmAction> toAdd;
     protected AnimatedArrayDisplay display;
 
-    public ActionSortingAlgorithm(List<Integer> arrayList, boolean isInstant) {
+    protected ActionSortingAlgorithm(List<Integer> arrayList, boolean isInstant) {
         super(arrayList, isInstant);
 
-        actions = new ArrayList<>();
-        toAdd = new ArrayList<>();
+        actions = new Stack<>();
+        toAdd = new Stack<>();
     }
 
     @Override
@@ -25,31 +27,29 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
         AlgorithmAction currentAction;
         do {
             if (actions.isEmpty()) {
-                System.out.println("Action list is empty");
+                System.out.println("No more actions left");
                 return;
             }
-            currentAction = actions.getFirst();
+            currentAction = actions.pop();
             currentAction.execute(this, display);
-            actions.remove(currentAction);
-            actions.addAll(0, toAdd);
-            toAdd.clear();
+            catchUpActions();
         } while (!currentAction.takesStep);
     }
 
     @Override
     public void iterateAnimated(AnimatedArrayDisplay display) {
-        AlgorithmAction currentAction;
-        do {
-            if (actions.isEmpty()) {
-                System.out.println("Action list is empty");
-                return;
-            }
-            currentAction = actions.getFirst();
-            currentAction.executeAnimated(this, display);
-            actions.remove(currentAction);
-            actions.addAll(0, toAdd);
-            toAdd.clear();
-        } while (!currentAction.takesStep);
+//        AlgorithmAction currentAction;
+//        do {
+//            if (actions.isEmpty()) {
+//                System.out.println("Action list is empty");
+//                return;
+//            }
+//            currentAction = actions.getFirst();
+//            currentAction.executeAnimated(this, display);
+//            actions.remove(currentAction);
+//            actions.addAll(0, toAdd);
+//            toAdd.clear();
+//        } while (!currentAction.takesStep);
     }
 
     @Override
@@ -57,8 +57,19 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
         return actions.isEmpty();
     }
 
+    protected void setInitialActions(AlgorithmAction... actions) {
+        addToStart(actions);
+        catchUpActions();
+    }
+
     protected void addToStart(AlgorithmAction... actions) {
-        toAdd.addAll(List.of(actions));
+        toAdd.addAll(Arrays.asList(actions));
+    }
+
+    protected void catchUpActions() {
+        while (!toAdd.isEmpty()) {
+            actions.add(toAdd.pop());
+        }
     }
 
     /**

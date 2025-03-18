@@ -29,8 +29,8 @@ public class QuickSort extends ActionSortingAlgorithm {
 
         this.partitionType = partitionType;
         switch (partitionType) {
-            case LEFT -> actions.add(new LeftPartition(0, arrayList.size() - 1));
-            case RIGHT -> actions.add(new RightPartition(0, arrayList.size() - 1));
+            case LEFT -> setInitialActions(new LeftPartition(0, arrayList.size() - 1));
+            case RIGHT -> setInitialActions(new RightPartition(0, arrayList.size() - 1));
             case MIDDLE -> System.out.println("Need to implement still!");
         }
     }

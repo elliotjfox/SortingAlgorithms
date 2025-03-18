@@ -18,8 +18,7 @@ public class HeapSort extends ActionSortingAlgorithm {
         super(arrayList, isInstant);
 
         length = arrayList.size();
-        actions.add(new BuildMaxHeap());
-        actions.add(new ExtractMax());
+        setInitialActions(new BuildMaxHeap(), new ExtractMax());
     }
 
     @Override

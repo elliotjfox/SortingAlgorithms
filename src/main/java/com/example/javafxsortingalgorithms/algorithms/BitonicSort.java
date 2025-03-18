@@ -22,10 +22,9 @@ public class BitonicSort extends ActionSortingAlgorithm {
 
         this.fastMode = fastMode;
 
-
         if (isInstant) return;
 
-        actions.add(createAllSwap());
+        addToStart(createAllSwap());
         for (int width = 4; width <= roundUpToPowerOf2(arrayList.size()); width *= 2) {
             if (width > 1) {
                 for (int i = width; i > 1; i -= 2) {
@@ -33,7 +32,7 @@ public class BitonicSort extends ActionSortingAlgorithm {
                     for (int j = (width - i) / 2; j < arrayList.size(); j += width) {
                         comparison.addComparisons(j, j + i - 1);
                     }
-                    actions.add(comparison);
+                    addToStart(comparison);
                 }
             }
 
@@ -44,7 +43,7 @@ public class BitonicSort extends ActionSortingAlgorithm {
                     for (int k = j; k < list.size(); k += i) {
                         comparison.addComparisons(k, k + distance);
                     }
-                    actions.add(comparison);
+                    addToStart(comparison);
                 }
             }
 
@@ -69,8 +68,9 @@ public class BitonicSort extends ActionSortingAlgorithm {
 //                actions.add(comparison);
 //            }
 
-            actions.add(createAllSwap());
+            addToStart(createAllSwap());
         }
+        catchUpActions();
     }
 
     private BitonicComparison createAllSwap() {

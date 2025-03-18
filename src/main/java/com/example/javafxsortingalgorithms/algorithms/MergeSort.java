@@ -19,7 +19,7 @@ public class MergeSort extends ActionSortingAlgorithm {
         super(arrayList, isInstant);
         this.inPlace = inPlace;
 
-        if (!isInstant) actions.add(new Divide(0, arrayList.size()));
+        if (!isInstant) setInitialActions(new Divide(0, arrayList.size()));
     }
 
     @Override

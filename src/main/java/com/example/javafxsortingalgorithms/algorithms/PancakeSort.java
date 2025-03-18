@@ -23,9 +23,10 @@ public class PancakeSort extends ActionSortingAlgorithm {
 
         if (!isInstant) {
             for (int i = 0; i < arrayList.size() - 1; i++) {
-                actions.add(new FindSmallest(i));
+                addToStart(new FindSmallest(i));
             }
         }
+        catchUpActions();
     }
 
     @Override

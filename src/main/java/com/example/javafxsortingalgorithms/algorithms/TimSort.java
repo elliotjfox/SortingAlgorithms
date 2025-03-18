@@ -35,13 +35,14 @@ public class TimSort extends ActionSortingAlgorithm {
         minrun = calculateMinrun();
         System.out.println("Minrun: " + minrun);
         for (int i = 0; i < list.size(); i += minrun) {
-            actions.add(new FindRun(i));
+            addToStart(new FindRun(i));
         }
 //        actions.add(new LaterAction(() -> {
 //            while (stack.size() > 1) {
 //                addMerge(stack.get(stack.size() - 2), stack.getLast());
 //            }
 //        }));
+        catchUpActions();
     }
 
     @Override

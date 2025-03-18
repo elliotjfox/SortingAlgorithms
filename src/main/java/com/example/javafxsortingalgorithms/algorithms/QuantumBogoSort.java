@@ -22,7 +22,7 @@ public class QuantumBogoSort extends ActionSortingAlgorithm {
     public QuantumBogoSort(List<Integer> arrayList, boolean isInstant) {
         super(arrayList, isInstant);
 
-        actions.add(new Randomize());
+        setInitialActions(new Randomize());
     }
 
     @Override
@@ -36,11 +36,9 @@ public class QuantumBogoSort extends ActionSortingAlgorithm {
                     return;
                 }
             }
-            currentAction = actions.getFirst();
+            currentAction = actions.pop();
             currentAction.execute(this, display);
-            actions.remove(currentAction);
-            actions.addAll(0, toAdd);
-            toAdd.clear();
+            catchUpActions();
         } while (!currentAction.takesStep);
     }
 

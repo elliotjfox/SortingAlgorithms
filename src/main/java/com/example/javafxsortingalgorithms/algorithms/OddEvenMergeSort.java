@@ -25,12 +25,13 @@ public class OddEvenMergeSort extends ActionSortingAlgorithm {
                         int left = i + j;
                         int right = i + j + gapSize;
                         if ((int) ((double) left / (p * 2)) == (int) ((double) right / (p * 2))) {
-                            actions.add(new Comparison(left, right));
+                            addToStart(new Comparison(left, right));
                         }
                     }
                 }
             }
         }
+        catchUpActions();
     }
 
     @Override

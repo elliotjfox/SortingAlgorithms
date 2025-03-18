@@ -12,7 +12,7 @@ public class StrandSort extends ActionSortingAlgorithm {
         super(arrayList, isInstant);
 
         buffer = 0;
-        actions.add(new FindStrand(0, false));
+        setInitialActions(new FindStrand(0, false));
     }
 
     @Override

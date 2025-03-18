@@ -16,11 +16,12 @@ public class CartesianTreeSort extends ActionSortingAlgorithm {
         super(arrayList, isInstant);
 
 //        rootNode = new CartesianTreeNode();
-        actions.add(new FindHighest(0, list.size() - 1));
+        addToStart(new FindHighest(0, list.size() - 1));
 
         for (int i = list.size() - 1; i >= 0; i--) {
-            actions.add(new ExtractMax(i));
+            addToStart(new ExtractMax(i));
         }
+        catchUpActions();
     }
 
     @Override

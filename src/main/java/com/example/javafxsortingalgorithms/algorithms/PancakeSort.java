@@ -117,9 +117,10 @@ public class PancakeSort extends ActionSortingAlgorithm {
             }
 
             algorithm.addToStart(
-                    new LaterAction(() -> display.onPlay(() -> display.setCurrentTask("Flipping"))),
+                    new LaterAction(() -> display.onPlay(() -> display.setCurrentTask("Flipping to top"))),
                     new Flip(smallestIndex, algorithm.getList().size() - 1, false),
                     new Wait(),
+                    new LaterAction(() -> display.onPlay(() -> display.setCurrentTask("Flipping to position"))),
                     new Flip(pancakeSort.count, algorithm.getList().size() - 1, false),
                     new Wait()
             );

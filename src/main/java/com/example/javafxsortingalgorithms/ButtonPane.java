@@ -19,7 +19,7 @@ public class ButtonPane extends FlowPane {
 
     private final List<Node> normalPane;
     private final List<Node> testPane;
-    private final List<Node> detailedPane;
+    private final List<Node> animatedPane;
     private final List<Node> comparingPane;
 
     public ButtonPane(AlgorithmDisplay algorithmDisplay) {
@@ -33,12 +33,12 @@ public class ButtonPane extends FlowPane {
         Button startTestButton = createButton("Start Test", event -> algorithmDisplay.startTest());
         Button openNormalButton = createButton(createBackIcon(), event -> algorithmDisplay.setMode(AlgorithmDisplay.Mode.NORMAL));
         Button openTestButton = createButton("Open Test", event -> algorithmDisplay.setMode(AlgorithmDisplay.Mode.TESTING));
-        Button openDetailedButton = createButton("Open Detailed", event -> algorithmDisplay.setMode(AlgorithmDisplay.Mode.ANIMATED));
+        Button openDetailedButton = createButton("Open Animated", event -> algorithmDisplay.setMode(AlgorithmDisplay.Mode.ANIMATED));
         Button openCompareButton = createButton("Open Compare", event -> algorithmDisplay.setMode(AlgorithmDisplay.Mode.COMPARING));
 
         normalPane = Arrays.asList(playButton, stopButton, stepButton, resetButton, reversedButton, openTestButton, openDetailedButton, openCompareButton);
         testPane = Arrays.asList(startTestButton, openNormalButton);
-        detailedPane = Arrays.asList(playButton, stopButton, stepButton, resetButton, openNormalButton);
+        animatedPane = Arrays.asList(playButton, stopButton, stepButton, resetButton, openNormalButton);
         comparingPane = Arrays.asList(playButton, stopButton, stepButton, resetButton, openNormalButton);
 
         getChildren().addAll(normalPane);
@@ -50,7 +50,7 @@ public class ButtonPane extends FlowPane {
         switch (mode) {
             case NORMAL -> getChildren().addAll(normalPane);
             case TESTING -> getChildren().addAll(testPane);
-            case ANIMATED -> getChildren().addAll(detailedPane);
+            case ANIMATED -> getChildren().addAll(animatedPane);
             case COMPARING -> getChildren().addAll(comparingPane);
         }
     }

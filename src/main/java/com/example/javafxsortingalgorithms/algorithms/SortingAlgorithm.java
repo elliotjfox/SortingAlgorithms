@@ -100,8 +100,8 @@ public abstract class SortingAlgorithm {
         return true;
     }
 
-    // An alternate to isListSorted, if it's better to check from the other end (ie something like selection sort leaved the
-    // end unsorted until the end, so it's more efficient to check there, for some algorithms
+    // An alternate to isListSorted, if it's better to check from the other end (ie something like selection sort leaves the
+    // end unsorted until the end, so it's more efficient to check from that direction)
     public static boolean isListSortedReverse(List<Integer> list) {
         for (int i = list.size() - 1; i > 0; i--) {
             if (list.get(i) < list.get(i - 1)) {

@@ -38,18 +38,19 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
 
     @Override
     public void iterateAnimated(AnimatedArrayDisplay display) {
-//        AlgorithmAction currentAction;
-//        do {
-//            if (actions.isEmpty()) {
-//                System.out.println("Action list is empty");
-//                return;
-//            }
-//            currentAction = actions.getFirst();
-//            currentAction.executeAnimated(this, display);
+        AlgorithmAction currentAction;
+        do {
+            if (actions.isEmpty()) {
+                System.out.println("Action list is empty");
+                return;
+            }
+            currentAction = actions.pop();
+            currentAction.executeAnimated(this, display);
+            catchUpActions();
 //            actions.remove(currentAction);
 //            actions.addAll(0, toAdd);
 //            toAdd.clear();
-//        } while (!currentAction.takesStep);
+        } while (!currentAction.takesStep);
     }
 
     @Override

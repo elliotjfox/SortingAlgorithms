@@ -79,6 +79,8 @@ public class PancakeSort extends ActionSortingAlgorithm {
 
         @Override
         void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+            PancakeSort pancakeSort = (PancakeSort) algorithm;
+
             for (int i = from + 1; i < algorithm.getList().size(); i++) {
                 int finalI = i;
                 algorithm.addToStart(
@@ -94,10 +96,10 @@ public class PancakeSort extends ActionSortingAlgorithm {
             algorithm.addToStart(
                     new LaterAction(() -> {
                         algorithm.addToStart(
-                            new Flip(smallestIndex, algorithm.getList().size() - 1, !((PancakeSort) algorithm).instantFlips),
-                            new Flip(((PancakeSort) algorithm).count, algorithm.getList().size() - 1, !((PancakeSort) algorithm).instantFlips)
+                            new Flip(smallestIndex, algorithm.getList().size() - 1, !pancakeSort.instantFlips),
+                            new Flip(pancakeSort.count, algorithm.getList().size() - 1, !pancakeSort.instantFlips)
                         );
-                        ((PancakeSort) algorithm).count++;
+                        pancakeSort.count++;
                     }, false)
             );
         }
@@ -144,7 +146,6 @@ public class PancakeSort extends ActionSortingAlgorithm {
                 (l, b) -> new PancakeSort(l, b, instantFlipsSetting.getValue()),
                 instantFlipsSetting
         );
-
     }
 
 //    void pancakeSort() {

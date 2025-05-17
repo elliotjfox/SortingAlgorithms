@@ -62,6 +62,7 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
     @Override
     public void setList(List<Integer> list) {
         this.list = list;
+        cleanUpItems();
         resetMax();
         bindHeight();
         if (!elements.isEmpty()) {
@@ -80,7 +81,7 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
     @Override
     public void playFinish() {
         animatedInfo.finish();
-        centerPane.getChildren().removeAll(items);
+        cleanUpItems();
     }
 
     public void addItem(AnimatedItem item) {
@@ -98,6 +99,11 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
         centerPane.getChildren().add(item);
         items.add(item);
         item.setIndex(index, y);
+    }
+
+    public void cleanUpItems() {
+        centerPane.getChildren().removeAll(items);
+        items.clear();
     }
 
     public void removeItem(AnimatedItem item) {

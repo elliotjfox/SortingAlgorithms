@@ -1,4 +1,4 @@
-package com.example.javafxsortingalgorithms.arraydisplay;
+package com.example.javafxsortingalgorithms.animation;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;

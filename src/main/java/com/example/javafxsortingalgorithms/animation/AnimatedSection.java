@@ -1,11 +1,14 @@
-package com.example.javafxsortingalgorithms.arraydisplay;
+package com.example.javafxsortingalgorithms.animation;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+
+import java.util.List;
 
 public class AnimatedSection extends AnimatedItem {
 
@@ -19,12 +22,8 @@ public class AnimatedSection extends AnimatedItem {
     private Rectangle left;
     private Rectangle right;
 
-    public AnimatedSection(AnimatedArrayDisplay display, int width, boolean hasEdges) {
-        this(display, display.getElementWidth() * width, hasEdges);
-    }
-
-    public AnimatedSection(AnimatedArrayDisplay display, double exactWidth, boolean hasEdges) {
-        super(display);
+    public AnimatedSection(AnimatedArrayDisplay display, ItemPosition position, List<Node> nodes, double exactWidth, boolean hasEdges) {
+        super(display, position, nodes);
 
         this.width = exactWidth;
         this.hasEdges = hasEdges;

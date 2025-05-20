@@ -3,6 +3,10 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
+import com.example.javafxsortingalgorithms.animation.AnimatedItem;
+import com.example.javafxsortingalgorithms.animation.ItemBuilder;
+import com.example.javafxsortingalgorithms.animation.PolygonWrapper;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 import javafx.scene.paint.Color;
 
@@ -239,7 +243,7 @@ public class SelectionSort extends SortingAlgorithm {
     public void startAnimated(AnimatedArrayDisplay display) {
         curIndex++;
 
-        arrow = AnimatedItemBuilder.defaultArrow(display, curIndex);
+        arrow = ItemBuilder.defaultArrow(display, curIndex);
         display.addItem(arrow);
 
         display.getDetailedInfo().updateInfo("Sorted", 0);
@@ -248,7 +252,7 @@ public class SelectionSort extends SortingAlgorithm {
 
 
         if (mode != SelectionMode.MAX) {
-            minArrow = new AnimatedItemBuilder(display)
+            minArrow = new ItemBuilder(display)
                     .with(PolygonWrapper.triangle(display, Color.LIGHTGREEN))
                     .at(minIndex, 0)
                     .build();
@@ -259,7 +263,7 @@ public class SelectionSort extends SortingAlgorithm {
         }
 
         if (mode != SelectionMode.MIN) {
-            maxArrow = new AnimatedItemBuilder(display)
+            maxArrow = new ItemBuilder(display)
                     .with(PolygonWrapper.triangle(display, Color.LIGHTGREEN))
                     .at(maxIndex, 0)
                     .build();

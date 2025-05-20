@@ -2,6 +2,9 @@ package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.*;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
+import com.example.javafxsortingalgorithms.animation.AnimatedItem;
+import com.example.javafxsortingalgorithms.animation.ItemBuilder;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 
 import java.util.List;
@@ -52,10 +55,10 @@ public class PancakeSort extends ActionSortingAlgorithm {
 
     @Override
     public void startAnimated(AnimatedArrayDisplay display) {
-        arrow = AnimatedItemBuilder.defaultArrow(display, 0);
+        arrow = ItemBuilder.defaultArrow(display, 0);
         display.addItem(arrow);
 
-        smallestArrow = AnimatedItemBuilder.defaultArrow(display, 0);
+        smallestArrow = ItemBuilder.defaultArrow(display, 0);
         display.addItem(smallestArrow);
     }
 

@@ -3,6 +3,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
+import com.example.javafxsortingalgorithms.animation.*;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 
 import java.util.List;
@@ -83,10 +84,12 @@ public class InsertionSort extends ActionSortingAlgorithm {
 
     @Override
     public void startAnimated(AnimatedArrayDisplay display) {
-        searchSection = new AnimatedSection(display, 1.0, true);
-        display.addItem(searchSection, 0, sectionHeight);
+        searchSection = new ItemBuilder(display)
+                .at(0, sectionHeight)
+                .buildSection(1, true);
+        display.addItem(searchSection);
 
-        arrow = AnimatedItemBuilder.defaultArrow(display, 0);
+        arrow = ItemBuilder.defaultArrow(display, 0);
         display.addItem(arrow);
 
         display.setCurrentTask("Searching for correct position");
@@ -198,7 +201,7 @@ public class InsertionSort extends ActionSortingAlgorithm {
         protected void searchDetailed(InsertionSort algorithm, AnimatedArrayDisplay display) {
             if (from > to) {
                 algorithm.searchSection.moveToIndex(from, algorithm.sectionHeight);
-                display.animate(algorithm.searchSection.resizeTimeline((to - from + 1) * 25));
+                display.animate(algorithm.searchSection.resizeTimeline(to - from + 1));
 
                 algorithm.addToStart(new Move(index, from));
                 return;
@@ -206,7 +209,7 @@ public class InsertionSort extends ActionSortingAlgorithm {
 
             algorithm.arrow.moveToIndex(index, algorithm.arrowHeight);
             algorithm.searchSection.moveToIndex(from, algorithm.sectionHeight);
-            display.animate(algorithm.searchSection.resizeTimeline((to - from + 1) * 25));
+            display.animate(algorithm.searchSection.resizeTimeline(to - from + 1));
             display.newGroup();
             display.comparing(index, from);
 
@@ -256,7 +259,7 @@ public class InsertionSort extends ActionSortingAlgorithm {
 
             algorithm.arrow.moveToIndex(index, algorithm.arrowHeight);
             algorithm.searchSection.moveToIndex(from, algorithm.sectionHeight);
-            display.animate(algorithm.searchSection.resizeTimeline((to - from + 1) * 25));
+            display.animate(algorithm.searchSection.resizeTimeline(to - from + 1));
             display.updateInfoWhenDone(SearchType.RIGHT_LINEAR.index, to);
             display.updateInfoWhenDone(SearchType.RIGHT_LINEAR.value, algorithm.getList().get(to));
             display.updateInfoWhenDone("Current index", index);

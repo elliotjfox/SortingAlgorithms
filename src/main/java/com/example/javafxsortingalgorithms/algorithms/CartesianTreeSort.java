@@ -1,9 +1,9 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrayDisplay;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.AnimatedCartesianTree;
+import com.example.javafxsortingalgorithms.animation.AnimatedCartesianTree;
 
 import java.util.List;
 

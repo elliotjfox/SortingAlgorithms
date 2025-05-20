@@ -1,5 +1,8 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
+import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
+import com.example.javafxsortingalgorithms.animation.AnimatedItem;
+import com.example.javafxsortingalgorithms.animation.ItemBuilder;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 import javafx.animation.Timeline;
 
@@ -336,8 +339,8 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
         @Override
         public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
 
-            AnimatedItem leftArrow = AnimatedItemBuilder.defaultArrow(display, left);
-            AnimatedItem rightArrow = AnimatedItemBuilder.defaultArrow(display, right);
+            AnimatedItem leftArrow = ItemBuilder.defaultArrow(display, left);
+            AnimatedItem rightArrow = ItemBuilder.defaultArrow(display, right);
 
             // Add arrows
             algorithm.addToStart(new AddItem(leftArrow, rightArrow));

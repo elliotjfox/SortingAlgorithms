@@ -1,6 +1,7 @@
 package com.example.javafxsortingalgorithms;
 
 import com.example.javafxsortingalgorithms.algorithms.SortingAlgorithm;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 import com.example.javafxsortingalgorithms.settings.Settings;
 import com.example.javafxsortingalgorithms.settings.SettingsPane;

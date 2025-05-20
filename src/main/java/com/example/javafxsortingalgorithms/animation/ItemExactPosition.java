@@ -1,11 +1,11 @@
-package com.example.javafxsortingalgorithms.arraydisplay;
+package com.example.javafxsortingalgorithms.animation;
 
-public class AnimatedItemExactPosition implements AnimatedItemPosition {
+public class ItemExactPosition implements ItemPosition {
 
     private double x;
     private double y;
 
-    public AnimatedItemExactPosition(double x, double y) {
+    public ItemExactPosition(double x, double y) {
         this.x = x;
         this.y = y;
     }

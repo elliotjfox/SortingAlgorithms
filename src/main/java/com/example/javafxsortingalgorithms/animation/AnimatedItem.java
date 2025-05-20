@@ -1,4 +1,4 @@
-package com.example.javafxsortingalgorithms.arraydisplay;
+package com.example.javafxsortingalgorithms.animation;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -12,23 +12,24 @@ import java.util.List;
 public class AnimatedItem extends Group {
 
     protected final AnimatedArrayDisplay display;
-    protected AnimatedItemPosition position;
+    protected ItemPosition position;
 
     public AnimatedItem(AnimatedArrayDisplay display) {
         this.display = display;
     }
 
-    public AnimatedItem(AnimatedArrayDisplay display, AnimatedItemPosition position, List<Node> nodes) {
-        this(display);
-
+    public AnimatedItem(AnimatedArrayDisplay display, ItemPosition position, List<Node> nodes) {
+        this.display = display;
         this.position = position;
-
-        getChildren().addAll(nodes);
+        if (nodes != null) {
+            getChildren().addAll(nodes);
+        }
     }
 
     public void goToPosition() {
         if (!hasPosition()) return;
 
+//        System.out.println("Moving");
         position.moveItem(this);
     }
 
@@ -59,7 +60,7 @@ public class AnimatedItem extends Group {
                 )
         );
 
-        timeline.setOnFinished(event -> position = new AnimatedItemIndexPosition(index, y));
+        timeline.setOnFinished(event -> position = new ItemIndexPosition(index, y));
 
         return timeline;
     }

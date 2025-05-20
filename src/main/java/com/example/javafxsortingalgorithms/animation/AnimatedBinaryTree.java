@@ -1,4 +1,4 @@
-package com.example.javafxsortingalgorithms.arraydisplay;
+package com.example.javafxsortingalgorithms.animation;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -23,7 +23,8 @@ public class AnimatedBinaryTree extends AnimatedItem {
 
     // TODO: Make this adaptable to different sizes maybe?
     public AnimatedBinaryTree(AnimatedArrayDisplay display, List<Integer> list) {
-        super(display);
+        // TODO: Fix this
+        super(display, null, null);
         treeItems = new ArrayList<>();
         lines = new ArrayList<>();
 

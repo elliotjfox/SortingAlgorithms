@@ -3,6 +3,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
+import com.example.javafxsortingalgorithms.animation.*;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 import javafx.scene.paint.Color;
 
@@ -62,9 +63,12 @@ public class QuickSort extends ActionSortingAlgorithm {
 
     @Override
     public void startAnimated(AnimatedArrayDisplay display) {
-        section = new AnimatedSection(display, list.size(), true);
-        display.addItem(section, 0, -SECTION_OFFSET);
+        section = new ItemBuilder(display)
+                .at(0, -SECTION_OFFSET)
+                .buildSection(list.size());
         section.setFill(IN_PROGRESS_COLOUR);
+        display.addItem(section);
+        // TODO: May not be in the correct spot
         actions.add(new LaterAction(() -> section.setFill(FINISHED_COLOUR)));
         actions.add(new AnimationAction(display.recolourTimeline()));
     }
@@ -108,23 +112,25 @@ public class QuickSort extends ActionSortingAlgorithm {
 
         @Override
         public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
-            AnimatedItem kArrow = AnimatedItemBuilder.defaultArrow(display, end);
+            AnimatedItem kArrow = ItemBuilder.defaultArrow(display, end);
             display.addItem(kArrow);
 
-            AnimatedItem iArrow = new AnimatedItemBuilder(display)
+            AnimatedItem iArrow = new ItemBuilder(display)
                     .with(PolygonWrapper.triangle(display, Color.rgb(25, 53, 145)))
                     .at(end, 0)
                     .build();
             display.addItem(iArrow);
 
-            AnimatedItem minArrow = new AnimatedItemBuilder(display)
+            AnimatedItem minArrow = new ItemBuilder(display)
                     .with(PolygonWrapper.triangle(display, Color.LIGHTGREEN))
                     .at(start, 0)
                     .build();
             display.addItem(minArrow);
 
-            AnimatedSection partitionLimit = new AnimatedSection(display, end - start + 1, false);
-            display.addItem(partitionLimit, start, algorithm.list.get(start) * display.getHeightMultiplier());
+            AnimatedSection partitionLimit = new ItemBuilder(display)
+                    .at(start, algorithm.list.get(start) * display.getHeightMultiplier())
+                    .buildSection(end - start + 1, false);
+            display.addItem(partitionLimit);
 
             display.animate(display.highlightAnimation(i -> i >= start && i <= end));
             display.onPlay(() -> display.setCurrentTask("Partitioning [" + start + ", " + end + "]"));
@@ -165,15 +171,19 @@ public class QuickSort extends ActionSortingAlgorithm {
 
             // Initialize
             if (makingLeft) {
-                leftSection = new AnimatedSection(display, end - start + 1, true);
-                algorithm.addToStart(new LaterAction(() -> display.addItem(leftSection, start, -depth * 15 - SECTION_OFFSET)));
+                leftSection = new ItemBuilder(display)
+                        .at(start, -depth * 15 - SECTION_OFFSET)
+                        .buildSection(end - start + 1);
+                algorithm.addToStart(new AddItem(leftSection));
             } else {
                 leftSection = null;
             }
 
             if (makingRight) {
-                rightSection = new AnimatedSection(display, end - start + 1, true);
-                algorithm.addToStart(new LaterAction(() -> display.addItem(rightSection, start, -depth * 15 - SECTION_OFFSET)));
+                rightSection = new ItemBuilder(display)
+                        .at(start, -depth * 15 - SECTION_OFFSET)
+                        .buildSection(end - start + 1);
+                algorithm.addToStart(new AddItem(rightSection));
             } else {
                 rightSection = null;
             }

@@ -1,8 +1,8 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
+import com.example.javafxsortingalgorithms.animation.*;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
-import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,13 +61,13 @@ public class OddEvenSort extends SortingAlgorithm {
 
     @Override
     public void startAnimated(AnimatedArrayDisplay display) {
-        leftArrow = new AnimatedItemBuilder(display)
+        leftArrow = new ItemBuilder(display)
                 .with(PolygonWrapper.triangle(display))
                 .at(0, ARROW_HEIGHT)
                 .build();
         display.addItem(leftArrow);
 
-        rightArrow = new AnimatedItemBuilder(display)
+        rightArrow = new ItemBuilder(display)
                 .with(PolygonWrapper.triangle(display))
                 .at(1, ARROW_HEIGHT)
                 .build();
@@ -75,11 +75,13 @@ public class OddEvenSort extends SortingAlgorithm {
 
         sections = new ArrayList<>();
         for (int i = 0; i < list.size() / 2; i++) {
-            AnimatedSection section = new AnimatedSection(display, 25.0, true);
+//            AnimatedSection section = new AnimatedSection(display, 25.0, true);
+            AnimatedSection section = new ItemBuilder(display)
+                    .at(i * 2 + (currentPos % 2 == 0 ? 0 : 1) + 12.5, SECTION_HEIGHT)
+                    // TODO: Should this be element width?
+                    .buildSection(25.0, true);
             sections.add(section);
             display.addItem(section);
-//            display.addItem(section, display.getX(i * 2 + (currentPos % 2 == 0 ? 0 : 1)) + 12.5, SECTION_HEIGHT);
-            section.setPosition(i * 2 + (currentPos % 2 == 0 ? 0 : 1) + 12.5, SECTION_HEIGHT);
         }
 
         display.setCurrentTask("Checking evens");

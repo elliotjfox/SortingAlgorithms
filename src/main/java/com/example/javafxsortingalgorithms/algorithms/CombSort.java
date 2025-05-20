@@ -3,6 +3,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsInputBox;
+import com.example.javafxsortingalgorithms.animation.*;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 
 import java.util.List;
@@ -74,15 +75,23 @@ public class CombSort extends SortingAlgorithm {
 
     @Override
     public void startAnimated(AnimatedArrayDisplay display) {
-
-        leftArrow = AnimatedItemBuilder.defaultArrow(display, 0);
+        leftArrow = new ItemBuilder(display)
+                .at(0, arrowHeight)
+                .with(PolygonWrapper.triangle(display))
+                .build();
         display.addItem(leftArrow);
 
-        rightArrow = AnimatedItemBuilder.defaultArrow(display, gapSize);
+        // TODO: This isn't appearing in the right spot?
+        rightArrow = new ItemBuilder(display)
+                .at(gapSize, arrowHeight)
+                .with(PolygonWrapper.triangle(display))
+                .build();
         display.addItem(rightArrow);
 
-        section = new AnimatedSection(display, gapSize + 1, true);
-        display.addItem(section, 0, sectionHeight);
+        section = new ItemBuilder(display)
+                .at(0, sectionHeight)
+                .buildSection(gapSize + 1);
+        display.addItem(section);
 
         display.updateInfo("Gap size", gapSize);
         display.updateInfo("Left index", 0);
@@ -118,7 +127,7 @@ public class CombSort extends SortingAlgorithm {
                 display.updateInfoWhenDone("Gap size", gapSize);
                 // Shouldn't actually need to move, but redundancy is good!
                 rightArrow.moveToIndex(lastPos + gapSize, arrowHeight);
-                display.animate(section.resizeTimeline((gapSize + 1) * 25)); // TODO: Should this be display.getElementHeight() instead of 25?
+                display.animate(section.resizeTimeline(gapSize + 1)); // TODO: Should this be display.getElementHeight() instead of 25?
             }
             return;
         }

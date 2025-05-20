@@ -3,10 +3,12 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithnSettingsCheckBox;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
+import com.example.javafxsortingalgorithms.animation.AnimatedSection;
+import com.example.javafxsortingalgorithms.animation.ItemBuilder;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MergeSort extends ActionSortingAlgorithm {
@@ -53,8 +55,10 @@ public class MergeSort extends ActionSortingAlgorithm {
 
     @Override
     public void startAnimated(AnimatedArrayDisplay display) {
-        AnimatedSection currentSection = new AnimatedSection(display, list.size(), true);
-        display.addItem(currentSection, 0, -SECTION_OFFSET);
+        AnimatedSection currentSection = new ItemBuilder(display)
+                .at(0, -SECTION_OFFSET)
+                .buildSection(list.size());
+        display.addItem(currentSection);
     }
 
     @Override
@@ -101,12 +105,17 @@ public class MergeSort extends ActionSortingAlgorithm {
             if (max - min >= 2) {
                 int half = (min + max) / 2;
 
-                AnimatedSection leftSection = new AnimatedSection(display, max - min, true);
-                AnimatedSection rightSection = new AnimatedSection(display, max - min, true);
+                AnimatedSection leftSection = new ItemBuilder(display)
+                        .at(min, -(depth) * 15 - SECTION_OFFSET)
+                        .buildSection(max - min);
+                AnimatedSection rightSection = new ItemBuilder(display)
+                        .at(min, -(depth) * 15 - SECTION_OFFSET)
+                        .buildSection(max - min);
+
                 algorithm.addToStart(
                         new LaterAction(() -> {
-                            display.addItem(leftSection, min, -(depth) * 15 - SECTION_OFFSET);
-                            display.addItem(rightSection, min, -(depth) * 15 - SECTION_OFFSET);
+                            display.addItem(leftSection);
+                            display.addItem(rightSection);
                             leftSection.moveToIndex(min, -(depth + 1) * 15 - SECTION_OFFSET);
                             rightSection.moveToIndex(half, -(depth + 1) * 15 - SECTION_OFFSET);
                             display.animate(

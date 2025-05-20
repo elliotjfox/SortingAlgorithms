@@ -1,5 +1,8 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
+import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
+import com.example.javafxsortingalgorithms.animation.AnimatedItem;
+import com.example.javafxsortingalgorithms.animation.ItemBuilder;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 import com.example.javafxsortingalgorithms.TestEntry;
 
@@ -88,10 +91,10 @@ public class BubbleSort extends SortingAlgorithm {
     public void startAnimated(AnimatedArrayDisplay display) {
         // TODO: Make this linked to the settings (element width)
 
-        leftArrow = AnimatedItemBuilder.defaultArrow(display, 0);
+        leftArrow = ItemBuilder.defaultArrow(display, 0);
         display.addItem(leftArrow);
 
-        rightArrow = AnimatedItemBuilder.defaultArrow(display, 1);
+        rightArrow = ItemBuilder.defaultArrow(display, 1);
         display.addItem(rightArrow);
 
         display.updateInfo("Number sorted", 0);

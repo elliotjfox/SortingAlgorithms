@@ -2,6 +2,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,12 +61,14 @@ public class OddEvenSort extends SortingAlgorithm {
 
     @Override
     public void startAnimated(AnimatedArrayDisplay display) {
-        leftArrow = AnimatedItemBuilder.triangle(display)
+        leftArrow = new AnimatedItemBuilder(display)
+                .with(PolygonWrapper.triangle(display))
                 .at(0, ARROW_HEIGHT)
                 .build();
         display.addItem(leftArrow);
 
-        rightArrow = AnimatedItemBuilder.triangle(display)
+        rightArrow = new AnimatedItemBuilder(display)
+                .with(PolygonWrapper.triangle(display))
                 .at(1, ARROW_HEIGHT)
                 .build();
         display.addItem(rightArrow);

@@ -239,9 +239,7 @@ public class SelectionSort extends SortingAlgorithm {
     public void startAnimated(AnimatedArrayDisplay display) {
         curIndex++;
 
-        arrow = AnimatedItemBuilder.triangle(display)
-                .at(curIndex, 0)
-                .build();
+        arrow = AnimatedItemBuilder.defaultArrow(display, curIndex);
         display.addItem(arrow);
 
         display.getDetailedInfo().updateInfo("Sorted", 0);
@@ -251,9 +249,7 @@ public class SelectionSort extends SortingAlgorithm {
 
         if (mode != SelectionMode.MAX) {
             minArrow = new AnimatedItemBuilder(display)
-                    .with(PolygonBuilder.triangle(display)
-                            .painted(Color.LIGHTGREEN).build()
-                    )
+                    .with(PolygonWrapper.triangle(display, Color.LIGHTGREEN))
                     .at(minIndex, 0)
                     .build();
             display.addItem(minArrow);
@@ -264,9 +260,7 @@ public class SelectionSort extends SortingAlgorithm {
 
         if (mode != SelectionMode.MIN) {
             maxArrow = new AnimatedItemBuilder(display)
-                    .with(PolygonBuilder.triangle(display)
-                            .painted(Color.LIGHTBLUE).build()
-                    )
+                    .with(PolygonWrapper.triangle(display, Color.LIGHTGREEN))
                     .at(maxIndex, 0)
                     .build();
             display.addItem(maxArrow);

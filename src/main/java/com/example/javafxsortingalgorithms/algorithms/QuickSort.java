@@ -112,16 +112,14 @@ public class QuickSort extends ActionSortingAlgorithm {
             display.addItem(kArrow);
 
             AnimatedItem iArrow = new AnimatedItemBuilder(display)
-                    .with(PolygonBuilder.triangle(display)
-                            .painted(Color.rgb(25, 53, 145)).build()
-                    ).at(end, 0)
+                    .with(PolygonWrapper.triangle(display, Color.rgb(25, 53, 145)))
+                    .at(end, 0)
                     .build();
             display.addItem(iArrow);
 
             AnimatedItem minArrow = new AnimatedItemBuilder(display)
-                    .with(PolygonBuilder.triangle(display)
-                            .painted(Color.LIGHTGREEN).build()
-                    ).at(start, 0)
+                    .with(PolygonWrapper.triangle(display, Color.LIGHTGREEN))
+                    .at(start, 0)
                     .build();
             display.addItem(minArrow);
 

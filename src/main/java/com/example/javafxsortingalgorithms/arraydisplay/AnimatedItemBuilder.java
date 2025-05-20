@@ -1,7 +1,7 @@
 package com.example.javafxsortingalgorithms.arraydisplay;
 
 import javafx.scene.Node;
-import javafx.scene.shape.Polygon;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,33 +43,6 @@ public class AnimatedItemBuilder {
     }
 
     public static AnimatedItem defaultArrow(AnimatedArrayDisplay display, int index) {
-        return new AnimatedItemBuilder(display).with(PolygonBuilder.triangle(display).build()).at(index, 0).build();
-    }
-
-    public static AnimatedItemBuilder triangle(AnimatedArrayDisplay display) {
-        return triangle(display, true);
-    }
-
-    public static AnimatedItemBuilder triangle(AnimatedArrayDisplay display, boolean up) {
-        double length = display.getElementWidth();
-        double sinLength = length * Math.sin(Math.toRadians(60));
-
-        Polygon polygon = new Polygon();
-
-        if (up) {
-            polygon.getPoints().addAll(
-                    length / 2, 0.0,
-                    length, sinLength,
-                    0.0, sinLength
-            );
-        } else {
-            polygon.getPoints().addAll(
-                    0.0, 0.0,
-                    length, 0.0,
-                    length / 2, sinLength
-            );
-        }
-
-        return new AnimatedItemBuilder(display).with(polygon);
+        return new AnimatedItemBuilder(display).with(PolygonWrapper.triangle(display, Color.BLACK, true)).at(index, 0).build();
     }
 }

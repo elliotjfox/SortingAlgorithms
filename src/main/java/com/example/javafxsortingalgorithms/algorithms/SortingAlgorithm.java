@@ -85,6 +85,32 @@ public abstract class SortingAlgorithm {
         list.add(targetIndex, list.remove(index));
     }
 
+    // [left, mid) and [mid, right)
+    protected void inPlaceMerge(int left, int mid, int right) {
+        // Clamp edges
+        if (left < 0) left = 0;
+        if (right > list.size()) right = list.size();
+
+        // Make sure left <= mid <= right
+        if (!increasing(left, mid, right)) return;
+
+
+        int l = left;
+        int r = mid;
+
+        while (r < right && l < r) {
+            if (list.get(l) > list.get(r)) {
+                move(r, l);
+                r++;
+            }
+            l++;
+        }
+    }
+
+    private boolean increasing(int i1, int i2, int i3) {
+        return i1 <= i2 && i2 <= i3;
+    }
+
     public List<Integer> getList() {
         return list;
     }

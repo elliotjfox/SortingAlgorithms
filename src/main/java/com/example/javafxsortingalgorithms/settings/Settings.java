@@ -50,7 +50,7 @@ public class Settings {
             case "Shell":       yield ShellSort.getSettings();
             case "Stooge":      yield new AlgorithmSettings<>("Stooge Sort", StoogeSort::new);
             case "Strand":      yield new AlgorithmSettings<>("Strand Sort", StrandSort::new);
-            case "Tim":         yield new AlgorithmSettings<>("Tim Sort", TimSort::new);
+            case "Tim":         yield TimSort.getSettings();
             case "Cycle":       yield new AlgorithmSettings<>("Strand Sort", CycleSort::new);
             default:            yield new AlgorithmSettings<>("Unknown Algorithm", GnomeSort::new);
         };

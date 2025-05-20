@@ -1,33 +1,53 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithnSettingsCheckBox;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 
 import java.util.List;
 
-// TODO: Still some bugs
 public class TimSort extends ActionSortingAlgorithm {
 
     private final int RUN_SIZE = 32;
 
-    public TimSort(List<Integer> arrayList, boolean isInstant) {
+    private final boolean alwaysAscending;
+
+    public TimSort(List<Integer> arrayList, boolean isInstant, boolean alwaysAscending) {
         super(arrayList, isInstant);
 
+        this.alwaysAscending = alwaysAscending;
+
+        // Insertion sort step
         for (int i = 0; i < list.size(); i += RUN_SIZE) {
+            // If the list is only one element, we don't have to do anything
+            if (i + 1 >= list.size()) {
+                continue;
+            }
+
+            boolean ascending;
+
+            if (alwaysAscending) {
+                ascending = true;
+            } else {
+                // We know there is at least two elements in this run, so this is safe
+                ascending = list.get(i) <= list.get(i + 1);
+            }
+
             int end = Math.min(i + RUN_SIZE, list.size());
-            // TODO: Technically could be out of bounds
-            int first = list.get(i);
-            int second = list.get(i + 1);
-            boolean ascending = first <= second;
             addToStart(new TimSortInsertion(ascending, i, end));
+
+            // Flip it now so we don't have to deal with flipping them when merging
             if (!ascending) {
                 addToStart(new Flip(i, end - 1));
             }
         }
 
+        // Merge step
         for (int size = RUN_SIZE; size < list.size(); size *= 2) {
             for (int left = 0; left < list.size(); left += 2 * size) {
-                addToStart(new Merge(left, left + size, Math.min(left + 2 * size, list.size())));
+                // Make sure we aren't going out of bounds
+                addToStart(new InPlaceMerge(left, left + size, Math.min(left + 2 * size, list.size())));
             }
         }
 
@@ -130,6 +150,16 @@ public class TimSort extends ActionSortingAlgorithm {
                 algorithm.addToStart(new TimSortInsertion(ascending, left, right, index + 1));
             }
         }
+    }
+
+    public static AlgorithmSettings<TimSort> getSettings() {
+        AlgorithnSettingsCheckBox alwaysAscendingSetting = new AlgorithnSettingsCheckBox("Always Ascending", false);
+
+        return new AlgorithmSettings<>(
+                "Tim Sort",
+                (l, b) -> new TimSort(l, b, alwaysAscendingSetting.getValue()),
+                alwaysAscendingSetting
+        );
     }
 
 }

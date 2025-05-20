@@ -150,12 +150,7 @@ public class QuickSort extends ActionSortingAlgorithm {
                             kArrow.moveToIndexTimeline(k, 0)
                     ),
                     new Swap(k, start),
-                    new LaterAction(() -> {
-                        display.removeItem(kArrow);
-                        display.removeItem(iArrow);
-                        display.removeItem(minArrow);
-                        display.removeItem(partitionLimit);
-                    })
+                    new RemoveItem(kArrow, iArrow, minArrow, partitionLimit)
             );
 
             boolean makingLeft = start < k - 1;

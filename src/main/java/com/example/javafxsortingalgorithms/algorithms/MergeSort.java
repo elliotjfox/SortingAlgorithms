@@ -88,7 +88,7 @@ public class MergeSort extends ActionSortingAlgorithm {
                         new Divide(half, max)
                 );
                 if (((MergeSort) algorithm).inPlace) {
-                    algorithm.addToStart(new InPlaceMerge(min, max));
+                    algorithm.addToStart(new InPlaceMerge(min, half, max));
                 } else {
                     algorithm.addToStart(new Merge(min, half, max));
                 }
@@ -105,7 +105,6 @@ public class MergeSort extends ActionSortingAlgorithm {
                 AnimatedSection rightSection = new AnimatedSection(display, max - min, true);
                 algorithm.addToStart(
                         new LaterAction(() -> {
-
                             display.addItem(leftSection, min, -(depth) * 15 - SECTION_OFFSET);
                             display.addItem(rightSection, min, -(depth) * 15 - SECTION_OFFSET);
                             leftSection.moveToIndex(min, -(depth + 1) * 15 - SECTION_OFFSET);
@@ -125,7 +124,7 @@ public class MergeSort extends ActionSortingAlgorithm {
                             display.animate(display.highlightAnimation(i -> i >= min && i < max));
                             display.onPlay(() -> display.setCurrentTask("Merging [" + min + ", " + (half - 1) + "] and [" + half + ", " + (max - 1) + "]"));
                         }),
-                        new InPlaceMerge(min, max),
+                        new InPlaceMerge(min, half, max),
                         new LaterAction(() -> {
                             leftSection.setFill(Color.BLACK);
                             rightSection.setFill(Color.BLACK);
@@ -137,131 +136,8 @@ public class MergeSort extends ActionSortingAlgorithm {
                                 rightSection.resizeTimeline(max - min)
                         ),
                         new Wait(),
-                        new LaterAction(() -> {
-                            display.removeItem(leftSection);
-                            display.removeItem(rightSection);
-                        })
+                        new RemoveItem(leftSection, rightSection)
                 );
-            }
-        }
-    }
-
-    private static class InPlaceMerge extends AlgorithmAction {
-        private int leftSide;
-        private int rightSide;
-        private final int end;
-        private int i;
-
-        public InPlaceMerge(int leftSide, int end) {
-            this.leftSide = leftSide;
-            this.rightSide = (leftSide + end) / 2;
-            this.end = end;
-            i = leftSide;
-            takesStep = false;
-        }
-
-        @Override
-        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
-            while (rightSide < end && leftSide < rightSide && i < rightSide) {
-                if (algorithm.list.get(leftSide) < algorithm.list.get(rightSide)) {
-                    // Pause to keep the merge smooth
-                    algorithm.addToStart(new Wait());
-                    leftSide++;
-                } else {
-                    algorithm.addToStart(new Move(rightSide, i));
-                    rightSide++;
-                }
-                i++;
-            }
-        }
-
-        @Override
-        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
-            AnimatedArrow leftArrow = new AnimatedArrow(display, true);
-            AnimatedArrow rightArrow = new AnimatedArrow(display, true);
-
-            int finalRight = rightSide;
-            int finalLeft = leftSide;
-            algorithm.addToStart(
-                    new LaterAction(() -> {
-                        display.addItem(rightArrow, finalRight, 0);
-                        display.addItem(leftArrow, finalLeft, 0);
-                    })
-            );
-            while (rightSide < end && leftSide < rightSide && i < rightSide) {
-                int innerFinalRight = rightSide;
-                int finalI = i;
-                if (algorithm.list.get(leftSide) < algorithm.list.get(rightSide)) {
-                    algorithm.addToStart(
-                            new AnimationAction(leftArrow.moveToIndexTimeline(finalI, 0), rightArrow.moveToIndexTimeline(innerFinalRight, 0)),
-                            new Wait(),
-                            new LaterAction(() -> display.reading(finalI, innerFinalRight), true)
-                    );
-                    leftSide++;
-                } else {
-                    algorithm.addToStart(
-                            new AnimationAction(leftArrow.moveToIndexTimeline(finalI, 0), rightArrow.moveToIndexTimeline(innerFinalRight, 0)),
-                            new Wait(),
-                            new LaterAction(() -> display.reading(finalI, innerFinalRight)),
-                            new Move(rightSide, i)
-                    );
-                    rightSide++;
-                }
-                i++;
-            }
-
-            algorithm.addToStart(
-                    new LaterAction(() -> {
-                        display.removeItem(leftArrow);
-                        display.removeItem(rightArrow);
-                    })
-            );
-        }
-    }
-
-    private static class Merge extends AlgorithmAction {
-
-        private final int leftSide;
-        private final int rightSide;
-        private final int end;
-        private int pos;
-
-        private final List<Integer> left;
-        private final List<Integer> right;
-
-        public Merge(int leftSide, int rightSide, int end) {
-            this.leftSide = leftSide;
-            this.rightSide = rightSide;
-            this.end = end;
-            this.pos = leftSide;
-
-            left = new ArrayList<>();
-            right = new ArrayList<>();
-        }
-
-        @Override
-        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
-            for (int i = leftSide; i < rightSide; i++) {
-                left.add(algorithm.list.get(i));
-                algorithm.addToStart(new Wait());
-            }
-            for (int i = rightSide; i < end; i++) {
-                right.add(algorithm.list.get(i));
-                algorithm.addToStart(new Wait());
-            }
-
-            while (!right.isEmpty() && !left.isEmpty()) {
-                if (left.getFirst() <= right.getFirst()) {
-                    algorithm.addToStart(new Set(pos, left.removeFirst()));
-                } else {
-                    algorithm.addToStart(new Set(pos, right.removeFirst()));
-                }
-                pos++;
-            }
-            List<Integer> emptyList = right.isEmpty() ? left : right;
-            while (!emptyList.isEmpty()) {
-                algorithm.addToStart(new Set(pos, emptyList.removeFirst()));
-                pos++;
             }
         }
     }

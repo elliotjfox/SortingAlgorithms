@@ -1,13 +1,12 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrayDisplay;
+import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrow;
+import com.example.javafxsortingalgorithms.arraydisplay.AnimatedItem;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 import javafx.animation.Timeline;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
 
@@ -99,7 +98,7 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
          * @param display The animated display the algorithm belongs to
          */
         public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
-            // TODO: Eventually make this abstract
+            // TODO: Eventually make this method abstract
             System.out.println("TODO: Should this action (" + getClass().getSimpleName() + ") have a detailed version?");
             execute(algorithm, display);
         }
@@ -233,6 +232,161 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
         }
     }
 
+    /**
+     * An action that merges two adjacent sorted sub-lists together
+     */
+    protected static class Merge extends AlgorithmAction {
+
+        // Bounds
+        private final int left;
+        private final int mid;
+        private final int end;
+
+        // The current position of merging
+        private int pos;
+
+        // Lists storing the numbers to be merged
+        private final List<Integer> leftSide;
+        private final List<Integer> rightSide;
+
+        /**
+         * Creates a Merge action that will merge two adjacent sorted sub-lists together when run. The list bounds
+         * are [left, mid) and [min, end). The lists must be sorted before this action is called.
+         * @param left The left bound of the left sub-list, inclusive
+         * @param mid The right bound of the left sub-list, exclusive, or the left bound of the right sub-list, inclusive
+         * @param end The right bound of the right sub-list, exclusive
+         */
+        public Merge(int left, int mid, int end) {
+            this(left, mid, end, true);
+        }
+
+        // TODO: Make takesStep logic
+        public Merge(int left, int mid, int end, boolean takesStep) {
+            this.left = left;
+            this.mid = mid;
+            this.end = end;
+            this.pos = left;
+
+            this.takesStep = takesStep;
+
+            leftSide = new ArrayList<>();
+            rightSide = new ArrayList<>();
+        }
+
+        @Override
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+
+            // Put the numbers into their lists
+            for (int i = left; i < mid; i++) {
+                leftSide.add(algorithm.list.get(i));
+                algorithm.addToStart(new Wait());
+            }
+            for (int i = mid; i < end; i++) {
+                rightSide.add(algorithm.list.get(i));
+                algorithm.addToStart(new Wait());
+            }
+
+            // While there are still numbers in both lists
+            while (!rightSide.isEmpty() && !leftSide.isEmpty()) {
+                // Set the current position to the smaller of the first of the lists
+                if (leftSide.getFirst() <= rightSide.getFirst()) {
+                    algorithm.addToStart(new Set(pos, leftSide.removeFirst()));
+                } else {
+                    algorithm.addToStart(new Set(pos, rightSide.removeFirst()));
+                }
+                pos++;
+            }
+
+            // Set the remaining positions
+            List<Integer> remainder = rightSide.isEmpty() ? leftSide : rightSide;
+            while (!remainder.isEmpty()) {
+                algorithm.addToStart(new Set(pos, remainder.removeFirst()));
+                pos++;
+            }
+        }
+    }
+
+    protected static class InPlaceMerge extends AlgorithmAction {
+
+        private int left;
+        private int right;
+        private final int end;
+        private int i;
+
+        public InPlaceMerge(int left, int mid, int end) {
+            this.left = left;
+            this.right = mid;
+            this.end = end;
+            i = left;
+
+            takesStep = false;
+        }
+
+        @Override
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+            while (right < end && left < right && i < right) {
+                if (algorithm.list.get(left) < algorithm.list.get(right)) {
+                    algorithm.addToStart(new Wait());
+                    left++;
+                } else {
+                    algorithm.addToStart(new Move(right, i));
+                    right++;
+                }
+                i++;
+            }
+        }
+
+        @Override
+        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
+            AnimatedArrow leftArrow = new AnimatedArrow(display, true);
+            AnimatedArrow rightArrow = new AnimatedArrow(display, true);
+
+            int finalRight = right;
+            int finalLeft = left;
+
+            // Add arrows
+            algorithm.addToStart(
+                    new LaterAction(() -> {
+                        display.addItem(rightArrow, finalRight, 0);
+                        display.addItem(leftArrow, finalLeft, 0);
+                    }, false)
+            );
+
+            // Merging process
+            while (right < end && left < right && i < right) {
+                int innerFinalRight = right;
+                int finalI = i;
+
+                if (algorithm.list.get(left) < algorithm.list.get(right)) {
+                    algorithm.addToStart(
+                            new AnimationAction(
+                                    leftArrow.moveToIndexTimeline(finalI, 0),
+                                    rightArrow.moveToIndexTimeline(innerFinalRight, 0)
+                            ),
+                            new Wait(),
+                            new LaterAction(() -> display.reading(finalI, innerFinalRight), true)
+                    );
+                    left++;
+                } else {
+                    algorithm.addToStart(
+                            new AnimationAction(
+                                    leftArrow.moveToIndexTimeline(finalI, 0),
+                                    rightArrow.moveToIndexTimeline(innerFinalRight, 0)
+                            ),
+                            new Wait(),
+                            new LaterAction(() -> display.reading(finalI, innerFinalRight)),
+                            new Move(right, i)
+                    );
+                    right++;
+                }
+                i++;
+            }
+
+            // Remove arrows
+            algorithm.addToStart(new RemoveItem(leftArrow, rightArrow));
+        }
+    }
+
     protected static class AnimationAction extends AlgorithmAction {
         private final Timeline[] timelines;
 
@@ -249,6 +403,27 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
         @Override
         public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
             display.animate(timelines);
+        }
+    }
+
+    protected static class RemoveItem extends AlgorithmAction {
+
+        private final List<AnimatedItem> items;
+
+        public RemoveItem(AnimatedItem... items) {
+            this.items = new ArrayList<>(List.of(items));
+        }
+
+        @Override
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+            System.out.println("Should not be running a RemoveItem action normally!");
+        }
+
+        @Override
+        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
+            for (AnimatedItem item : items) {
+                display.removeItem(item);
+            }
         }
     }
 

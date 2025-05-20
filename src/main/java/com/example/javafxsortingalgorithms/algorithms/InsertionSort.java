@@ -29,7 +29,7 @@ public class InsertionSort extends ActionSortingAlgorithm {
     private final SearchType searchType;
 
     private AnimatedSection searchSection;
-    private AnimatedArrow arrow;
+    private AnimatedItem arrow;
 
     private final double sectionHeight = -10;
     private final double arrowHeight = 0;
@@ -85,8 +85,9 @@ public class InsertionSort extends ActionSortingAlgorithm {
     public void startAnimated(AnimatedArrayDisplay display) {
         searchSection = new AnimatedSection(display, 1.0, true);
         display.addItem(searchSection, 0, sectionHeight);
-        arrow = new AnimatedArrow(display, true);
-        display.addItem(arrow, 0, arrowHeight);
+
+        arrow = AnimatedItemBuilder.defaultArrow(display, 0);
+        display.addItem(arrow);
 
         display.setCurrentTask("Searching for correct position");
         display.updateInfo("Sorted", 1);

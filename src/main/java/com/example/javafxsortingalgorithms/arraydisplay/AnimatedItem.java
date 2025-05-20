@@ -4,14 +4,32 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.util.Duration;
+
+import java.util.List;
 
 public class AnimatedItem extends Group {
 
     protected final AnimatedArrayDisplay display;
+    protected AnimatedItemPosition position;
 
     public AnimatedItem(AnimatedArrayDisplay display) {
         this.display = display;
+    }
+
+    public AnimatedItem(AnimatedArrayDisplay display, AnimatedItemPosition position, List<Node> nodes) {
+        this(display);
+
+        this.position = position;
+
+        getChildren().addAll(nodes);
+    }
+
+    public void goToPosition() {
+        if (!hasPosition()) return;
+
+        position.moveItem(this);
     }
 
     public void setIndex(int index, double y) {
@@ -33,22 +51,34 @@ public class AnimatedItem extends Group {
     }
 
     public Timeline moveToIndexTimeline(int index, double y) {
-        return new Timeline(
+        Timeline timeline = new Timeline(
                 new KeyFrame(
                         Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),
                         new KeyValue(layoutXProperty(), index * display.getElementWidth()),
                         new KeyValue(layoutYProperty(), display.getMaxValue() * display.getHeightMultiplier() - y)
                 )
         );
+
+        timeline.setOnFinished(event -> position = new AnimatedItemIndexPosition(index, y));
+
+        return timeline;
     }
 
     public Timeline moveToPositionTimeline(double x, double y) {
-        return new Timeline(
+        Timeline timeline = new Timeline(
                 new KeyFrame(
                         Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),
                         new KeyValue(layoutXProperty(), x),
                         new KeyValue(layoutYProperty(), display.getMaxValue() * display.getHeightMultiplier() - y)
                 )
         );
+
+        timeline.setOnFinished(event -> position = null);
+
+        return timeline;
+    }
+
+    public boolean hasPosition() {
+        return position != null;
     }
 }

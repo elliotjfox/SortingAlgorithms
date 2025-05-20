@@ -15,8 +15,8 @@ public class CombSort extends SortingAlgorithm {
     private int gapSize;
     private final double shrinkFactor;
 
-    private AnimatedArrow leftArrow;
-    private AnimatedArrow rightArrow;
+    private AnimatedItem leftArrow;
+    private AnimatedItem rightArrow;
     private AnimatedSection section;
 
     private final double sectionHeight = -10;
@@ -74,11 +74,12 @@ public class CombSort extends SortingAlgorithm {
 
     @Override
     public void startAnimated(AnimatedArrayDisplay display) {
-        leftArrow = new AnimatedArrow(display, true);
-        display.addItem(leftArrow, 0, arrowHeight);
 
-        rightArrow = new AnimatedArrow(display, true);
-        display.addItem(rightArrow, gapSize, arrowHeight);
+        leftArrow = AnimatedItemBuilder.defaultArrow(display, 0);
+        display.addItem(leftArrow);
+
+        rightArrow = AnimatedItemBuilder.defaultArrow(display, gapSize);
+        display.addItem(rightArrow);
 
         section = new AnimatedSection(display, gapSize + 1, true);
         display.addItem(section, 0, sectionHeight);
@@ -117,7 +118,7 @@ public class CombSort extends SortingAlgorithm {
                 display.updateInfoWhenDone("Gap size", gapSize);
                 // Shouldn't actually need to move, but redundancy is good!
                 rightArrow.moveToIndex(lastPos + gapSize, arrowHeight);
-                display.animate(section.resizeTimeline((gapSize + 1) * 25));
+                display.animate(section.resizeTimeline((gapSize + 1) * 25)); // TODO: Should this be display.getElementHeight() instead of 25?
             }
             return;
         }

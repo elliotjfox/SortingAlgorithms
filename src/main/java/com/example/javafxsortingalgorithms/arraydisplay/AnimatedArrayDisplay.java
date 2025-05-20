@@ -87,6 +87,9 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
     public void addItem(AnimatedItem item) {
         centerPane.getChildren().add(item);
         items.add(item);
+        if (item.hasPosition()) {
+            item.goToPosition();
+        }
     }
 
     public void addItem(AnimatedItem item, double x, double y) {

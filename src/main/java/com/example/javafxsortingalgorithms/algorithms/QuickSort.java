@@ -108,16 +108,22 @@ public class QuickSort extends ActionSortingAlgorithm {
 
         @Override
         public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
-            AnimatedArrow kArrow = new AnimatedArrow(display, true);
-            display.addItem(kArrow, end, 0);
+            AnimatedItem kArrow = AnimatedItemBuilder.defaultArrow(display, end);
+            display.addItem(kArrow);
 
-            AnimatedArrow iArrow = new AnimatedArrow(display, true);
-            iArrow.setFill(Color.rgb(25, 53, 145));
-            display.addItem(iArrow, end, 0);
+            AnimatedItem iArrow = new AnimatedItemBuilder(display)
+                    .with(PolygonBuilder.triangle(display)
+                            .painted(Color.rgb(25, 53, 145)).build()
+                    ).at(end, 0)
+                    .build();
+            display.addItem(iArrow);
 
-            AnimatedArrow minArrow = new AnimatedArrow(display, true);
-            minArrow.setFill(Color.LIGHTGREEN);
-            display.addItem(minArrow, start, 0);
+            AnimatedItem minArrow = new AnimatedItemBuilder(display)
+                    .with(PolygonBuilder.triangle(display)
+                            .painted(Color.LIGHTGREEN).build()
+                    ).at(start, 0)
+                    .build();
+            display.addItem(minArrow);
 
             AnimatedSection partitionLimit = new AnimatedSection(display, end - start + 1, false);
             display.addItem(partitionLimit, start, algorithm.list.get(start) * display.getHeightMultiplier());

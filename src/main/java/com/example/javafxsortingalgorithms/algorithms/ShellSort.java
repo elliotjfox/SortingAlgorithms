@@ -4,9 +4,7 @@ import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsInputBox;
-import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrayDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrow;
+import com.example.javafxsortingalgorithms.arraydisplay.*;
 
 import java.util.List;
 
@@ -22,7 +20,7 @@ public class ShellSort extends ActionSortingAlgorithm {
     private final double shrinkFactor;
     private int gapSize;
 
-    private AnimatedArrow arrow;
+    private AnimatedItem arrow;
 
     public ShellSort(List<Integer> arrayList, boolean isInstant, double shrinkFactor, ShellSortMode mode) {
         super(arrayList, isInstant);
@@ -84,8 +82,8 @@ public class ShellSort extends ActionSortingAlgorithm {
 
     @Override
     public void startAnimated(AnimatedArrayDisplay display) {
-        arrow = new AnimatedArrow(display, true);
-        display.addItem(arrow, 0, 0);
+        arrow = AnimatedItemBuilder.defaultArrow(display, 0);
+        display.addItem(arrow);
 
         display.updateInfo("Gap Size", (int) (list.size() / shrinkFactor));
         display.updateInfo("Offset", 0);

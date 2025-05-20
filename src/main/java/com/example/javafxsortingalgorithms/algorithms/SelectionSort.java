@@ -3,9 +3,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
-import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrayDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrow;
+import com.example.javafxsortingalgorithms.arraydisplay.*;
 import javafx.scene.paint.Color;
 
 import java.util.List;
@@ -38,11 +36,11 @@ public class SelectionSort extends SortingAlgorithm {
     private int sorted;
 
     /** The arrow pointing to the minimum number */
-    private AnimatedArrow minArrow;
+    private AnimatedItem minArrow;
     /** The arrow pointing to the maximum number */
-    private AnimatedArrow maxArrow;
+    private AnimatedItem maxArrow;
     /** The arrow pointing to the current index */
-    private AnimatedArrow arrow;
+    private AnimatedItem arrow;
 
     /**
      * Create a selection sort to sort the provided list, with the provided selection type.
@@ -241,8 +239,10 @@ public class SelectionSort extends SortingAlgorithm {
     public void startAnimated(AnimatedArrayDisplay display) {
         curIndex++;
 
-        arrow = new AnimatedArrow(display, true);
-        display.addItem(arrow, curIndex, 0);
+        arrow = AnimatedItemBuilder.triangle(display)
+                .at(curIndex, 0)
+                .build();
+        display.addItem(arrow);
 
         display.getDetailedInfo().updateInfo("Sorted", 0);
         display.getDetailedInfo().updateInfo("Current index", curIndex);
@@ -250,17 +250,27 @@ public class SelectionSort extends SortingAlgorithm {
 
 
         if (mode != SelectionMode.MAX) {
-            minArrow = new AnimatedArrow(display, true);
-            minArrow.setFill(Color.LIGHTGREEN);
-            display.addItem(minArrow, minIndex, 0);
+            minArrow = new AnimatedItemBuilder(display)
+                    .with(PolygonBuilder.triangle(display)
+                            .painted(Color.LIGHTGREEN).build()
+                    )
+                    .at(minIndex, 0)
+                    .build();
+            display.addItem(minArrow);
+
             display.getDetailedInfo().updateInfo("Min index", minIndex);
             display.getDetailedInfo().updateInfo("Min value", list.get(minIndex));
         }
 
         if (mode != SelectionMode.MIN) {
-            maxArrow = new AnimatedArrow(display, true);
-            maxArrow.setFill(Color.LIGHTBLUE);
-            display.addItem(maxArrow, maxIndex, 0);
+            maxArrow = new AnimatedItemBuilder(display)
+                    .with(PolygonBuilder.triangle(display)
+                            .painted(Color.LIGHTBLUE).build()
+                    )
+                    .at(maxIndex, 0)
+                    .build();
+            display.addItem(maxArrow);
+
             display.getDetailedInfo().updateInfo("Max index", maxIndex);
             display.getDetailedInfo().updateInfo("Max value", list.get(maxIndex));
         }

@@ -1,9 +1,6 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrayDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrow;
-import com.example.javafxsortingalgorithms.arraydisplay.AnimatedItem;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
+import com.example.javafxsortingalgorithms.arraydisplay.*;
 import javafx.animation.Timeline;
 
 import java.util.*;
@@ -338,19 +335,12 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
 
         @Override
         public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
-            AnimatedArrow leftArrow = new AnimatedArrow(display, true);
-            AnimatedArrow rightArrow = new AnimatedArrow(display, true);
 
-            int finalRight = right;
-            int finalLeft = left;
+            AnimatedItem leftArrow = AnimatedItemBuilder.defaultArrow(display, left);
+            AnimatedItem rightArrow = AnimatedItemBuilder.defaultArrow(display, right);
 
             // Add arrows
-            algorithm.addToStart(
-                    new LaterAction(() -> {
-                        display.addItem(rightArrow, finalRight, 0);
-                        display.addItem(leftArrow, finalLeft, 0);
-                    }, false)
-            );
+            algorithm.addToStart(new AddItem(leftArrow, rightArrow));
 
             // Merging process
             while (right < end && left < right && i < right) {
@@ -403,6 +393,27 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
         @Override
         public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
             display.animate(timelines);
+        }
+    }
+
+    protected static class AddItem extends AlgorithmAction {
+
+        private final List<AnimatedItem> items;
+
+        public AddItem(AnimatedItem... items) {
+            this.items = new ArrayList<>(List.of(items));
+        }
+
+        @Override
+        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
+            System.out.println("Should not be running an AddItem action normally!");
+        }
+
+        @Override
+        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
+            for (AnimatedItem item : items) {
+                display.addItem(item);
+            }
         }
     }
 

@@ -33,7 +33,7 @@ public class TimSort extends ActionSortingAlgorithm {
 
         stack = new ArrayList<>();
         minrun = calculateMinrun();
-        System.out.println("Minrun: " + minrun);
+//        System.out.println("Minrun: " + minrun);
         for (int i = 0; i < list.size(); i += minrun) {
             addToStart(new FindRun(i));
         }
@@ -47,7 +47,92 @@ public class TimSort extends ActionSortingAlgorithm {
 
     @Override
     protected void instantAlgorithm(TestEntry entry) {
+        int n = list.size();
+        int run = 32;
+        int i = 0;
+        int left = 0;
+        int size = run;
 
+        while (i < n) {
+            int tmp = Math.min(i + run - 1, n - 1);
+            insertionSort(i, tmp);
+            i += run;
+        }
+
+        while (size < n) {
+            while (left < n) {
+                int mid = left + size - 1;
+                int right = Math.min(left + 2 * size - 1, n - 1);
+                if (mid < right) {
+                    merge(left, mid, right);
+                }
+                left = left + 2 * size;
+            }
+            left = 0;
+            size *= 2;
+        }
+    }
+
+    private void insertionSort(int left, int right) {
+        int i = left + 1;
+        while (i <= right) {
+            int tmp = list.get(i);
+            int j = i - 1;
+
+            while (j >= left && list.get(j) > tmp) {
+                list.set(j + 1, list.get(j));
+                j--;
+            }
+            list.set(j + 1, tmp);
+            i++;
+        }
+    }
+
+    private void merge(int l, int m, int r) {
+        int x = 0;
+        int y = 0;
+        int i = 0;
+        int j = 0;
+        int k = 0;
+
+        int len1 = m - l + 1;
+        int len2 = r - m;
+
+        Integer[] left = new Integer[len1];
+        Integer[] right = new Integer[len2];
+
+        while (x < len1) {
+            left[x] = list.get(l + x);
+            x++;
+        }
+
+        while (y < len2) {
+            right[y] = list.get(m + 1 + y);
+            y++;
+        }
+
+        while (i < len1 && j < len2) {
+            if (left[i] <= right[j]) {
+                list.set(l + k, left[i]);
+                i++;
+            } else {
+                list.set(l + k, right[j]);
+                j++;
+            }
+            k++;
+        }
+
+        while (i < len1) {
+            list.set(l + k, left[i]);
+            i++;
+            k++;
+        }
+
+        while (j < len2) {
+            list.set(l + k, right[j]);
+            j++;
+            k++;
+        }
     }
 
     @Override

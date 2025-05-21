@@ -29,7 +29,6 @@ public class AnimatedItem extends Group {
     public void goToPosition() {
         if (!hasPosition()) return;
 
-//        System.out.println("Moving");
         position.moveItem(this);
     }
 

@@ -12,7 +12,7 @@ public class ItemIndexPosition implements ItemPosition {
 
     @Override
     public void moveItem(AnimatedItem item) {
-        item.setLayoutY(index * item.display.getElementWidth());
+        item.setLayoutX(index * item.display.getElementWidth());
         item.setLayoutY(item.display.getMaxValue() * item.display.getHeightMultiplier() - height);
     }
 }

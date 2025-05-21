@@ -68,9 +68,22 @@ public class QuickSort extends ActionSortingAlgorithm {
                 .buildSection(list.size());
         section.setFill(IN_PROGRESS_COLOUR);
         display.addItem(section);
-        // TODO: May not be in the correct spot
-        actions.add(new LaterAction(() -> section.setFill(FINISHED_COLOUR)));
-        actions.add(new AnimationAction(display.recolourTimeline()));
+
+        // Reset actions, and add two visual ones after the sorting algorithm
+        actions.clear();
+        switch (partitionType) {
+            case LEFT -> setInitialActions(
+                    new LeftPartition(0, list.size() - 1),
+                    new LaterAction(() -> section.setFill(FINISHED_COLOUR)),
+                    new AnimationAction(display.recolourTimeline())
+            );
+            case RIGHT -> setInitialActions(
+                    new RightPartition(0, list.size() - 1),
+                    new LaterAction(() -> section.setFill(FINISHED_COLOUR)),
+                    new AnimationAction(display.recolourTimeline())
+            );
+            case MIDDLE -> System.out.println("Need to implement still!");
+        }
     }
 
     @Override

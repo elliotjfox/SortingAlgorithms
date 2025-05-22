@@ -62,13 +62,13 @@ public class OddEvenSort extends SortingAlgorithm {
     @Override
     public void startAnimated(AnimatedArrayDisplay display) {
         leftArrow = new ItemBuilder(display)
-                .with(PolygonWrapper.triangle(display))
+                .add(PolygonWrapper.triangle(display))
                 .at(0, ARROW_HEIGHT)
                 .build();
         display.addItem(leftArrow);
 
         rightArrow = new ItemBuilder(display)
-                .with(PolygonWrapper.triangle(display))
+                .add(PolygonWrapper.triangle(display))
                 .at(1, ARROW_HEIGHT)
                 .build();
         display.addItem(rightArrow);

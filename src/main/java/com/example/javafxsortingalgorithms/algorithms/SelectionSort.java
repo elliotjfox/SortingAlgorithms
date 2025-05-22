@@ -253,7 +253,7 @@ public class SelectionSort extends SortingAlgorithm {
 
         if (mode != SelectionMode.MAX) {
             minArrow = new ItemBuilder(display)
-                    .with(PolygonWrapper.triangle(display, Color.LIGHTGREEN))
+                    .add(PolygonWrapper.triangle(display, Color.LIGHTGREEN))
                     .at(minIndex, 0)
                     .build();
             display.addItem(minArrow);
@@ -264,7 +264,7 @@ public class SelectionSort extends SortingAlgorithm {
 
         if (mode != SelectionMode.MIN) {
             maxArrow = new ItemBuilder(display)
-                    .with(PolygonWrapper.triangle(display, Color.LIGHTGREEN))
+                    .add(PolygonWrapper.triangle(display, Color.LIGHTGREEN))
                     .at(maxIndex, 0)
                     .build();
             display.addItem(maxArrow);

@@ -77,14 +77,14 @@ public class CombSort extends SortingAlgorithm {
     public void startAnimated(AnimatedArrayDisplay display) {
         leftArrow = new ItemBuilder(display)
                 .at(0, arrowHeight)
-                .with(PolygonWrapper.triangle(display))
+                .add(PolygonWrapper.triangle(display))
                 .build();
         display.addItem(leftArrow);
 
         // TODO: This isn't appearing in the right spot?
         rightArrow = new ItemBuilder(display)
                 .at(gapSize, arrowHeight)
-                .with(PolygonWrapper.triangle(display))
+                .add(PolygonWrapper.triangle(display))
                 .build();
         display.addItem(rightArrow);
 

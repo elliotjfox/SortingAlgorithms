@@ -66,7 +66,7 @@ public class QuickSort extends ActionSortingAlgorithm {
         section = new ItemBuilder(display)
                 .at(0, -SECTION_OFFSET)
                 .buildSection(list.size());
-        section.setFill(IN_PROGRESS_COLOUR);
+        section.setSectionFill(IN_PROGRESS_COLOUR);
         display.addItem(section);
 
         // Reset actions, and add two visual ones after the sorting algorithm
@@ -74,12 +74,12 @@ public class QuickSort extends ActionSortingAlgorithm {
         switch (partitionType) {
             case LEFT -> setInitialActions(
                     new LeftPartition(0, list.size() - 1),
-                    new LaterAction(() -> section.setFill(FINISHED_COLOUR)),
+                    new LaterAction(() -> section.setSectionFill(FINISHED_COLOUR)),
                     new AnimationAction(display.recolourTimeline())
             );
             case RIGHT -> setInitialActions(
                     new RightPartition(0, list.size() - 1),
-                    new LaterAction(() -> section.setFill(FINISHED_COLOUR)),
+                    new LaterAction(() -> section.setSectionFill(FINISHED_COLOUR)),
                     new AnimationAction(display.recolourTimeline())
             );
             case MIDDLE -> System.out.println("Need to implement still!");
@@ -223,17 +223,17 @@ public class QuickSort extends ActionSortingAlgorithm {
 
             if (makingLeft) {
                 algorithm.addToStart(
-                        new LaterAction(() -> leftSection.setFill(IN_PROGRESS_COLOUR)),
+                        new LaterAction(() -> leftSection.setSectionFill(IN_PROGRESS_COLOUR)),
                         new LeftPartition(start, k - 1, depth + 1),
-                        new LaterAction(() -> leftSection.setFill(FINISHED_COLOUR))
+                        new LaterAction(() -> leftSection.setSectionFill(FINISHED_COLOUR))
                 );
             }
 
             if (makingRight) {
                 algorithm.addToStart(
-                        new LaterAction(() -> rightSection.setFill(IN_PROGRESS_COLOUR)),
+                        new LaterAction(() -> rightSection.setSectionFill(IN_PROGRESS_COLOUR)),
                         new LeftPartition(k + 1, end, depth + 1),
-                        new LaterAction(() -> rightSection.setFill(FINISHED_COLOUR))
+                        new LaterAction(() -> rightSection.setSectionFill(FINISHED_COLOUR))
                 );
             }
         }

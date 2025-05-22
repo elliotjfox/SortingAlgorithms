@@ -127,7 +127,7 @@ public class CombSort extends SortingAlgorithm {
                 display.updateInfoWhenDone("Gap size", gapSize);
                 // Shouldn't actually need to move, but redundancy is good!
                 rightArrow.moveToIndex(lastPos + gapSize, arrowHeight);
-                display.animate(section.resizeTimeline(gapSize + 1)); // TODO: Should this be display.getElementHeight() instead of 25?
+                section.resize(gapSize + 1);
             }
             return;
         }

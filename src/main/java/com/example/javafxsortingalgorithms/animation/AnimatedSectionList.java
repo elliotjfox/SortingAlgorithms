@@ -55,7 +55,8 @@ public class AnimatedSectionList extends AnimatedItem {
         return new Timeline(
                 new KeyFrame(
                         Duration.ZERO,
-                        event -> selectedSection.setSectionVisible(false)
+                        // TODO: Make sure this works properly
+                        event -> selectedSection.setVisible(false)
                 ),
                 new KeyFrame(
                         Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),

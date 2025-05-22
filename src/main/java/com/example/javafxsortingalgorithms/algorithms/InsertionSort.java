@@ -201,7 +201,7 @@ public class InsertionSort extends ActionSortingAlgorithm {
         protected void searchDetailed(InsertionSort algorithm, AnimatedArrayDisplay display) {
             if (from > to) {
                 algorithm.searchSection.moveToIndex(from, algorithm.sectionHeight);
-                display.animate(algorithm.searchSection.resizeTimeline(to - from + 1));
+                algorithm.searchSection.resize(to - from + 1);
 
                 algorithm.addToStart(new Move(index, from));
                 return;
@@ -209,7 +209,7 @@ public class InsertionSort extends ActionSortingAlgorithm {
 
             algorithm.arrow.moveToIndex(index, algorithm.arrowHeight);
             algorithm.searchSection.moveToIndex(from, algorithm.sectionHeight);
-            display.animate(algorithm.searchSection.resizeTimeline(to - from + 1));
+            algorithm.searchSection.resize(to - from + 1);
             display.newGroup();
             display.comparing(index, from);
 
@@ -245,7 +245,7 @@ public class InsertionSort extends ActionSortingAlgorithm {
         public void searchDetailed(InsertionSort algorithm, AnimatedArrayDisplay display) {
             if (to < 0) {
                 algorithm.searchSection.moveToIndex(from, algorithm.sectionHeight);
-                display.animate(algorithm.searchSection.resizeTimeline((to - from + 1) * 25));
+                algorithm.searchSection.resize(to - from + 1);
                 display.updateInfoWhenDone(SearchType.RIGHT_LINEAR.index, AnimatedInfo.OUT_OF_BOUNDS_INDEX);
                 display.updateInfoWhenDone(SearchType.RIGHT_LINEAR.value, AnimatedInfo.OUT_OF_BOUND_VALUE);
 
@@ -259,7 +259,7 @@ public class InsertionSort extends ActionSortingAlgorithm {
 
             algorithm.arrow.moveToIndex(index, algorithm.arrowHeight);
             algorithm.searchSection.moveToIndex(from, algorithm.sectionHeight);
-            display.animate(algorithm.searchSection.resizeTimeline(to - from + 1));
+            algorithm.searchSection.resize(to - from + 1);
             display.updateInfoWhenDone(SearchType.RIGHT_LINEAR.index, to);
             display.updateInfoWhenDone(SearchType.RIGHT_LINEAR.value, algorithm.getList().get(to));
             display.updateInfoWhenDone("Current index", index);
@@ -312,7 +312,7 @@ public class InsertionSort extends ActionSortingAlgorithm {
         protected void searchDetailed(InsertionSort algorithm, AnimatedArrayDisplay display) {
             if (from >= to) {
                 algorithm.searchSection.moveToIndex(from, algorithm.sectionHeight);
-                display.animate(algorithm.searchSection.resizeTimeline(to - from + 1));
+                algorithm.searchSection.resize(to - from + 1);
                 display.newGroup();
                 display.comparing(index, from);
 //                display.addAnimations(
@@ -335,7 +335,7 @@ public class InsertionSort extends ActionSortingAlgorithm {
 
                 algorithm.arrow.moveToIndex(index, algorithm.arrowHeight);
                 algorithm.searchSection.moveToIndex(index, algorithm.sectionHeight);
-                display.animate(algorithm.searchSection.resizeTimeline(to - from + 1));
+                algorithm.searchSection.resize(to - from + 1);
                 display.newGroup();
                 display.comparing(index, mid);
 //                display.addAnimations(

@@ -295,7 +295,7 @@ public class SelectionSort extends SortingAlgorithm {
             // Move the smallest to the start
             swap(minIndex, sorted);
             display.swap(minIndex, sorted);
-            display.getElementAnimationGroup().addOnPlay(() -> {
+            display.onPlayFinal(() -> {
                 display.setCurrentTask("Swapping smallest");
                 display.getDetailedInfo().updateInfo("Sorted", sorted);
             });
@@ -346,7 +346,7 @@ public class SelectionSort extends SortingAlgorithm {
             // Move the smallest to the start
             swap(maxIndex, list.size() - 1 - sorted);
             display.swap(maxIndex, list.size() - 1 - sorted);
-            display.getElementAnimationGroup().addOnPlay(() -> display.setCurrentTask("Swapping biggest"));
+            display.onPlayFinal(() -> display.setCurrentTask("Swapping biggest"));
 
             // Reset for finding the next smallest
             sorted++;
@@ -402,7 +402,7 @@ public class SelectionSort extends SortingAlgorithm {
                 display.swap(maxIndex, maxDestination);
                 display.swap(minIndex, minDestination);
             }
-            display.getElementAnimationGroup().addOnPlay(() -> display.setCurrentTask("Moving smallest and biggest to edges"));
+            display.onPlayFinal(() -> display.setCurrentTask("Moving smallest and biggest to edges"));
 
             sorted++;
             curIndex = sorted;

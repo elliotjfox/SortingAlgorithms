@@ -44,4 +44,25 @@ public class PolygonWrapper extends Polygon {
 
         return polygon;
     }
+
+    public static Polygon readArrow() {
+        return readArrow(15, Color.BLACK);
+    }
+
+    public static Polygon readArrow(double length) {
+        return readArrow(length, Color.BLACK);
+    }
+
+    public static Polygon readArrow(double length, Paint fill) {
+        Polygon polygon = new Polygon(
+                0.0, 0.0,
+                -length, length / 2,
+                -length + length / 4, 0.0,
+                -length, -length / 2
+        );
+
+        polygon.setFill(fill);
+
+        return polygon;
+    }
 }

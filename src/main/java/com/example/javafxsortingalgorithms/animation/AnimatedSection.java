@@ -12,18 +12,33 @@ import javafx.util.Duration;
 
 import java.util.List;
 
+/**
+ * A class representing a 'section' that algorithms can use in the animated mode to show
+ * things like how they are divided, or what part of the list the algorithm is looking at currently
+ */
 public class AnimatedSection extends AnimatedItem {
 
     private static final double SECTION_THICKNESS = 5;
     private static final Color DEFAULT_COLOUR = Color.BLACK;
 
     private final boolean hasEdges;
-    private DoublePropertyBase widthProperty;
+    private final DoublePropertyBase widthProperty;
 
     private final Rectangle rectangle;
     private Rectangle left;
     private Rectangle right;
 
+    /**
+     * Creates an AnimatedSection that will be used on the provided display.
+     * May also have a position specified, and may have a list of nodes to be added as children.
+     * Initial width is also specified, and whether the section will have edges (extra vertical bars on the edges of the section).
+     *
+     * @param display The display this item will be used by
+     * @param position The position this item should be position at. May be null
+     * @param nodes A list of nodes that are children to this item. May be null or empty
+     * @param exactWidth The initial width of this section
+     * @param hasEdges Whether this section has edges
+     */
     public AnimatedSection(AnimatedArrayDisplay display, ItemPosition position, List<Node> nodes, double exactWidth, boolean hasEdges) {
         super(display, position, nodes);
 
@@ -66,6 +81,10 @@ public class AnimatedSection extends AnimatedItem {
         setSectionFill(DEFAULT_COLOUR);
     }
 
+    /**
+     * Sets the fill of the section.
+     * @param fill The new colour of the section
+     */
     public void setSectionFill(Paint fill) {
         rectangle.setFill(fill);
         if (hasEdges) {
@@ -83,17 +102,27 @@ public class AnimatedSection extends AnimatedItem {
     }
 
     /**
-     * Queues an animation of this section resizing to the specified width
+     * Queues an animation of this section resizing to the specified width.
      * @param exactWidth The width this will be
      */
     public void resize(double exactWidth) {
         display.animate(resizeTimeline(exactWidth));
     }
 
+    /**
+     * Creates and returns a timeline of this section resizing to the specified width, in number of elements wide.
+     * @param width The new width for the section, in number of elements wide
+     * @return The timeline
+     */
     public Timeline resizeTimeline(int width) {
         return resizeTimeline(toExact(width));
     }
 
+    /**
+     * Creates and returns a timeline of this section resizing to the specified width.
+     * @param exactWidth The new width for the section
+     * @return The timeline
+     */
     public Timeline resizeTimeline(double exactWidth) {
         return new Timeline(
                 new KeyFrame(

@@ -4,6 +4,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -16,15 +17,29 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A class representing a binary tree that is used by HeapSort.
+ */
 public class AnimatedBinaryTree extends AnimatedItem {
 
     private final List<AnimatedBinaryTreeItem> treeItems;
     private final List<Line> lines;
 
+
     // TODO: Make this adaptable to different sizes maybe?
-    public AnimatedBinaryTree(AnimatedArrayDisplay display, List<Integer> list) {
-        // TODO: Fix this
-        super(display, null, null);
+    /**
+     * Create an AnimatedBinaryTree object that will be used on the provided display.
+     * May have a position specified, and may have a list of nodes to be added as children.
+     * Also has the list this binary tree is made off of.
+     *
+     * @param display The display this item will be used by
+     * @param position The position this item should be at. May be null
+     * @param nodes A list of nodes that are children to this item. May be null or empty
+     * @param list The list of integers this will use as a blueprint
+     */
+    public AnimatedBinaryTree(AnimatedArrayDisplay display, ItemPosition position, List<Node> nodes, List<Integer> list) {
+        super(display, position, nodes);
+
         treeItems = new ArrayList<>();
         lines = new ArrayList<>();
 
@@ -47,21 +62,39 @@ public class AnimatedBinaryTree extends AnimatedItem {
         }
     }
 
-    private int getWidth(int i) {
-        return (int) Math.pow(2, roundDown(treeItems.size() - 1) - roundDown(i));
+    /**
+     * Queues an animation of two elements in the tree swapping position.
+     * @param first The index of the first element to swap
+     * @param second The index of the second element to swap
+     */
+    public void swap(int first, int second) {
+        display.animate(swapTimeline(first, second));
     }
 
-    private int roundDown(int i) {
-        return (int) (Math.log(i + 1) / Math.log(2));
+    /**
+     * Queues an animation of one of the elements being removed from the binary tree and being replaced.
+     * @param toRemove The index of the element to remove
+     * @param toReplace The index of the element replacing the removed element
+     */
+    public void extractItem(int toRemove, int toReplace) {
+        display.animate(extractItemTimeline(toRemove, toReplace));
     }
 
-    private void lineBetween(AnimatedBinaryTreeItem upper, AnimatedBinaryTreeItem lower) {
-        Line line = new Line(upper.getLayoutX() + 12.5, upper.getLayoutY() + 25, lower.getLayoutX() + 12.5, lower.getLayoutY());
-        getChildren().add(line);
-        lines.set(treeItems.indexOf(lower), line);
+    /**
+     * Queues an animation of an element being read.
+     * @param index The index of the element being read
+     */
+    public void read(int index) {
+        display.animate(readTimeline(index));
     }
 
-    public Timeline animateSwap(int first, int second) {
+    /**
+     * Creates and returns a timeline of an animation of two element swapping position
+     * @param first The index of the first element to swap
+     * @param second The index of the second element to swap
+     * @return The timeline
+     */
+    public Timeline swapTimeline(int first, int second) {
         AnimatedBinaryTreeItem firstItem = treeItems.get(first);
         AnimatedBinaryTreeItem secondItem = treeItems.get(second);
         treeItems.set(first, treeItems.set(second, treeItems.get(first)));
@@ -76,7 +109,13 @@ public class AnimatedBinaryTree extends AnimatedItem {
         );
     }
 
-    public Timeline extractItem(int toRemove, int toReplace) {
+    /**
+     * Creates and returns a timeline of an animation of an element being removed and replaced by another.
+     * @param toRemove The index of the element to remove
+     * @param toReplace The index of the element replacing the other
+     * @return The timeline
+     */
+    public Timeline extractItemTimeline(int toRemove, int toReplace) {
         AnimatedBinaryTreeItem toRemoveItem = treeItems.get(toRemove);
         Line toRemoveLine = lines.get(toReplace);
         AnimatedBinaryTreeItem toReplaceItem = treeItems.get(toReplace);
@@ -101,7 +140,12 @@ public class AnimatedBinaryTree extends AnimatedItem {
         return timeline;
     }
 
-    public Timeline read(int index) {
+    /**
+     * Creates and returns a timeline of an animation of an element being read.
+     * @param index The index of the element being read
+     * @return The timeline
+     */
+    public Timeline readTimeline(int index) {
         Polygon arrow = AnimatedArrayDisplay.createReadArrow();
         arrow.setLayoutX(treeItems.get(index).getLayoutX());
         arrow.setLayoutY(treeItems.get(index).getLayoutY() + 25);
@@ -117,6 +161,20 @@ public class AnimatedBinaryTree extends AnimatedItem {
         );
         timeline.setOnFinished(event -> getChildren().remove(arrow));
         return timeline;
+    }
+
+    private int getWidth(int i) {
+        return (int) Math.pow(2, roundDown(treeItems.size() - 1) - roundDown(i));
+    }
+
+    private int roundDown(int i) {
+        return (int) (Math.log(i + 1) / Math.log(2));
+    }
+
+    private void lineBetween(AnimatedBinaryTreeItem upper, AnimatedBinaryTreeItem lower) {
+        Line line = new Line(upper.getLayoutX() + 12.5, upper.getLayoutY() + 25, lower.getLayoutX() + 12.5, lower.getLayoutY());
+        getChildren().add(line);
+        lines.set(treeItems.indexOf(lower), line);
     }
 
     private static class AnimatedBinaryTreeItem extends StackPane {

@@ -89,8 +89,6 @@ public class BubbleSort extends SortingAlgorithm {
 
     @Override
     public void startAnimated(AnimatedArrayDisplay display) {
-        // TODO: Make this linked to the settings (element width)
-
         leftArrow = ItemBuilder.defaultArrow(display, 0);
         display.addItem(leftArrow);
 

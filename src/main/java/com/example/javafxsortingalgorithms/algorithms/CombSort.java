@@ -75,13 +75,14 @@ public class CombSort extends SortingAlgorithm {
 
     @Override
     public void startAnimated(AnimatedArrayDisplay display) {
+        // We can't use default arrow, since that assumes the arrow will be at height 0
+
         leftArrow = new ItemBuilder(display)
                 .at(0, arrowHeight)
                 .add(PolygonWrapper.triangle(display))
                 .build();
         display.addItem(leftArrow);
 
-        // TODO: This isn't appearing in the right spot?
         rightArrow = new ItemBuilder(display)
                 .at(gapSize, arrowHeight)
                 .add(PolygonWrapper.triangle(display))

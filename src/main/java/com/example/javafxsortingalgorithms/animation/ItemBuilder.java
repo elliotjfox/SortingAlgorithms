@@ -89,6 +89,10 @@ public class ItemBuilder {
         return new AnimatedSection(display, position, nodes, exactWidth, hasEdges);
     }
 
+    public AnimatedBinaryTree buildTree(List<Integer> list) {
+        return new AnimatedBinaryTree(display, position, nodes, list);
+    }
+
     public static AnimatedItem defaultArrow(AnimatedArrayDisplay display, int index) {
         return new ItemBuilder(display).add(PolygonWrapper.triangle(display, Color.BLACK, true)).at(index, 0).build();
     }

@@ -75,11 +75,9 @@ public class OddEvenSort extends SortingAlgorithm {
 
         sections = new ArrayList<>();
         for (int i = 0; i < list.size() / 2; i++) {
-//            AnimatedSection section = new AnimatedSection(display, 25.0, true);
             AnimatedSection section = new ItemBuilder(display)
                     .at(i * 2 + (currentPos % 2 == 0 ? 0 : 1) + 12.5, SECTION_HEIGHT)
-                    // TODO: Should this be element width?
-                    .buildSection(25.0, true);
+                    .buildSection(1, true);
             sections.add(section);
             display.addItem(section);
         }

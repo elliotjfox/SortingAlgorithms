@@ -1,10 +1,11 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrayDisplay;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
+import com.example.javafxsortingalgorithms.animation.ItemBuilder;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.AnimatedSection;
-import com.example.javafxsortingalgorithms.arraydisplay.AnimatedSectionList;
+import com.example.javafxsortingalgorithms.animation.AnimatedSection;
+import com.example.javafxsortingalgorithms.animation.AnimatedSectionList;
 
 import java.util.List;
 
@@ -92,9 +93,9 @@ public class StoogeSort extends ActionSortingAlgorithm {
                     display.newGroup();
                     display.animate(
                             stoogeSort.sectionList.addSections(
-                                    new AnimatedSection(display, from + third - to + 1, true),
-                                    new AnimatedSection(display, to - from - third + 1, true),
-                                    new AnimatedSection(display, from + third - to + 1, true)
+                                    new ItemBuilder(display).buildSection(from + third - to + 1),
+                                    new ItemBuilder(display).buildSection(to - from - third + 1),
+                                    new ItemBuilder(display).buildSection(from + third - to + 1)
                             )
                     );
                 }

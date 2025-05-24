@@ -1,5 +1,8 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
+import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
+import com.example.javafxsortingalgorithms.animation.AnimatedItem;
+import com.example.javafxsortingalgorithms.animation.ItemBuilder;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 import com.example.javafxsortingalgorithms.TestEntry;
 
@@ -20,8 +23,8 @@ public class BubbleSort extends SortingAlgorithm {
     private int lastPos;
     private boolean hasMadeSwap;
 
-    private AnimatedArrow leftArrow;
-    private AnimatedArrow rightArrow;
+    private AnimatedItem leftArrow;
+    private AnimatedItem rightArrow;
 
     public BubbleSort(List<Integer> arrayList, boolean isInstant) {
         super(arrayList, isInstant);
@@ -86,12 +89,11 @@ public class BubbleSort extends SortingAlgorithm {
 
     @Override
     public void startAnimated(AnimatedArrayDisplay display) {
-        // TODO: Make this linked to the settings (element width)
-        leftArrow = new AnimatedArrow(display, true);
-        display.addItem(leftArrow, 0, 0);
+        leftArrow = ItemBuilder.defaultArrow(display, 0);
+        display.addItem(leftArrow);
 
-        rightArrow = new AnimatedArrow(display, true);
-        display.addItem(rightArrow, 1, 0);
+        rightArrow = ItemBuilder.defaultArrow(display, 1);
+        display.addItem(rightArrow);
 
         display.updateInfo("Number sorted", 0);
         display.updateInfo("Left index", 0);

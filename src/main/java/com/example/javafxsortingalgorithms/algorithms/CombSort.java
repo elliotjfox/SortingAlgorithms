@@ -3,6 +3,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsInputBox;
+import com.example.javafxsortingalgorithms.animation.*;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 
 import java.util.List;
@@ -15,8 +16,8 @@ public class CombSort extends SortingAlgorithm {
     private int gapSize;
     private final double shrinkFactor;
 
-    private AnimatedArrow leftArrow;
-    private AnimatedArrow rightArrow;
+    private AnimatedItem leftArrow;
+    private AnimatedItem rightArrow;
     private AnimatedSection section;
 
     private final double sectionHeight = -10;
@@ -74,14 +75,24 @@ public class CombSort extends SortingAlgorithm {
 
     @Override
     public void startAnimated(AnimatedArrayDisplay display) {
-        leftArrow = new AnimatedArrow(display, true);
-        display.addItem(leftArrow, 0, arrowHeight);
+        // We can't use default arrow, since that assumes the arrow will be at height 0
 
-        rightArrow = new AnimatedArrow(display, true);
-        display.addItem(rightArrow, gapSize, arrowHeight);
+        leftArrow = new ItemBuilder(display)
+                .at(0, arrowHeight)
+                .add(PolygonWrapper.triangle(display))
+                .build();
+        display.addItem(leftArrow);
 
-        section = new AnimatedSection(display, gapSize + 1, true);
-        display.addItem(section, 0, sectionHeight);
+        rightArrow = new ItemBuilder(display)
+                .at(gapSize, arrowHeight)
+                .add(PolygonWrapper.triangle(display))
+                .build();
+        display.addItem(rightArrow);
+
+        section = new ItemBuilder(display)
+                .at(0, sectionHeight)
+                .buildSection(gapSize + 1);
+        display.addItem(section);
 
         display.updateInfo("Gap size", gapSize);
         display.updateInfo("Left index", 0);
@@ -117,7 +128,7 @@ public class CombSort extends SortingAlgorithm {
                 display.updateInfoWhenDone("Gap size", gapSize);
                 // Shouldn't actually need to move, but redundancy is good!
                 rightArrow.moveToIndex(lastPos + gapSize, arrowHeight);
-                display.animate(section.resizeTimeline((gapSize + 1) * 25));
+                section.resize(gapSize + 1);
             }
             return;
         }

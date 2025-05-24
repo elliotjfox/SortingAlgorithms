@@ -1,4 +1,4 @@
-package com.example.javafxsortingalgorithms.arraydisplay;
+package com.example.javafxsortingalgorithms.animation;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;

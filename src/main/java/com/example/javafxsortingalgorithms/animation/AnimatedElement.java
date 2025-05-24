@@ -1,4 +1,4 @@
-package com.example.javafxsortingalgorithms.arraydisplay;
+package com.example.javafxsortingalgorithms.animation;
 
 import com.example.javafxsortingalgorithms.settings.SettingsPane;
 import javafx.animation.KeyFrame;
@@ -20,7 +20,8 @@ public class AnimatedElement extends AnimatedItem {
     private final ObjectProperty<Paint> colourProperty;
 
     public AnimatedElement(AnimatedArrayDisplay display, int index) {
-        super(display);
+        // TODO: Fix
+        super(display, null, null);
         this.settingsPane = display.getSettings();
         this.index = index;
         colourProperty = new ObjectPropertyBase<>() {

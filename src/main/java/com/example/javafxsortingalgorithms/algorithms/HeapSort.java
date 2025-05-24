@@ -1,9 +1,10 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrayDisplay;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
+import com.example.javafxsortingalgorithms.animation.ItemBuilder;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.AnimatedBinaryTree;
+import com.example.javafxsortingalgorithms.animation.AnimatedBinaryTree;
 import javafx.animation.Timeline;
 
 import java.util.List;
@@ -64,9 +65,10 @@ public class HeapSort extends ActionSortingAlgorithm {
 
     @Override
     public void startAnimated(AnimatedArrayDisplay display) {
-        tree = new AnimatedBinaryTree(display, list);
-
-        display.addItem(tree, list.size(), 600);
+        tree = new ItemBuilder(display)
+                .at(list.size(), 600)
+                .buildTree(list);
+        display.addItem(tree);
     }
 
     @Override
@@ -145,16 +147,17 @@ public class HeapSort extends ActionSortingAlgorithm {
             if (i * 2 + 2 < heapSort.length) {
                 // Read the current and its children
                 display.reading(i);
-                display.animate(heapSort.tree.read(i));
+                heapSort.tree.read(i);
                 display.newGroup();
                 display.comparing(i * 2 + 1, i * 2 + 2);
-                display.animate(heapSort.tree.read(i * 2 + 1), heapSort.tree.read(i * 2 + 2));
+                heapSort.tree.read(i *  2 + 1);
+                heapSort.tree.read(i *  2 + 2);
                 // If the current one is less than one of its children
                 if (heapSort.getList().get(i) < heapSort.getList().get(i * 2 + 1) || heapSort.getList().get(i) < heapSort.getList().get(i * 2 + 2)) {
                     // Swap is with the larger child
                     int largestChild = heapSort.getList().get(i * 2 + 1) > heapSort.getList().get(i * 2 + 2) ? i * 2 + 1 : i * 2 + 2;
                     heapSort.addToStart(
-                            new LaterAction(() -> display.getElementAnimationGroup().addTimelines(heapSort.tree.animateSwap(i, largestChild))),
+                            new LaterAction(() -> display.getElementAnimationGroup().addTimelines(heapSort.tree.swapTimeline(i, largestChild))),
                             new Swap(i, largestChild),
                             new MaxHeapify(largestChild)
                     );
@@ -163,15 +166,15 @@ public class HeapSort extends ActionSortingAlgorithm {
                 }
             } else if (i * 2 + 1 < heapSort.length) {
                 display.reading(i);
-                display.animate(heapSort.tree.read(i));
+                heapSort.tree.read(i);
                 display.newGroup();
                 display.reading(i * 2 + 1);
-                display.animate(heapSort.tree.read(i * 2 + 1));
+                heapSort.tree.read(i * 2 + 1);
 
                 // One of the children is in range, check if it is bigger
                 if (heapSort.getList().get(i) < heapSort.getList().get(i * 2 + 1)) {
                     heapSort.addToStart(
-                            new LaterAction(() -> display.getElementAnimationGroup().addTimelines(heapSort.tree.animateSwap(i, i * 2 + 1))),
+                            new LaterAction(() -> display.getElementAnimationGroup().addTimelines(heapSort.tree.swapTimeline(i, i * 2 + 1))),
                             new Swap(i, i * 2 + 1)
                     );
                     // Don't need to call max heapify, since the child was at the edge of the
@@ -218,7 +221,7 @@ public class HeapSort extends ActionSortingAlgorithm {
                 return;
             }
 
-            Timeline extractAnimation = heapSort.tree.extractItem(0, heapSort.length - 1);
+            Timeline extractAnimation = heapSort.tree.extractItemTimeline(0, heapSort.length - 1);
             heapSort.addToStart(
                     new LaterAction(() -> {
                         display.onPlay(() -> display.setCurrentTask("Extracting max"));

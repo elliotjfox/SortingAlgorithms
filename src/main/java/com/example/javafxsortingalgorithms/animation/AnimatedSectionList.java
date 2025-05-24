@@ -1,4 +1,4 @@
-package com.example.javafxsortingalgorithms.arraydisplay;
+package com.example.javafxsortingalgorithms.animation;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -17,7 +17,8 @@ public class AnimatedSectionList extends AnimatedItem {
     private final VBox vBox;
 
     public AnimatedSectionList(AnimatedArrayDisplay display) {
-        super(display);
+        // TODO Fix
+        super(display, null, null);
         sections = new ArrayList<>();
         vBox = new VBox(10);
 
@@ -54,7 +55,8 @@ public class AnimatedSectionList extends AnimatedItem {
         return new Timeline(
                 new KeyFrame(
                         Duration.ZERO,
-                        event -> selectedSection.setSectionVisible(false)
+                        // TODO: Make sure this works properly
+                        event -> selectedSection.setVisible(false)
                 ),
                 new KeyFrame(
                         Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),

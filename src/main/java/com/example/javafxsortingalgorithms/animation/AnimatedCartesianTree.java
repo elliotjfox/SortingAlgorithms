@@ -1,4 +1,4 @@
-package com.example.javafxsortingalgorithms.arraydisplay;
+package com.example.javafxsortingalgorithms.animation;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -22,7 +22,8 @@ public class AnimatedCartesianTree extends AnimatedItem {
     private final List<Line> lines;
 
     public AnimatedCartesianTree(AnimatedArrayDisplay display, List<Integer> list) {
-        super(display);
+        // TODO Fix
+        super(display, null, null);
 
         treeItems = new ArrayList<>();
         found = new ArrayList<>();

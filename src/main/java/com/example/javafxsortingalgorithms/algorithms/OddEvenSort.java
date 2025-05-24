@@ -1,10 +1,8 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrayDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrow;
-import com.example.javafxsortingalgorithms.arraydisplay.AnimatedSection;
+import com.example.javafxsortingalgorithms.animation.*;
+import com.example.javafxsortingalgorithms.arraydisplay.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +13,8 @@ public class OddEvenSort extends SortingAlgorithm {
     private static final double ARROW_HEIGHT = -15;
 
     private List<AnimatedSection> sections;
-    private AnimatedArrow leftArrow;
-    private AnimatedArrow rightArrow;
+    private AnimatedItem leftArrow;
+    private AnimatedItem rightArrow;
 
     private boolean hasMadeSwap;
     private int currentPos;
@@ -63,19 +61,25 @@ public class OddEvenSort extends SortingAlgorithm {
 
     @Override
     public void startAnimated(AnimatedArrayDisplay display) {
-        leftArrow = new AnimatedArrow(display, true);
-        display.addItem(leftArrow, 0, ARROW_HEIGHT);
+        leftArrow = new ItemBuilder(display)
+                .add(PolygonWrapper.triangle(display))
+                .at(0, ARROW_HEIGHT)
+                .build();
+        display.addItem(leftArrow);
 
-        rightArrow = new AnimatedArrow(display, true);
-        display.addItem(rightArrow, 1, ARROW_HEIGHT);
+        rightArrow = new ItemBuilder(display)
+                .add(PolygonWrapper.triangle(display))
+                .at(1, ARROW_HEIGHT)
+                .build();
+        display.addItem(rightArrow);
 
         sections = new ArrayList<>();
         for (int i = 0; i < list.size() / 2; i++) {
-            AnimatedSection section = new AnimatedSection(display, 25.0, true);
+            AnimatedSection section = new ItemBuilder(display)
+                    .at(i * 2 + (currentPos % 2 == 0 ? 0 : 1) + 12.5, SECTION_HEIGHT)
+                    .buildSection(1, true);
             sections.add(section);
             display.addItem(section);
-//            display.addItem(section, display.getX(i * 2 + (currentPos % 2 == 0 ? 0 : 1)) + 12.5, SECTION_HEIGHT);
-            section.setPosition(i * 2 + (currentPos % 2 == 0 ? 0 : 1) + 12.5, SECTION_HEIGHT);
         }
 
         display.setCurrentTask("Checking evens");

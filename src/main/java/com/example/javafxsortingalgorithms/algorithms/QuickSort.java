@@ -3,6 +3,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
+import com.example.javafxsortingalgorithms.animation.*;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 import javafx.scene.paint.Color;
 
@@ -62,11 +63,27 @@ public class QuickSort extends ActionSortingAlgorithm {
 
     @Override
     public void startAnimated(AnimatedArrayDisplay display) {
-        section = new AnimatedSection(display, list.size(), true);
-        display.addItem(section, 0, -SECTION_OFFSET);
-        section.setFill(IN_PROGRESS_COLOUR);
-        actions.add(new LaterAction(() -> section.setFill(FINISHED_COLOUR)));
-        actions.add(new AnimationAction(display.recolourTimeline()));
+        section = new ItemBuilder(display)
+                .at(0, -SECTION_OFFSET)
+                .buildSection(list.size());
+        section.setSectionFill(IN_PROGRESS_COLOUR);
+        display.addItem(section);
+
+        // Reset actions, and add two visual ones after the sorting algorithm
+        actions.clear();
+        switch (partitionType) {
+            case LEFT -> setInitialActions(
+                    new LeftPartition(0, list.size() - 1),
+                    new LaterAction(() -> section.setSectionFill(FINISHED_COLOUR)),
+                    new AnimationAction(display.recolourTimeline())
+            );
+            case RIGHT -> setInitialActions(
+                    new RightPartition(0, list.size() - 1),
+                    new LaterAction(() -> section.setSectionFill(FINISHED_COLOUR)),
+                    new AnimationAction(display.recolourTimeline())
+            );
+            case MIDDLE -> System.out.println("Need to implement still!");
+        }
     }
 
     @Override
@@ -108,19 +125,25 @@ public class QuickSort extends ActionSortingAlgorithm {
 
         @Override
         public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
-            AnimatedArrow kArrow = new AnimatedArrow(display, true);
-            display.addItem(kArrow, end, 0);
+            AnimatedItem kArrow = ItemBuilder.defaultArrow(display, end);
+            display.addItem(kArrow);
 
-            AnimatedArrow iArrow = new AnimatedArrow(display, true);
-            iArrow.setFill(Color.rgb(25, 53, 145));
-            display.addItem(iArrow, end, 0);
+            AnimatedItem iArrow = new ItemBuilder(display)
+                    .add(PolygonWrapper.triangle(display, Color.rgb(25, 53, 145)))
+                    .at(end, 0)
+                    .build();
+            display.addItem(iArrow);
 
-            AnimatedArrow minArrow = new AnimatedArrow(display, true);
-            minArrow.setFill(Color.LIGHTGREEN);
-            display.addItem(minArrow, start, 0);
+            AnimatedItem minArrow = new ItemBuilder(display)
+                    .add(PolygonWrapper.triangle(display, Color.LIGHTGREEN))
+                    .at(start, 0)
+                    .build();
+            display.addItem(minArrow);
 
-            AnimatedSection partitionLimit = new AnimatedSection(display, end - start + 1, false);
-            display.addItem(partitionLimit, start, algorithm.list.get(start) * display.getHeightMultiplier());
+            AnimatedSection partitionLimit = new ItemBuilder(display)
+                    .at(start, algorithm.list.get(start) * display.getHeightMultiplier())
+                    .buildSection(end - start + 1, false);
+            display.addItem(partitionLimit);
 
             display.animate(display.highlightAnimation(i -> i >= start && i <= end));
             display.onPlay(() -> display.setCurrentTask("Partitioning [" + start + ", " + end + "]"));
@@ -161,15 +184,19 @@ public class QuickSort extends ActionSortingAlgorithm {
 
             // Initialize
             if (makingLeft) {
-                leftSection = new AnimatedSection(display, end - start + 1, true);
-                algorithm.addToStart(new LaterAction(() -> display.addItem(leftSection, start, -depth * 15 - SECTION_OFFSET)));
+                leftSection = new ItemBuilder(display)
+                        .at(start, -depth * 15 - SECTION_OFFSET)
+                        .buildSection(end - start + 1);
+                algorithm.addToStart(new AddItem(leftSection));
             } else {
                 leftSection = null;
             }
 
             if (makingRight) {
-                rightSection = new AnimatedSection(display, end - start + 1, true);
-                algorithm.addToStart(new LaterAction(() -> display.addItem(rightSection, start, -depth * 15 - SECTION_OFFSET)));
+                rightSection = new ItemBuilder(display)
+                        .at(start, -depth * 15 - SECTION_OFFSET)
+                        .buildSection(end - start + 1);
+                algorithm.addToStart(new AddItem(rightSection));
             } else {
                 rightSection = null;
             }
@@ -196,17 +223,17 @@ public class QuickSort extends ActionSortingAlgorithm {
 
             if (makingLeft) {
                 algorithm.addToStart(
-                        new LaterAction(() -> leftSection.setFill(IN_PROGRESS_COLOUR)),
+                        new LaterAction(() -> leftSection.setSectionFill(IN_PROGRESS_COLOUR)),
                         new LeftPartition(start, k - 1, depth + 1),
-                        new LaterAction(() -> leftSection.setFill(FINISHED_COLOUR))
+                        new LaterAction(() -> leftSection.setSectionFill(FINISHED_COLOUR))
                 );
             }
 
             if (makingRight) {
                 algorithm.addToStart(
-                        new LaterAction(() -> rightSection.setFill(IN_PROGRESS_COLOUR)),
+                        new LaterAction(() -> rightSection.setSectionFill(IN_PROGRESS_COLOUR)),
                         new LeftPartition(k + 1, end, depth + 1),
-                        new LaterAction(() -> rightSection.setFill(FINISHED_COLOUR))
+                        new LaterAction(() -> rightSection.setSectionFill(FINISHED_COLOUR))
                 );
             }
         }

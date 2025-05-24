@@ -1,5 +1,6 @@
-package com.example.javafxsortingalgorithms.arraydisplay;
+package com.example.javafxsortingalgorithms.animation;
 
+import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 import com.example.javafxsortingalgorithms.settings.SettingsPane;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -87,6 +88,9 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
     public void addItem(AnimatedItem item) {
         centerPane.getChildren().add(item);
         items.add(item);
+        if (item.hasPosition()) {
+            item.goToPosition();
+        }
     }
 
     public void addItem(AnimatedItem item, double x, double y) {

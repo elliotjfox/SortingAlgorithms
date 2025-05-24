@@ -1,4 +1,4 @@
-package com.example.javafxsortingalgorithms.arraydisplay;
+package com.example.javafxsortingalgorithms.animation;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -20,7 +20,8 @@ public class AnimatedSortingNetwork extends AnimatedItem {
     private final List<Line> lines;
 
     public AnimatedSortingNetwork(AnimatedArrayDisplay display, List<Integer> list) {
-        super(display);
+        // TODO Fix
+        super(display, null, null);
         this.list = list;
         allComparisons = new ArrayList<>();
         visuals = new ArrayList<>();

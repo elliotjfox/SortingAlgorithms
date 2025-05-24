@@ -2,9 +2,10 @@ package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.*;
-import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrayDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.AnimatedArrow;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
+import com.example.javafxsortingalgorithms.animation.AnimatedItem;
+import com.example.javafxsortingalgorithms.animation.ItemBuilder;
+import com.example.javafxsortingalgorithms.arraydisplay.*;
 
 import java.util.List;
 
@@ -12,8 +13,8 @@ public class PancakeSort extends ActionSortingAlgorithm {
 
     private int count;
     private final boolean instantFlips;
-    private AnimatedArrow arrow;
-    private AnimatedArrow smallestArrow;
+    private AnimatedItem arrow;
+    private AnimatedItem smallestArrow;
 
     public PancakeSort(List<Integer> arrayList, boolean isInstant, boolean instantFlips) {
         super(arrayList, isInstant);
@@ -54,10 +55,11 @@ public class PancakeSort extends ActionSortingAlgorithm {
 
     @Override
     public void startAnimated(AnimatedArrayDisplay display) {
-        arrow = new AnimatedArrow(display);
-        display.addItem(arrow, 0, 0);
-        smallestArrow = new AnimatedArrow(display);
-        display.addItem(smallestArrow, 0, 0);
+        arrow = ItemBuilder.defaultArrow(display, 0);
+        display.addItem(arrow);
+
+        smallestArrow = ItemBuilder.defaultArrow(display, 0);
+        display.addItem(smallestArrow);
     }
 
     @Override

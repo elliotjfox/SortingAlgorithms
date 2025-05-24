@@ -313,7 +313,6 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
 
     public void reading(int... indices) {
         for (int index : indices) {
-            if (index < 0 || index >= list.size()) continue;
             animate(createReadAnimation(index, list.get(index)));
         }
     }
@@ -354,22 +353,23 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
      * @return The timeline animation
      */
     public Timeline createReadAnimation(int index, double height) {
-        Polygon arrow = PolygonWrapper.readArrow();
-        arrow.setLayoutX(getX(settingsPane, index));
-        arrow.setLayoutY(maxValue * getHeightMultiplier());
+        AnimatedItem arrow = new ItemBuilder(this)
+                .at(index, 0)
+                .add(PolygonWrapper.readArrow())
+                .build();
+
         return new Timeline(
                 new KeyFrame(
                         Duration.ZERO,
-                        event -> centerPane.getChildren().add(arrow)
+                        event -> addItem(arrow)
                 ),
                 new KeyFrame(
-                        // TODO: Fine tune this, because the tallest one will instantly disappear when it reaches the top
-                        Duration.millis(height / maxValue * ANIMATION_LENGTH),
+                        Duration.millis(height / maxValue * ANIMATION_LENGTH * 0.8),
                         new KeyValue(arrow.layoutYProperty(), getHeightMultiplier() * (maxValue - height))
                 ),
                 new KeyFrame(
-                        Duration.millis(ANIMATION_LENGTH + 1),
-                        event -> centerPane.getChildren().remove(arrow)
+                        Duration.millis(ANIMATION_LENGTH),
+                        event -> removeItem(arrow)
                 )
         );
     }

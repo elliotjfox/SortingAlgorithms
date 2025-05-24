@@ -30,6 +30,7 @@ public class AnimatedItem extends Group {
     public AnimatedItem(AnimatedArrayDisplay display, ItemPosition position, List<Node> nodes) {
         this.display = display;
         this.position = position;
+        goToPosition();
         if (nodes != null) {
             getChildren().addAll(nodes);
         }

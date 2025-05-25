@@ -5,6 +5,8 @@ import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 import com.example.javafxsortingalgorithms.settings.Settings;
 import com.example.javafxsortingalgorithms.settings.SettingsPane;
+import com.example.javafxsortingalgorithms.simple.SimpleAlgorithm;
+import com.example.javafxsortingalgorithms.simple.SimpleBubbleSort;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -32,27 +34,30 @@ public class AlgorithmContainer {
     }
 
     private List<Integer> list;
-    private SortingAlgorithm algorithm;
     private SettingsPane settingsPane;
-    private ArrayDisplay display;
-    private final Timeline normarlTimeline;
-    private final Timeline animatedTimeline;
+
+    private SimpleAlgorithm simpleAlgorithm;
+    private SimpleDisplay simpleDisplay;
+
     private final Menu algorithmMenu;
     private final MenuBar menuBar;
     private final Button settingsButton;
+
+    private final Timeline normalTimeline;
+    private final Timeline animatedTimeline;
     private Timeline currentTimeline;
 
     private AlgorithmMode mode;
     private AnimatedMode animatedMode;
 
     public AlgorithmContainer() {
-        normarlTimeline = new Timeline(
+        normalTimeline = new Timeline(
                 new KeyFrame(
                         Duration.millis(1),
                         event -> iterateNormal(settingsPane.getAlgorithmSettings().getSpeed())
                 )
         );
-        normarlTimeline.setCycleCount(Animation.INDEFINITE);
+        normalTimeline.setCycleCount(Animation.INDEFINITE);
 
         animatedTimeline = new Timeline(
                 new KeyFrame(
@@ -65,8 +70,8 @@ public class AlgorithmContainer {
 
         settingsPane = new SettingsPane();
         createArray(settingsPane.getDisplaySettings().getNumberElements());
-        // Change this type
-        display = new ArrayColourfulDisplay(list, settingsPane);
+
+        simpleDisplay = new SimpleDisplay(settingsPane, list);
 
         algorithmMenu = createAlgorithmSelector();
         menuBar = new MenuBar(algorithmMenu);
@@ -78,14 +83,18 @@ public class AlgorithmContainer {
 
         mode = AlgorithmMode.NORMAL;
         animatedMode = AnimatedMode.ITERATE;
-        currentTimeline = normarlTimeline;
+        currentTimeline = normalTimeline;
     }
 
     public void createAlgorithm() {
-        algorithm = settingsPane.getAlgorithmSettings().createAlgorithm(list);
+//        algorithm = settingsPane.getAlgorithmSettings().createAlgorithm(list);
+        // TODO: Select correct algorithm here
+        simpleAlgorithm = new SimpleBubbleSort(list);
+        simpleAlgorithm.link(simpleDisplay);
+
         if (mode == AlgorithmMode.ANIMATED) {
-            if (display instanceof AnimatedArrayDisplay) {
-                algorithm.startAnimated((AnimatedArrayDisplay) display);
+            if (simpleDisplay instanceof AnimatedArrayDisplay) {
+                simpleAlgorithm.startAnimations((AnimatedArrayDisplay) simpleDisplay);
             } else {
                 System.out.println("Display is not a animated display when it should be!");
             }
@@ -98,7 +107,8 @@ public class AlgorithmContainer {
 //        list = Settings.getRandom(size);
 //        list = Settings.getApproxList(size, x -> x, size / 10);
 //        list = Settings.getApproxList(size, x -> -Math.abs(size / 2 - x) + size, size / 10);
-        if (display != null) display.setList(list);
+//        if (display != null) display.setList(list);
+        if (simpleDisplay != null) simpleDisplay.setList(list);
     }
 
     public void play() {
@@ -131,7 +141,8 @@ public class AlgorithmContainer {
     public void reset(List<Integer> list) {
         stop();
         this.list = new ArrayList<>(list);
-        if (display != null) display.setList(this.list);
+//        if (display != null) display.setList(this.list);
+        if (simpleDisplay != null) simpleDisplay.setList(this.list);
         resetAlgorithm();
     }
 
@@ -141,40 +152,44 @@ public class AlgorithmContainer {
 
     public void finish() {
         stop();
-        display.playFinish();
+//        display.playFinish();
         resetAlgorithm();
     }
 
     public void resetAlgorithm() {
         settingsPane.getAlgorithmSettings().resetAlgorithm();
-        algorithm = null;
+        simpleAlgorithm = null;
     }
 
     public void startTest(TestDisplay testDisplay) {
         Settings.getTestList(settingsPane.getTestSettings().getNumberElements(), testList -> {
             list = testList;
-            algorithm = settingsPane.getAlgorithmSettings().createInstantAlgorithm(list);
-            algorithm.solveInstant(testDisplay);
+
+            // TODO Fix
+//            algorithm = settingsPane.getAlgorithmSettings().createInstantAlgorithm(list);
+//            algorithm.solveInstant(testDisplay);
         });
     }
 
     public void iterateNormal(int num) {
-        for (int i = 0; i < num; i++) {
-            if (algorithm.isDone()) break;
-            algorithm.iterate(display);
-        }
-        if (algorithm.isDone()) {
+        if (simpleDisplay.hasFramesLeft()) {
+            simpleDisplay.showNextFrame();
+        } else if (simpleAlgorithm.isDone()) {
             if (!SortingAlgorithm.isListSorted(list)) {
                 System.out.println("!!! --- Algorithm is done, but list is not sorted --- !!!");
             } else {
                 finish();
             }
+        } else {
+            for (int i = 0; i < num; i++) {
+                if (simpleAlgorithm.isDone()) break;
+                simpleAlgorithm.iterate();
+            }
         }
-        display.update();
     }
 
     public void iterateAnimated() {
-        if (!(display instanceof AnimatedArrayDisplay animatedDisplay)) {
+        if (!(simpleDisplay instanceof AnimatedArrayDisplay animatedDisplay)) {
             System.out.println("Display is not a animated display!!");
             return;
         }
@@ -197,9 +212,18 @@ public class AlgorithmContainer {
 
             // If there are any animations to do, make sure we do them before iterating next
             if (animatedDisplay.hasAnimationsLeft()) {
-                animatedMode = AnimatedMode.ANIMATIONS;
-                animatedDisplay.startAnimations();
+
+            // Only check if we would be iterating
+            if (simpleAlgorithm.isDone()) {
+                finish();
+                return;
             }
+            animatedDisplay.newGroup();
+//             simpleAlgorithm.iterateAnimated();
+//             if (animatedDisplay.hasAnimations() || animatedDisplay.needsToMoveElements()) {
+//                 animatedMode = AnimatedMode.ANIMATIONS;
+//                 animatedDisplay.startAnimations();
+//             }
         }
 
         // If we have animations, do the next group
@@ -217,15 +241,18 @@ public class AlgorithmContainer {
         // TODO: Replace with selecting the correct one
         stop();
         mode = AlgorithmMode.NORMAL;
-        currentTimeline = normarlTimeline;
-        display = new ArrayColourfulDisplay(list, settingsPane);
+        currentTimeline = normalTimeline;
+//        display = new ArrayColourfulDisplay(list, settingsPane);
+
+        simpleDisplay = new SimpleDisplay(settingsPane);
+        simpleDisplay.setList(list);
     }
 
     public void enterAnimatedMode() {
         stop();
         mode = AlgorithmMode.ANIMATED;
         currentTimeline = animatedTimeline;
-        display = new AnimatedArrayDisplay(settingsPane);
+        simpleDisplay = new AnimatedArrayDisplay(settingsPane);
         reset();
     }
 
@@ -235,7 +262,7 @@ public class AlgorithmContainer {
     }
 
     public boolean hasCreatedAlgorithm() {
-        return algorithm != null;
+        return simpleAlgorithm != null;
     }
 
     public Node getSelector() {
@@ -248,7 +275,8 @@ public class AlgorithmContainer {
     }
 
     public Node getDisplay() {
-        return display;
+        return simpleDisplay;
+//        return display;
     }
 
     public List<Integer> getList() {

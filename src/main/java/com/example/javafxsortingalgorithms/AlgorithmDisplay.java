@@ -4,6 +4,9 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.layout.*;
 
+/**
+ * This is the object that contains every thing displayed on screen: the buttons and the elements being sorted by the algorithm.
+ */
 public class AlgorithmDisplay extends VBox {
 
     public enum Mode {

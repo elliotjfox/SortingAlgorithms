@@ -13,6 +13,7 @@ public class Main extends Application {
     public void start(Stage stage) {
         Main.stage = stage;
         AlgorithmDisplay algorithmDisplay = new AlgorithmDisplay();
+//        SimpleAlgorithmDisplay algorithmDisplay = new SimpleAlgorithmDisplay();
         Scene scene = new Scene(algorithmDisplay, 1050, 650);
 //        stage.setOnCloseRequest(windowEvent -> algorithmDisplay.close());
 

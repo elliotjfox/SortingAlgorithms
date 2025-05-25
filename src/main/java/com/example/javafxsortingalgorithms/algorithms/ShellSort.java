@@ -130,13 +130,22 @@ public class ShellSort extends ActionSortingAlgorithm {
             }
             for (int i = 0; i < gap; i++) {
                 int finalI = i;
-                shellSort.addToStart(
-                        new AnimationAction(display.highlightAnimation(pos -> (pos - finalI) % gap == 0)),
-                        new LaterAction(() -> {
-                            display.updateInfoOnPlay("Current task", finalI == 0 ? "Shrinking gap size" : "Increasing offset");
-                            display.updateInfoOnPlay("Gap Size", gap);
-                        })
-                );
+
+                // TODO: Fix this animation
+                display.highlight(pos -> (pos - finalI) % gap == 0);
+                if (i == 0) {
+                    display.onPlay(() -> {
+                        display.setCurrentTask("Shrinking gap size");
+                        display.updateInfo("Gap Size", gap);
+                    });
+                } else {
+                    display.onPlay(() -> {
+                        display.setCurrentTask("Increasing offset");
+                        display.updateInfo("Gap Size", gap);
+                    });
+                }
+                display.newGroup();
+
                 for (int j = i; j < shellSort.list.size(); j += gap) {
                     int finalJ = j;
                     shellSort.addToStart(
@@ -188,7 +197,7 @@ public class ShellSort extends ActionSortingAlgorithm {
             algorithm.addToStart(
                     new AnimationAction(
                             ((ShellSort) algorithm).arrow.moveToIndexTimeline(from, 0),
-                            display.highlightAnimation(i -> Math.abs(i - from) % gapSize == 0)
+                            display.highlightTimeline(i -> Math.abs(i - from) % gapSize == 0)
                     ),
                     new Wait(),
                     new LaterAction(() -> display.reading(from - gapSize, from))

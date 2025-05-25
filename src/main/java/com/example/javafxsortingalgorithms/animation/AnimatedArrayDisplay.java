@@ -8,7 +8,6 @@ import javafx.animation.Timeline;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Polygon;
 import javafx.util.Duration;
 
 import java.util.*;
@@ -21,25 +20,28 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
 
     private final List<AnimatedItem> items;
     private final ArrayList<AnimatedElement> elements;
-    private boolean needsToMoveElements;
+
+    // Animation controllers
     private final List<AnimationGroup> animationGroups;
-    private final AnimationGroup elementAnimationGroup;
+    private AnimationGroup finalAnimationGroup;
+    private boolean playingAnimations;
+    private boolean elementsMoved;
 
     private final BorderPane borderPane;
     private final Pane centerPane;
     private final AnimatedInfo animatedInfo;
-
-    private AnimationGroup currentAnimationGroup;
-
 
     public AnimatedArrayDisplay(SettingsPane settingsPane) {
         super(settingsPane);
 
         items = new ArrayList<>();
         elements = new ArrayList<>();
-        needsToMoveElements = false;
+
         animationGroups = new ArrayList<>();
-        elementAnimationGroup = new AnimationGroup();
+        finalAnimationGroup = new AnimationGroup();
+        playingAnimations = false;
+        elementsMoved = false;
+
 //        currentTask = new Label();
         animatedInfo = new AnimatedInfo();
         animatedInfo.updateInfo("Current task", "");
@@ -105,13 +107,13 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
         item.setIndex(index, y);
     }
 
+    public void removeItem(AnimatedItem item) {
+        centerPane.getChildren().remove(item);
+    }
+
     public void cleanUpItems() {
         centerPane.getChildren().removeAll(items);
         items.clear();
-    }
-
-    public void removeItem(AnimatedItem item) {
-        centerPane.getChildren().remove(item);
     }
 
     @Override
@@ -121,44 +123,179 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
 
     @Override
     public void update() {
+        // TODO: Is this ever running? It shouldn't be
         System.out.println("Detailed is drawing...");
-        for (int i = 0; i < elements.size(); i++) {
-            elements.get(i).moveToIndex(i);
-        }
-        needsToMoveElements = false;
+//        for (int i = 0; i < elements.size(); i++) {
+//            elements.get(i).moveToIndex(i);
+//        }
     }
 
-    public void playAnimations() {
-        if (animationGroups.isEmpty()) {
-            return;
-        }
-        animationGroups.removeFirst().play();
+    public void resetAnimations() {
+        animationGroups.clear();
+        newGroup();
+        finalAnimationGroup = new AnimationGroup();
+        playingAnimations = false;
+        elementsMoved = false;
     }
 
-    public void playFinalAnimations() {
-        elementAnimationGroup.play();
-        for (int i = 0; i < elements.size(); i++) {
-            elements.get(i).moveToIndex(i);
+    public void startAnimations() {
+        playingAnimations = true;
+    }
+
+    public void addElementAnimations() {
+        if (elementsMoved) {
+            for (int i = 0; i < elements.size(); i++) {
+                animateFinal(elements.get(i).moveToIndexTimeline(i, 0));
+            }
         }
-        elementAnimationGroup.clear();
-        needsToMoveElements = false;
     }
 
     public void swap(int firstIndex, int secondIndex) {
         AnimatedElement tmp = elements.get(firstIndex);
         elements.set(firstIndex, elements.get(secondIndex));
         elements.set(secondIndex, tmp);
-        needsToMoveElements = true;
+        elementsMoved = true;
     }
 
     public void move(int index, int targetIndex) {
         if (index < 0 || index >= elements.size() || targetIndex < 0 || targetIndex >= elements.size() || index == targetIndex) return;
         elements.add(targetIndex, elements.remove(index));
-        needsToMoveElements = true;
+        elementsMoved = true;
     }
 
+    public void newGroup() {
+        animationGroups.add(new AnimationGroup());
+    }
 
-    public Timeline highlightAnimation(Function<Integer, Boolean> condition) {
+    private void addGroups(int upTo) {
+        while (upTo >= animationGroups.size()) {
+            newGroup();
+        }
+    }
+
+    /**
+     * Add the provided timelines to the current animation group.
+     * @param timelines The timelines to add
+     */
+    public void animate(Timeline... timelines) {
+        animate(animationGroups.size() - 1, timelines);
+    }
+
+    public void animate(int animationGroup, Timeline... timelines) {
+        if (playingAnimations) {
+            throw new IllegalStateException("Trying to add animations while playing animations!");
+        }
+
+        addGroups(animationGroup);
+
+        animationGroups.get(animationGroup).addTimelines(timelines);
+    }
+
+    public void onPlay(Runnable... onPlayActions) {
+        onPlay(animationGroups.size() - 1, onPlayActions);
+    }
+
+    public void onPlay(int animationGroup, Runnable... onPlayActions) {
+        if (playingAnimations) {
+            throw new IllegalStateException("Trying to add on play actions while playing animations!");
+        }
+
+        addGroups(animationGroup);
+
+        animationGroups.get(animationGroup).addOnPlay(onPlayActions);
+    }
+
+    public void whenDone(Runnable... whenDoneActions) {
+        whenDone(animationGroups.size() - 1, whenDoneActions);
+    }
+
+    public void whenDone(int animationGroup, Runnable... whenDoneActions) {
+        if (playingAnimations) {
+            throw new IllegalStateException("Trying to add when done actions while playing animations!");
+        }
+
+        addGroups(animationGroup);
+
+        animationGroups.get(animationGroup).addWhenDone(whenDoneActions);
+    }
+
+    public void animateFinal(Timeline... timelines) {
+        if (playingAnimations) {
+            throw new IllegalStateException("Trying to add animations while playing animations!");
+        }
+
+        finalAnimationGroup.addTimelines(timelines);
+    }
+
+    public void onPlayFinal(Runnable... onPlayActions) {
+        if (playingAnimations) {
+            throw new IllegalStateException("Trying to add on play actions while playing animations!");
+        }
+
+        finalAnimationGroup.addOnPlay(onPlayActions);
+    }
+
+    public void whenDoneFinal(Runnable... whenDoneActions) {
+        if (playingAnimations) {
+            throw new IllegalStateException("Trying to add when done actions while playing animations!");
+        }
+
+        finalAnimationGroup.addWhenDone(whenDoneActions);
+    }
+
+    public void setCurrentTask(String task) {
+        animatedInfo.updateInfo("Current task", task);
+    }
+
+    public void updateInfoWhenDone(String key, Object value) {
+        whenDone(() -> animatedInfo.updateInfo(key, value));
+    }
+
+    public void updateInfoOnPlay(String key, Object value) {
+        onPlay(() -> animatedInfo.updateInfo(key, value));
+    }
+
+    public void updateInfo(String key, Object value) {
+        animatedInfo.updateInfo(key, value);
+    }
+
+    public AnimationGroup getNextAnimationGroup() {
+        AnimationGroup current;
+
+        do {
+            if (animationGroups.isEmpty()) {
+                if (finalAnimationGroup == null) {
+                    // List is empty, and final animation group is null
+                    return null;
+                } else {
+                    // Set current to the final element group, the while block will check for if it has animations
+                    current = finalAnimationGroup;
+                    finalAnimationGroup = null;
+                }
+            } else {
+                current = animationGroups.removeFirst();
+            }
+        } while (current.isEmpty());
+
+        return current;
+    }
+
+    public boolean hasAnimationsLeft() {
+        for (AnimationGroup animationGroup : animationGroups) {
+            if (!animationGroup.isEmpty()) {
+                return true;
+            }
+        }
+
+        if (finalAnimationGroup == null) return false;
+        else return !finalAnimationGroup.isEmpty();
+    }
+
+    public void highlight(Function<Integer, Boolean> condition) {
+        animate(highlightTimeline(condition));
+    }
+
+    public Timeline highlightTimeline(Function<Integer, Boolean> condition) {
         List<KeyValue> keyValues = new ArrayList<>();
         for (int i = 0; i < elements.size(); i++) {
             if (condition.apply(i)) {
@@ -179,7 +316,7 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
     }
 
     public Timeline recolourTimeline() {
-        return highlightAnimation(i -> true);
+        return highlightTimeline(i -> true);
     }
 
     /**
@@ -187,13 +324,12 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
      * @param index The index that is read
      */
     public void reading(int index) {
-        currentAnimationGroup.addTimelines(createReadAnimation(index, list.get(index)));
+        animate(createReadAnimation(index, list.get(index)));
     }
 
     public void reading(int... indices) {
         for (int index : indices) {
-            if (index < 0 || index >= list.size()) continue;
-            currentAnimationGroup.addTimelines(createReadAnimation(index, list.get(index)));
+            animate(createReadAnimation(index, list.get(index)));
         }
     }
 
@@ -207,51 +343,6 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
         reading(secondIndex);
     }
 
-    /**
-     * Add the provided timelines to the current animation group. Will check the length of each timeline, and print if
-     * it's too long, but still add it.
-     * @param timelines The timelines to add
-     */
-    public void animate(Timeline... timelines) {
-        for (Timeline timeline : timelines) {
-            // Accounting for the read animations being 1 more
-            double timelineLength = timeline.getKeyFrames().getLast().getTime().toMillis();
-            if (timelineLength - 1 > ANIMATION_LENGTH) {
-                System.out.println("Timeline is longer than animation length! (" + timelineLength + " > " + ANIMATION_LENGTH + ")");
-            }
-        }
-        currentAnimationGroup.addTimelines(timelines);
-    }
-
-    public void setCurrentTask(String task) {
-        animatedInfo.updateInfo("Current task", task);
-    }
-
-    public void updateInfoWhenDone(String key, Object value) {
-        whenDone(() -> animatedInfo.updateInfo(key, value));
-    }
-
-    public void updateInfoOnPlay(String key, Object value) {
-        onPlay(() -> animatedInfo.updateInfo(key, value));
-    }
-
-    public void updateInfo(String key, Object value) {
-        animatedInfo.updateInfo(key, value);
-    }
-
-    public void onPlay(Runnable runnable) {
-        currentAnimationGroup.addOnPlay(runnable);
-    }
-
-    public void whenDone(Runnable runnable) {
-        currentAnimationGroup.addWhenDone(runnable);
-    }
-
-    public void newGroup() {
-        currentAnimationGroup = new AnimationGroup();
-        animationGroups.add(currentAnimationGroup);
-    }
-
 
     /**
      * Creates and returns a read animation. The animation consists of a small arrow appearing and going up the top of the element
@@ -263,36 +354,25 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
      * @return The timeline animation
      */
     public Timeline createReadAnimation(int index, double height) {
-        Polygon arrow = createReadArrow();
-        arrow.setLayoutX(getX(settingsPane, index));
-        arrow.setLayoutY(maxValue * getHeightMultiplier());
+        AnimatedItem arrow = new ItemBuilder(this)
+                .at(index, 0)
+                .add(PolygonWrapper.readArrow())
+                .build();
+
         return new Timeline(
                 new KeyFrame(
                         Duration.ZERO,
-                        event -> centerPane.getChildren().add(arrow)
+                        event -> addItem(arrow)
                 ),
                 new KeyFrame(
-                        // TODO: Fine tune this, because the tallest one will instantly disappear when it reaches the top
-                        Duration.millis(height / maxValue * ANIMATION_LENGTH),
+                        Duration.millis(height / maxValue * ANIMATION_LENGTH * 0.8),
                         new KeyValue(arrow.layoutYProperty(), getHeightMultiplier() * (maxValue - height))
                 ),
                 new KeyFrame(
-                        Duration.millis(ANIMATION_LENGTH + 1),
-                        event -> centerPane.getChildren().remove(arrow)
+                        Duration.millis(ANIMATION_LENGTH),
+                        event -> removeItem(arrow)
                 )
         );
-    }
-
-    public boolean hasAnimations() {
-        return !animationGroups.isEmpty();
-    }
-
-    public boolean needsToMoveElements() {
-        return needsToMoveElements || elementAnimationGroup.hasAnimations();
-    }
-
-    public AnimationGroup getElementAnimationGroup() {
-        return elementAnimationGroup;
     }
 
     public AnimatedInfo getDetailedInfo() {
@@ -305,15 +385,5 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
 
     public static double getX(SettingsPane settingsPane, int index) {
         return settingsPane.getDisplaySettings().getElementWidth() * index;
-    }
-
-    public static Polygon createReadArrow() {
-        double length = 15;
-        return new Polygon(
-                0.0, 0.0,
-                -length, length / 2,
-                -length + length / 4, 0.0,
-                -length, -length / 2
-        );
     }
 }

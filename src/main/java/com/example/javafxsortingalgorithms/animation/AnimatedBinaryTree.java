@@ -146,7 +146,7 @@ public class AnimatedBinaryTree extends AnimatedItem {
      * @return The timeline
      */
     public Timeline readTimeline(int index) {
-        Polygon arrow = AnimatedArrayDisplay.createReadArrow();
+        Polygon arrow = PolygonWrapper.readArrow();
         arrow.setLayoutX(treeItems.get(index).getLayoutX());
         arrow.setLayoutY(treeItems.get(index).getLayoutY() + 25);
         Timeline timeline = new Timeline(

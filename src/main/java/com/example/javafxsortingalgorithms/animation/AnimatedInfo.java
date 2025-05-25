@@ -4,6 +4,7 @@ import javafx.scene.control.Label;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class AnimatedInfo extends Label {
 
@@ -28,6 +29,18 @@ public class AnimatedInfo extends Label {
         }
         info.put(key, value);
         updateText();
+    }
+
+    public void updateInfos(String... values) {
+        for (int i = 0; i + 1 < values.length; i += 2) {
+            updateInfo(values[i], values[i + 1]);
+        }
+    }
+
+    public void updateInfos(Objects... values) {
+        for (int i = 0; i + 1 < values.length; i += 2) {
+            updateInfo(values[i].toString(), values[i + 1].toString());
+        }
     }
 
     public void finish() {

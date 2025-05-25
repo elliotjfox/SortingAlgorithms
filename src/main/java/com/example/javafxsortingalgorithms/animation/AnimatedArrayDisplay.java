@@ -1,6 +1,7 @@
 package com.example.javafxsortingalgorithms.animation;
 
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
+import com.example.javafxsortingalgorithms.arraydisplay.SimpleDisplay;
 import com.example.javafxsortingalgorithms.settings.SettingsPane;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -14,7 +15,7 @@ import javafx.util.Duration;
 import java.util.*;
 import java.util.function.Function;
 
-public class AnimatedArrayDisplay extends ArrayDisplay {
+public class AnimatedArrayDisplay extends SimpleDisplay {
 
     public static final double ANIMATION_LENGTH = 400;
     public static final double ANIMATION_COOLDOWN = 75;
@@ -65,7 +66,7 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
         this.list = list;
         cleanUpItems();
         resetMax();
-        bindHeight();
+//        bindHeight();
         if (!elements.isEmpty()) {
             centerPane.getChildren().removeAll(elements);
             elements.clear();
@@ -79,7 +80,6 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
         centerPane.setPrefWidth(list.size() * getElementWidth());
     }
 
-    @Override
     public void playFinish() {
         animatedInfo.finish();
         cleanUpItems();
@@ -114,12 +114,10 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
         centerPane.getChildren().remove(item);
     }
 
-    @Override
     public void initializeElements(int count) {
         System.out.println("asked to create elements " + count);
     }
 
-    @Override
     public void update() {
         System.out.println("Detailed is drawing...");
         for (int i = 0; i < elements.size(); i++) {
@@ -264,7 +262,7 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
      */
     public Timeline createReadAnimation(int index, double height) {
         Polygon arrow = createReadArrow();
-        arrow.setLayoutX(getX(settingsPane, index));
+        arrow.setLayoutX(getX(settings, index));
         arrow.setLayoutY(maxValue * getHeightMultiplier());
         return new Timeline(
                 new KeyFrame(
@@ -300,7 +298,7 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
     }
 
     public SettingsPane getSettings() {
-        return settingsPane;
+        return settings;
     }
 
     public static double getX(SettingsPane settingsPane, int index) {

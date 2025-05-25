@@ -276,7 +276,7 @@ public class InsertionSort extends ActionSortingAlgorithm {
             } else {
                 algorithm.addToStart(new RightSearch(to - 1, index));
             }
-            display.readIndex(to);
+            display.reading(to);
         }
     }
 
@@ -358,7 +358,7 @@ public class InsertionSort extends ActionSortingAlgorithm {
                     // AKA: array.get(index) == array.get(mid)
                     algorithm.addToStart(new Move(index, mid));
                 }
-                display.readIndex(mid);
+                display.reading(mid);
             }
         }
     }

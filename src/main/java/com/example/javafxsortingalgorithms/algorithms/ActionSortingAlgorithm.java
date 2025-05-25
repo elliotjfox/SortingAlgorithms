@@ -100,7 +100,7 @@ public abstract class ActionSortingAlgorithm extends SortingAlgorithm {
         public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
             // TODO: Eventually make this method abstract
             System.out.println("TODO: Should this action (" + getClass().getSimpleName() + ") have a detailed version?");
-            execute(algorithm, display);
+//            execute(algorithm, display);
         }
     }
 

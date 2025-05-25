@@ -197,7 +197,7 @@ public class AlgorithmContainer {
         // If we need to iterate, do the next step
         if (animatedMode == AnimatedMode.ITERATE) {
             // But only if there is still actions left to do
-            if (algorithm.isDone()) {
+            if (simpleAlgorithm.isDone()) {
                 finish();
                 return;
             }
@@ -205,25 +205,15 @@ public class AlgorithmContainer {
             animatedDisplay.resetAnimations();
 
             // Do the iteration, this will add all the animations in groups
-            algorithm.iterateAnimated(animatedDisplay);
+            simpleAlgorithm.iterateAnimated();
 
-            // Once all the swaps and things are done, we can add the element animations
-            animatedDisplay.addElementAnimations();
+            // TODO: Need to be able to force the element animation group to go whenever "doneStep" is called in SimpleAlgorithm
 
             // If there are any animations to do, make sure we do them before iterating next
             if (animatedDisplay.hasAnimationsLeft()) {
-
-            // Only check if we would be iterating
-            if (simpleAlgorithm.isDone()) {
-                finish();
-                return;
+                animatedMode = AnimatedMode.ANIMATIONS;
+                animatedDisplay.startAnimations();
             }
-            animatedDisplay.newGroup();
-//             simpleAlgorithm.iterateAnimated();
-//             if (animatedDisplay.hasAnimations() || animatedDisplay.needsToMoveElements()) {
-//                 animatedMode = AnimatedMode.ANIMATIONS;
-//                 animatedDisplay.startAnimations();
-//             }
         }
 
         // If we have animations, do the next group

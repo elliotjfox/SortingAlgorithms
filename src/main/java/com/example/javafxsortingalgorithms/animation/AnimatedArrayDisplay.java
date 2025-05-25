@@ -116,11 +116,6 @@ public class AnimatedArrayDisplay extends SimpleDisplay {
         items.clear();
     }
 
-    @Override
-    public void removeItem(AnimatedItem item) {
-        centerPane.getChildren().remove(item);
-    }
-
     public void initializeElements(int count) {
         System.out.println("asked to create elements " + count);
     }

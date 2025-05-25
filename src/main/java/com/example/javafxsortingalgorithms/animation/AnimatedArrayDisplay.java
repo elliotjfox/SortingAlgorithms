@@ -8,7 +8,6 @@ import javafx.animation.Timeline;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Polygon;
 import javafx.util.Duration;
 
 import java.util.*;
@@ -21,8 +20,6 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
 
     private final List<AnimatedItem> items;
     private final ArrayList<AnimatedElement> elements;
-
-//    private final AnimationGroupManager animationManager;
 
     // Animation controllers
     private final List<AnimationGroup> animationGroups;
@@ -246,6 +243,22 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
         finalAnimationGroup.addWhenDone(whenDoneActions);
     }
 
+    public void setCurrentTask(String task) {
+        animatedInfo.updateInfo("Current task", task);
+    }
+
+    public void updateInfoWhenDone(String key, Object value) {
+        whenDone(() -> animatedInfo.updateInfo(key, value));
+    }
+
+    public void updateInfoOnPlay(String key, Object value) {
+        onPlay(() -> animatedInfo.updateInfo(key, value));
+    }
+
+    public void updateInfo(String key, Object value) {
+        animatedInfo.updateInfo(key, value);
+    }
+
     public AnimationGroup getNextAnimationGroup() {
         AnimationGroup current;
 
@@ -278,8 +291,11 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
         else return !finalAnimationGroup.isEmpty();
     }
 
+    public void highlight(Function<Integer, Boolean> condition) {
+        animate(highlightTimeline(condition));
+    }
 
-    public Timeline highlightAnimation(Function<Integer, Boolean> condition) {
+    public Timeline highlightTimeline(Function<Integer, Boolean> condition) {
         List<KeyValue> keyValues = new ArrayList<>();
         for (int i = 0; i < elements.size(); i++) {
             if (condition.apply(i)) {
@@ -300,7 +316,7 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
     }
 
     public Timeline recolourTimeline() {
-        return highlightAnimation(i -> true);
+        return highlightTimeline(i -> true);
     }
 
     /**
@@ -327,21 +343,6 @@ public class AnimatedArrayDisplay extends ArrayDisplay {
         reading(secondIndex);
     }
 
-    public void setCurrentTask(String task) {
-        animatedInfo.updateInfo("Current task", task);
-    }
-
-    public void updateInfoWhenDone(String key, Object value) {
-        whenDone(() -> animatedInfo.updateInfo(key, value));
-    }
-
-    public void updateInfoOnPlay(String key, Object value) {
-        onPlay(() -> animatedInfo.updateInfo(key, value));
-    }
-
-    public void updateInfo(String key, Object value) {
-        animatedInfo.updateInfo(key, value);
-    }
 
     /**
      * Creates and returns a read animation. The animation consists of a small arrow appearing and going up the top of the element

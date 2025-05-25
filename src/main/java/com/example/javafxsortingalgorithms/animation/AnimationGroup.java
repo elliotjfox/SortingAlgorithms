@@ -52,10 +52,17 @@ public class AnimationGroup {
     public void clear() {
         timelines.clear();
         onPlayActions.clear();
+        whenDoneActions.clear();
     }
 
     public boolean hasAnimations() {
         return !timelines.isEmpty();
+    }
+
+    public void printDesc() {
+        System.out.println("Timelines (" + timelines.size() + ")" +
+                "\nOn play actions (" + onPlayActions.size() + ")" +
+                "\nwhen done actions (" + whenDoneActions.size() + ")");
     }
 
     public boolean isEmpty() {

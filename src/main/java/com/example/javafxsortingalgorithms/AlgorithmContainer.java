@@ -194,27 +194,45 @@ public class AlgorithmContainer {
             return;
         }
 
-        // So that iterating doesn't take any time
+        // If we need to iterate, do the next step
         if (animatedMode == AnimatedMode.ITERATE) {
+            // But only if there is still actions left to do
+            if (algorithm.isDone()) {
+                finish();
+                return;
+            }
+
+            animatedDisplay.resetAnimations();
+
+            // Do the iteration, this will add all the animations in groups
+            algorithm.iterateAnimated(animatedDisplay);
+
+            // Once all the swaps and things are done, we can add the element animations
+            animatedDisplay.addElementAnimations();
+
+            // If there are any animations to do, make sure we do them before iterating next
+            if (animatedDisplay.hasAnimationsLeft()) {
+
             // Only check if we would be iterating
             if (simpleAlgorithm.isDone()) {
                 finish();
                 return;
             }
             animatedDisplay.newGroup();
-            simpleAlgorithm.iterateAnimated();
-            if (animatedDisplay.hasAnimations() || animatedDisplay.needsToMoveElements()) {
-                animatedMode = AnimatedMode.ANIMATIONS;
-            }
+//             simpleAlgorithm.iterateAnimated();
+//             if (animatedDisplay.hasAnimations() || animatedDisplay.needsToMoveElements()) {
+//                 animatedMode = AnimatedMode.ANIMATIONS;
+//                 animatedDisplay.startAnimations();
+//             }
         }
 
-        if (animatedDisplay.hasAnimations()) {
-            animatedDisplay.playAnimations();
-        } else if (animatedDisplay.needsToMoveElements()) {
-            animatedDisplay.playFinalAnimations();
+        // If we have animations, do the next group
+        if (animatedDisplay.hasAnimationsLeft()) {
+            animatedDisplay.getNextAnimationGroup().play();
         }
 
-        if (!animatedDisplay.hasAnimations() && !animatedDisplay.needsToMoveElements()) {
+        // If no more animations left, switch back to iterating
+        if (!animatedDisplay.hasAnimationsLeft()) {
             animatedMode = AnimatedMode.ITERATE;
         }
     }

@@ -145,7 +145,7 @@ public class QuickSort extends ActionSortingAlgorithm {
                     .buildSection(end - start + 1, false);
             display.addItem(partitionLimit);
 
-            display.animate(display.highlightAnimation(i -> i >= start && i <= end));
+            display.highlight(i -> i >= start && i <= end);
             display.onPlay(() -> display.setCurrentTask("Partitioning [" + start + ", " + end + "]"));
 
             int k = end;

@@ -72,6 +72,26 @@ public class SelectionSort extends SortingAlgorithm {
         }
     }
 
+    @Override
+    protected void runAlgorithm() {
+        switch (mode) {
+            case MIN -> runMin();
+            default -> {}
+        }
+        System.out.println(isListSorted(list));
+    }
+
+    private void runMin() {
+        for (int i = 0; i < list.size(); i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < list.size(); j++) {
+                if (list.get(j) < list.get(minIndex)) minIndex = j;
+                addFrame();
+            }
+            swap(minIndex, i);
+        }
+    }
+
     /**
      * Iterate the selection sort using the min selection type by first checking if we have reached the end of the
      * unsorted elements, which is also just the end of the list.

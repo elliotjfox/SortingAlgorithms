@@ -34,38 +34,19 @@ public class BubbleSort extends SortingAlgorithm {
         hasMadeSwap = false;
     }
 
-    @Override
-    protected void runAlgorithm(ArrayDisplay display) {
-        if (sorted + 1 >= list.size()) {
-            isDone = true;
-            return;
-        }
-
-        // Check if the next position would be outside the array, and reset if we need to. This does use a step.
-        if (lastPos + 1 >= list.size() - sorted) {
-            sorted++;
-            lastPos = 0;
-            if (!hasMadeSwap) {
-                isDone = true;
-                return;
+    protected void runAlgorithm() {
+        boolean hasSwapped;
+        for (int i = 0; i < list.size(); i++) {
+            hasSwapped = false;
+            for (int j = 0; j < list.size() - 1 - i; j++) {
+                if (list.get(j) > list.get(j + 1)) {
+                    swap(j, j + 1);
+                    hasSwapped = true;
+                }
+                addFrame();
             }
-            hasMadeSwap = false;
-            return;
+            if (!hasSwapped) return;
         }
-
-        // Check if we need to swap the elements
-        if (list.get(lastPos) > list.get(lastPos + 1)) {
-            hasMadeSwap = true;
-            swap(lastPos, lastPos + 1);
-            display.writeIndex(lastPos);
-            display.writeIndex(lastPos + 1);
-        } else {
-            display.readIndex(lastPos);
-            display.readIndex(lastPos + 1);
-        }
-
-        // Increase the position
-        lastPos++;
     }
 
     @Override

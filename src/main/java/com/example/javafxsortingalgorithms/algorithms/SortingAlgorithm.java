@@ -4,12 +4,15 @@ import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
 import com.example.javafxsortingalgorithms.TestDisplay;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
+import com.example.javafxsortingalgorithms.arraydisplay.DisplayFrame;
+import com.example.javafxsortingalgorithms.arraydisplay.DisplayMode;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 // TODO: Finish replacing ArrayLists with Lists
@@ -18,6 +21,9 @@ public abstract class SortingAlgorithm {
     protected List<Integer> list;
     protected boolean isDone;
     protected final boolean isInstant;
+    protected DisplayMode mode;
+
+    protected List<DisplayFrame> frames;
 
     public enum ColourAction {
         READ, WRITE
@@ -27,9 +33,28 @@ public abstract class SortingAlgorithm {
         this.list = list;
         this.isInstant = isInstant;
         isDone = false;
+
+        this.frames = new ArrayList<>();
     }
 
-    protected abstract void runAlgorithm(ArrayDisplay display);
+    protected void runAlgorithm(ArrayDisplay display) {}
+
+    public void runAlgorithm(DisplayMode mode) {
+        this.mode = mode;
+        runAlgorithm();
+    }
+
+    protected void runAlgorithm() {
+
+    }
+
+    protected void addFrame() {
+        frames.add(new DisplayFrame(list));
+    }
+
+    public List<DisplayFrame> getFrames() {
+        return frames;
+    }
 
     protected abstract void instantAlgorithm(TestEntry entry);
 

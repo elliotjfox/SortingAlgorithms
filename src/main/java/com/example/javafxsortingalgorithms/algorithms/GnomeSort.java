@@ -48,6 +48,21 @@ public class GnomeSort extends SortingAlgorithm {
     }
 
     @Override
+    protected void runAlgorithm() {
+        int i = 0;
+        while (i + 1 < list.size()) {
+            if (i < 0) i++;
+            else if (list.get(i) <= list.get(i + 1)) {
+                i++;
+            } else {
+                swap(i, i + 1);
+                i--;
+            }
+            addFrame();
+        }
+    }
+
+    @Override
     protected void instantAlgorithm(TestEntry entry) {
         int highest = 0;
         int i = 0;

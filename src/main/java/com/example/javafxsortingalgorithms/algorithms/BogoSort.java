@@ -15,6 +15,17 @@ public class BogoSort extends ActionSortingAlgorithm {
     }
 
     @Override
+    protected void runAlgorithm() {
+        Random r = new Random();
+        while (!isListSorted(list)) {
+            for (int i = list.size(); i > 1; i--) {
+                swap(i - 1, r.nextInt(i));
+                addFrame();
+            }
+        }
+    }
+
+    @Override
     protected void runAlgorithm(ArrayDisplay display) {
         AlgorithmAction currentAction;
         do {
@@ -29,13 +40,13 @@ public class BogoSort extends ActionSortingAlgorithm {
 
     @Override
     protected void instantAlgorithm(TestEntry entry) {
-        Random random = new Random();
-        while (!isListSorted(list)) {
-            for (int i = list.size(); i > 1; i--) {
-                entry.addWrite(2);
-                swap(i - 1, random.nextInt(i));
-            }
-        }
+//        Random random = new Random();
+//        while (!isListSorted(list)) {
+//            for (int i = list.size(); i > 1; i--) {
+//                entry.addWrite(2);
+//                swap(i - 1, random.nextInt(i));
+//            }
+//        }
     }
 
     @Override

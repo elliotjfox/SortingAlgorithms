@@ -1,12 +1,11 @@
 package com.example.javafxsortingalgorithms.arraydisplay;
 
-import com.example.javafxsortingalgorithms.settings.SettingsPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import java.util.List;
+public class BasicArrayDisplay extends SimpleArrayDisplay<Rectangle> {
 
-public class ArrayPlotDisplay extends SimpleArrayDisplay<Rectangle> {
+    private static final double COLOUR_RANGE = 360;
 
     @Override
     protected Rectangle createElement() {
@@ -15,10 +14,11 @@ public class ArrayPlotDisplay extends SimpleArrayDisplay<Rectangle> {
 
     @Override
     protected void formatElement(int index, int value, Rectangle element) {
-        element.setFill(Color.hsb(0, 0, 0));
+        double hue = COLOUR_RANGE * value / currentSettings.maxValue();
         element.setX(index * currentSettings.elementWidth());
         element.setY((currentSettings.maxValue() - value) * currentSettings.heightMultiplier());
+        element.setHeight(value * currentSettings.heightMultiplier());
         element.setWidth(currentSettings.elementWidth());
-        element.setHeight(currentSettings.elementWidth());
+        element.setFill(Color.hsb(hue, 1.0 ,1.0));
     }
 }

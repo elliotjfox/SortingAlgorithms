@@ -15,6 +15,28 @@ public class OddEvenMergeSort extends ActionSortingAlgorithm {
         addComparisons();
     }
 
+    @Override
+    protected void runAlgorithm() {
+        for (int p = 1; p < list.size(); p *= 2) {
+            for (int gapSize = p; gapSize >= 1; gapSize /= 2) {
+                for (int j = gapSize % p; j <= list.size() - 1 - gapSize; j += 2 * gapSize) {
+                    int end = Math.min(gapSize - 1, list.size() - j - gapSize - 1);
+                    for (int i = 0; i <= end; i++) {
+                        int left = i + j;
+                        int right = i + j + gapSize;
+                        if ((int) ((double) left / (p * 2)) == (int) ((double) right / (p * 2))) {
+                            if (list.get(left) > list.get(right)) {
+                                swap(left, right);
+                            }
+                        }
+
+                        addFrame();
+                    }
+                }
+            }
+        }
+    }
+
     private void addComparisons() {
         // Copied from https://en.wikipedia.org/wiki/Batcher_odd%E2%80%93even_mergesort
         for (int p = 1; p < list.size(); p *= 2) {

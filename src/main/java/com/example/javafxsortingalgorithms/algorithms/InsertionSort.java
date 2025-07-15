@@ -44,6 +44,42 @@ public class InsertionSort extends ActionSortingAlgorithm {
     }
 
     @Override
+    protected void runAlgorithm() {
+        switch (searchType) {
+            case RIGHT_LINEAR -> rightSearch();
+            case LEFT_LINEAR -> leftSearch();
+            case BINARY -> binarySearch();
+        }
+    }
+
+    private void rightSearch() {
+        for (int i = 1; i < list.size(); i++) {
+            int j = i - 1;
+            while (j >= 0 && list.get(j) > list.get(i)) {
+                j--;
+                addFrame();
+            }
+            move(i, j + 1);
+            addFrame();
+        }
+    }
+
+    private void leftSearch() {
+        for (int i = 1; i < list.size(); i++) {
+            int j = 0;
+            // TODO: Check this
+            while (j < i && list.get(j) < list.get(i)) {
+                j++;
+            }
+            move(i, j);
+        }
+    }
+
+    private void binarySearch() {
+        System.out.println("TODO");
+    }
+
+    @Override
     protected void instantAlgorithm(TestEntry entry) {
         switch (searchType) {
             case RIGHT_LINEAR -> instantRight(entry);

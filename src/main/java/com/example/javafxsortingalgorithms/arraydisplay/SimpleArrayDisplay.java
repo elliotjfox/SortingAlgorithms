@@ -14,25 +14,27 @@ public abstract class SimpleArrayDisplay<T extends Node> extends ArrayDisplayBas
     }
 
     @Override
-    public void initializeElements(int listSize) {
+    public void initializeElements(List<Integer> list) {
         getChildren().removeAll(elements);
         elements.clear();
-        for (int i = 0; i < listSize; i++) {
+        for (int i = 0; i < list.size(); i++) {
             T element = createElement();
             getChildren().add(element);
             elements.add(element);
         }
+
+        displayList(list);
     }
 
     @Override
-    public void displayFrame(DisplayFrame frame) {
-        if (frame.list().size() != elements.size()) {
-            System.out.println("Size of frame does not equal number of elements");
+    public void displayList(List<Integer> list) {
+        if (list.size() != elements.size()) {
+            System.out.println("List size does not equal number of elements");
             return;
         }
 
-        for (int i = 0; i < frame.list().size(); i++) {
-            formatElement(i, frame.list().get(i), elements.get(i));
+        for (int i = 0; i < list.size(); i++) {
+            formatElement(i, list.get(i), elements.get(i));
         }
     }
 

@@ -3,6 +3,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
 import com.example.javafxsortingalgorithms.animation.AnimatedItem;
 import com.example.javafxsortingalgorithms.animation.ItemBuilder;
+import com.example.javafxsortingalgorithms.animation.Pointer;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 import com.example.javafxsortingalgorithms.TestEntry;
 
@@ -47,6 +48,19 @@ public class BubbleSort extends SortingAlgorithm {
             }
             if (!hasSwapped) return;
         }
+//        Pointer i = createPointer();
+//        Pointer j = createPointer();
+//        for (i.setValue(0); i.getValue() < list.size(); i.increment()) {
+//            hasSwapped = false;
+//            for (j.setValue(0); j.getValue() < list.size() - 1 - i.getValue(); j.increment()) {
+//                if (list.get(j.getValue()) > list.get(j.getValue() + 1)) {
+//                    swap(j.getValue(), j.getValue() + 1);
+//                    hasSwapped = true;
+//                }
+//                addFrame();
+//            }
+//            if (!hasSwapped) return;
+//        }
     }
 
     @Override
@@ -130,7 +144,6 @@ public class BubbleSort extends SortingAlgorithm {
     public String getName() {
         return "Bubble Sort";
     }
-
 
 //    void bubbleSort() {
 //        boolean hasSwapped;

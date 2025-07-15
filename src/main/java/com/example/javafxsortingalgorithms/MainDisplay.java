@@ -1,7 +1,6 @@
 package com.example.javafxsortingalgorithms;
 
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplayBase;
-import com.example.javafxsortingalgorithms.arraydisplay.BasicArrayDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.DisplayMode;
 import com.example.javafxsortingalgorithms.arraydisplay.DisplayType;
 import com.example.javafxsortingalgorithms.settings.AlgorithmType;
@@ -11,6 +10,9 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainDisplay extends VBox {
 
     private AlgorithmController algorithmController;
@@ -18,6 +20,7 @@ public class MainDisplay extends VBox {
     private ArrayDisplayBase arrayDisplay;
     private SettingsPane settingsPane;
     private FlowPane arrayPane;
+
     private DisplayMode currentMode;
     private DisplayType displayType;
     private boolean createdAlgorithm;
@@ -59,7 +62,8 @@ public class MainDisplay extends VBox {
     }
 
     private void createAlgorithm() {
-        algorithmController.setAlgorithm(settingsPane.getAlgorithmSettings().createAlgorithm(algorithmController.getList()));
+        List<Integer> listCopy = new ArrayList<>(algorithmController.getList());
+        algorithmController.setAlgorithm(settingsPane.getAlgorithmSettings().createAlgorithm(listCopy));
         createdAlgorithm = true;
     }
 

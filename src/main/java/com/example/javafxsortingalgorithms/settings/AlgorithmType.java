@@ -24,8 +24,8 @@ public enum AlgorithmType {
     QUICK("Quick Sort", QuickSort.getSettings()),
     RADIX("Radix Sort", RadixLSDSort.getSettings()),
     SELECTION("Selection Sort", SelectionSort.getSettings()),
-    SHELL("Shell Sort", new AlgorithmSettings<>("Sleep Sort", SleepSort::new)),
-    SLEEP("Sleep Sort", ShellSort.getSettings()),
+    SHELL("Shell Sort", ShellSort.getSettings()),
+    SLEEP("Sleep Sort", new AlgorithmSettings<>("Sleep Sort", SleepSort::new)),
     STOOGE("Stooge Sort", new AlgorithmSettings<>("Stooge Sort", StoogeSort::new)),
     STRAND("Strand Sort", new AlgorithmSettings<>("Strand Sort", StrandSort::new)),
     TIM("Tim Sort", TimSort.getSettings());

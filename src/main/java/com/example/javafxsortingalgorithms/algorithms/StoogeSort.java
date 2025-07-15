@@ -16,7 +16,28 @@ public class StoogeSort extends ActionSortingAlgorithm {
     public StoogeSort(List<Integer> arrayList, boolean isInstant) {
         super(arrayList, isInstant);
 
-        setInitialActions(new StoogeSortAction(0, list.size() - 1));
+//        setInitialActions(new StoogeSortAction(0, list.size() - 1));
+    }
+
+    @Override
+    protected void runAlgorithm() {
+        stoogeSort(0, list.size() - 1);
+    }
+
+    private void stoogeSort(int from, int to) {
+        if (from >= to) return;
+
+        if (list.get(from) > list.get(to)) {
+            swap(from, to);
+            addFrame();
+        }
+
+        if (to - from + 1 > 2) {
+            int third = (to - from + 1) / 3;
+            stoogeSort(from, to - third);
+            stoogeSort(from + third, to);
+            stoogeSort(from, to - third);
+        }
     }
 
     @Override

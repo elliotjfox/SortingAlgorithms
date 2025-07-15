@@ -26,6 +26,28 @@ public class OddEvenSort extends SortingAlgorithm {
     }
 
     @Override
+    protected void runAlgorithm() {
+        do {
+            hasMadeSwap = false;
+
+            for (int i = 0; i < list.size() - 1; i += 2) {
+                if (list.get(i) > list.get(i + 1)) {
+                    hasMadeSwap = true;
+                    swap(i, i + 1);
+                }
+                addFrame();
+            }
+            for (int i = 1; i < list.size() - 1; i += 2) {
+                if (list.get(i) > list.get(i + 1)) {
+                    hasMadeSwap = true;
+                    swap(i, i + 1);
+                }
+                addFrame();
+            }
+        } while (hasMadeSwap);
+    }
+
+    @Override
     protected void runAlgorithm(ArrayDisplay display) {
         if (currentPos + 1 >= list.size()) {
             if (isListSorted(list)) {

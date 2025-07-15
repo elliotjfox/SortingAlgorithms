@@ -32,6 +32,21 @@ public class CombSort extends SortingAlgorithm {
     }
 
     @Override
+    protected void runAlgorithm() {
+        gapSize = (int) (list.size() / shrinkFactor);
+        while (!isListSorted(list)) {
+            for (int i = 0; i + gapSize < list.size(); i++) {
+                if (list.get(i) > list.get(i + gapSize)) {
+                    swap(i, i + gapSize);
+                }
+                addFrame();
+            }
+            if (gapSize != 1) gapSize = (int) (gapSize / shrinkFactor);
+        }
+
+    }
+
+    @Override
     protected void runAlgorithm(ArrayDisplay display) {
         // Check if we will compare outside the array, and reset if we need to. This uses a step.
         if (lastPos + gapSize >= list.size()) {

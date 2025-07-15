@@ -25,19 +25,43 @@ public class ShellSort extends ActionSortingAlgorithm {
 
     private AnimatedItem arrow;
 
-    public ShellSort(List<Integer> arrayList, boolean isInstant, double shrinkFactor, ShellSortMode mode) {
-        super(arrayList, isInstant);
+    public ShellSort(List<Integer> list, boolean isInstant, double shrinkFactor, ShellSortMode mode) {
+        super(list, isInstant);
 
         this.shrinkFactor = shrinkFactor;
-        gapSize = arrayList.size();
+        gapSize = list.size();
 
-        if (!isInstant) {
-            switch (mode) {
-                case ONE_BY_ONE -> addOneByOneActions();
-                case OFFSET_FIRST -> addOffsetFirstActions();
-            }
-        }
+//        if (!isInstant) {
+//            switch (mode) {
+//                case ONE_BY_ONE -> addOneByOneActions();
+//                case OFFSET_FIRST -> addOffsetFirstActions();
+//            }
+//        }
     }
+
+    @Override
+    protected void runAlgorithm() {
+        do {
+            shrinkGap();
+            for (int i = gapSize; i < list.size(); i++) {
+                int j = i - gapSize;
+                while (j >= 0 && list.get(j) > list.get(j + gapSize)) {
+                    swap(j, j + gapSize);
+                    addFrame();
+                    j -= gapSize;
+                }
+            }
+        } while (gapSize > 1);
+    }
+
+//    private void searchFrom(int i) {
+//        int j = i - gapSize;
+//        while (j >= 0 && list.get(j) > list.get(j + gapSize)) {
+//            swap(j, j + gapSize);
+//            addFrame();
+//            j -= gapSize;
+//        }
+//    }
 
     private void addOneByOneActions() {
         do {

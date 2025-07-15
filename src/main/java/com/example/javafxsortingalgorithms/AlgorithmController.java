@@ -10,6 +10,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AlgorithmController {
@@ -55,11 +56,11 @@ public class AlgorithmController {
             return;
         }
 
-        algorithm.runAlgorithm(display.getMode());
+        algorithm.startAlgorithm(display.getMode());
         hasRunAlgorithm = true;
         frames = algorithm.getFrames();
         System.out.println("# frames: " + frames.size());
-        currentFrame = 0;
+        currentFrame = -1;
     }
 
     public void play() {
@@ -102,38 +103,29 @@ public class AlgorithmController {
                         display.getSettings().getDisplaySettings().getElementWidth()
                 )
         );
-        arrayDisplay.initializeElements(listSize);
-
-        showFrame(new DisplayFrame(list));
+        arrayDisplay.initializeElements(list);
     }
 
     private void showNextFrame() {
-        currentFrame++;
+        if (currentFrame + 1 < frames.size()) {
+            currentFrame++;
 
-        if (currentFrame >= frames.size()) {
-            currentFrame = frames.size() - 1;
+            // Apply changes
+            for (int i = 0; i < frames.get(currentFrame).list().size(); i++) {
+                frames.get(currentFrame).list().get(i).performChange(list);
+            }
+
+            showFrame();
         }
-
-        if (currentFrame == -1) {
-            System.out.println("No frames");
-            return;
-        }
-
-        showFrame(frames.get(currentFrame));
     }
 
-    private void showFrame(DisplayFrame frame) {
-        if (frame == null) {
-            System.out.println("Frame is null");
-            return;
-        }
-
+    private void showFrame() {
         if (arrayDisplay == null) {
             System.out.println("Display is null");
             return;
         }
 
-        arrayDisplay.displayFrame(frame);
+        arrayDisplay.displayList(list);
     }
 
     public List<Integer> getList() {

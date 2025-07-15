@@ -28,6 +28,36 @@ public class ExchangeSort extends SortingAlgorithm {
     }
 
     @Override
+    protected void runAlgorithm() {
+        switch (direction) {
+            case UP -> runUp();
+            case DOWN -> runDown();
+        }
+    }
+
+    private void runUp() {
+        for (int i = 0; i < list.size(); i++) {
+            for (int j = i + 1; j < list.size(); j++) {
+                if (list.get(j) < list.get(i)) {
+                    swap(i, j);
+                }
+                addFrame();
+            }
+        }
+    }
+
+    private void runDown() {
+        for (int i = 0; i < list.size(); i++) {
+            for (int j = list.size() - 1; j > i; j--) {
+                if (list.get(j) < list.get(i)) {
+                    swap(i, j);
+                }
+                addFrame();
+            }
+        }
+    }
+
+    @Override
     protected void runAlgorithm(ArrayDisplay display) {
         if (curIndex >= list.size() || curIndex <= sorted) {
             sorted++;

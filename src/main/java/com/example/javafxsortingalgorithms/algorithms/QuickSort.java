@@ -37,6 +37,37 @@ public class QuickSort extends ActionSortingAlgorithm {
     }
 
     @Override
+    protected void runAlgorithm() {
+        switch (partitionType) {
+            case LEFT -> leftPartition(0, list.size() - 1);
+            case RIGHT -> rightPartition(0, list.size() - 1);
+        }
+    }
+
+    private void leftPartition(int from, int to) {
+        int k = to;
+        for (int i = to; i > from; i--) {
+            if (list.get(i) > list.get(from)) {
+                swap(i, k);
+                k--;
+            }
+            addFrame();
+        }
+
+        swap(k, from);
+        addFrame();
+
+        if (from < k - 1) leftPartition(from, k - 1);
+        if (k + 1 < to) leftPartition(k + 1, to);
+    }
+
+    // TODO
+    private void rightPartition(int from, int to) {
+
+    }
+
+
+    @Override
     protected void instantAlgorithm(TestEntry entry) {
         leftPartition(0, list.size() - 1, entry);
     }

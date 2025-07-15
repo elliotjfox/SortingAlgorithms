@@ -34,6 +34,40 @@ public class CocktailShakerSort extends SortingAlgorithm {
     }
 
     @Override
+    protected void runAlgorithm() {
+        int start = 0;
+        int end = list.size() - 1;
+        while (true) {
+            boolean swapped = false;
+            for (int i = start; i < end; i++) {
+                if (list.get(i) > list.get(i + 1)) {
+                    swap(i, i + 1);
+                    swapped = true;
+                }
+                addFrame();
+            }
+
+            // If we didn't swap anything, we are done sorting
+            if (!swapped) break;
+
+            end--;
+
+            swapped = false;
+            for (int i = end - 1; i >= start; i--) {
+                if (list.get(i) > list.get(i + 1)) {
+                    swap(i, i + 1);
+                    swapped = true;
+                }
+                addFrame();
+            }
+
+            if (!swapped) break;
+
+            start++;
+        }
+    }
+
+    @Override
     protected void runAlgorithm(ArrayDisplay display) {
         // Check if we are at the edge, and turn around if needed. If we do, it uses a step to take so.
         if (goingUp) {

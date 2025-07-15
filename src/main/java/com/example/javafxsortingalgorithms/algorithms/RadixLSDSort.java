@@ -88,6 +88,28 @@ public class RadixLSDSort extends SortingAlgorithm {
     }
 
     @Override
+    protected void runAlgorithm() {
+        System.out.println("Yep");
+        if (state == SortState.IN_PLACE) {
+            int maxDigit = list.getFirst();
+            for (Integer i : list) if (i > maxDigit) maxDigit = i;
+
+            for (int i = 0; i < base; i++) indices.add(0);
+
+            while (Math.pow(base, digit) < maxDigit) {
+                for (int i = 0; i < list.size(); i++) {
+                    int currentDigit = getDigit(list.get(i), digit);
+                    move(i, indices.get(currentDigit));
+                    incrementFollowing(indices, currentDigit);
+                    addFrame();
+                }
+                digit++;
+                for (int i = 0; i < base; i++) indices.set(i, 0);
+            }
+        }
+    }
+
+    @Override
     protected void runAlgorithm(ArrayDisplay display) {
 
         switch (state) {

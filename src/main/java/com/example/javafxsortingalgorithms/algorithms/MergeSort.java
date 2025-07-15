@@ -25,6 +25,36 @@ public class MergeSort extends ActionSortingAlgorithm {
     }
 
     @Override
+    protected void runAlgorithm() {
+        divide(0, list.size());
+    }
+
+    // [from, to)
+    private void divide(int from, int to) {
+        if (to - from >= 2) {
+            int half = (from + to) / 2;
+            divide(from, half);
+            divide(half, to);
+            // Merge adds frames
+            merge(from, to);
+        }
+    }
+
+    // TODO: Add inPlace options
+    private void merge(int left, int end) {
+        int right = (left + end) / 2;
+        while (right < end && left < right) {
+            if (list.get(left) < list.get(right)) {
+                left++;
+            } else {
+                move(right, left);
+                right++;
+            }
+            addFrame();
+        }
+    }
+
+    @Override
     protected void instantAlgorithm(TestEntry entry) {
         divide(0, list.size(), entry);
     }

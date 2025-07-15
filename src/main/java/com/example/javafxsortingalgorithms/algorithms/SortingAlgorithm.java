@@ -3,9 +3,8 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
 import com.example.javafxsortingalgorithms.TestDisplay;
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.DisplayFrame;
-import com.example.javafxsortingalgorithms.arraydisplay.DisplayMode;
+import com.example.javafxsortingalgorithms.animation.Pointer;
+import com.example.javafxsortingalgorithms.arraydisplay.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -24,6 +23,7 @@ public abstract class SortingAlgorithm {
     protected DisplayMode mode;
 
     protected List<DisplayFrame> frames;
+    protected List<ListChange> currentChanges;
 
     public enum ColourAction {
         READ, WRITE
@@ -35,21 +35,28 @@ public abstract class SortingAlgorithm {
         isDone = false;
 
         this.frames = new ArrayList<>();
+        currentChanges = new ArrayList<>();
     }
 
     protected void runAlgorithm(ArrayDisplay display) {}
 
-    public void runAlgorithm(DisplayMode mode) {
+    public void startAlgorithm(DisplayMode mode) {
         this.mode = mode;
+        System.out.println("Running on " + mode);
         runAlgorithm();
     }
 
     protected void runAlgorithm() {
-
+        System.out.println("TODO: Implement this algorithm!");
     }
 
     protected void addFrame() {
-        frames.add(new DisplayFrame(list));
+        frames.add(new DisplayFrame(currentChanges));
+        currentChanges.clear();
+    }
+
+    protected Pointer createPointer() {
+        return new Pointer(this, mode);
     }
 
     public List<DisplayFrame> getFrames() {
@@ -91,11 +98,6 @@ public abstract class SortingAlgorithm {
         updateTimeline.play();
     }
 
-    // TODO: Probably just delete this
-    public void iterate(ArrayDisplay display) {
-        runAlgorithm(display);
-    }
-
     public boolean isDone() {
         return isDone;
     }
@@ -103,11 +105,13 @@ public abstract class SortingAlgorithm {
     protected void swap(int firstIndex, int secondIndex) {
         if (firstIndex < 0 || firstIndex >= list.size() || secondIndex < 0 || secondIndex >= list.size()) return;
         list.set(firstIndex, list.set(secondIndex, list.get(firstIndex)));
+        currentChanges.add(new SwapChange(firstIndex, secondIndex));
     }
 
     protected void move(int index, int targetIndex) {
         if (index < 0 || index >= list.size() || targetIndex < 0 || targetIndex >= list.size() || index == targetIndex) return;
         list.add(targetIndex, list.remove(index));
+        currentChanges.add(new MoveChange(index, targetIndex));
     }
 
     // [left, mid) and [mid, right)

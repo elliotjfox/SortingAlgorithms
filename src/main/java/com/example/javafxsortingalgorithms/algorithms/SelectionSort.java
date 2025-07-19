@@ -89,6 +89,7 @@ public class SelectionSort extends SortingAlgorithm {
                 addFrame();
             }
             swap(minIndex, i);
+            addFrame();
         }
     }
 

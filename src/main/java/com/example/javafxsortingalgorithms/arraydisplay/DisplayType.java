@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 public enum DisplayType {
     COLOURFUL(BasicArrayDisplay::new),
+    CIRCULAR(CircularDisplay::new),
     HEATMAP(HeatMapDisplay::new);
 
     private final Supplier<? extends ArrayDisplayBase> createDisplay;

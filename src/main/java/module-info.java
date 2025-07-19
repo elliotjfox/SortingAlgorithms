@@ -19,4 +19,6 @@ module com.example.javafxsortingalgorithms {
     opens com.example.javafxsortingalgorithms.arraydisplay to javafx.fxml;
     exports com.example.javafxsortingalgorithms.animation;
     opens com.example.javafxsortingalgorithms.animation to javafx.fxml;
+    exports com.example.javafxsortingalgorithms.algorithmupdates;
+    opens com.example.javafxsortingalgorithms.algorithmupdates to javafx.fxml;
 }

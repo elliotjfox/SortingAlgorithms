@@ -1,20 +1,20 @@
-package com.example.javafxsortingalgorithms.arraydisplay;
+package com.example.javafxsortingalgorithms.algorithmupdates;
 
 import java.util.List;
 
-public class SwapChange implements ListChange {
+public class SwapUpdate implements ListUpdate {
 
     private final int firstIndex;
     private final int secondIndex;
 
-    public SwapChange(int firstIndex, int secondIndex) {
+    public SwapUpdate(int firstIndex, int secondIndex) {
         this.firstIndex = firstIndex;
         this.secondIndex = secondIndex;
     }
 
     @Override
-    public void performChange(List<Integer> list) {
-        list.set(firstIndex, list.set(secondIndex, list.get(firstIndex)));
+    public void performChange(List<?> list) {
+        ListUpdate.swap(list, firstIndex, secondIndex);
     }
 
     @Override

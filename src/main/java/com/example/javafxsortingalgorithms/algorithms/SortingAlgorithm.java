@@ -1,9 +1,12 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
+import com.example.javafxsortingalgorithms.algorithmupdates.AlgorithmUpdate;
+import com.example.javafxsortingalgorithms.algorithmupdates.CreateItemUpdate;
+import com.example.javafxsortingalgorithms.algorithmupdates.MoveUpdate;
+import com.example.javafxsortingalgorithms.algorithmupdates.SwapUpdate;
+import com.example.javafxsortingalgorithms.animation.*;
 import com.example.javafxsortingalgorithms.TestDisplay;
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.animation.Pointer;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -23,7 +26,7 @@ public abstract class SortingAlgorithm {
     protected DisplayMode mode;
 
     protected List<DisplayFrame> frames;
-    protected List<ListChange> currentChanges;
+    protected List<AlgorithmUpdate> currentChanges;
 
     public enum ColourAction {
         READ, WRITE
@@ -55,8 +58,25 @@ public abstract class SortingAlgorithm {
         currentChanges.clear();
     }
 
-    protected Pointer createPointer() {
-        return new Pointer(this, mode);
+    protected void addAnimatedFrame() {
+        if (mode == DisplayMode.ANIMATED) {
+            addFrame();
+        }
+    }
+
+    protected NewAnimatedItem createPointer() {
+        if (mode == DisplayMode.ANIMATED) {
+            NewAnimatedItem tmp = new NewAnimatedItem();
+            currentChanges.add(new CreateItemUpdate(tmp));
+            return tmp;
+        }
+        return null;
+    }
+
+    protected void movePointer(NewAnimatedItem item, int index) {
+        if (item == null) return;
+
+        currentChanges.add(item.moveToIndex(index));
     }
 
     public List<DisplayFrame> getFrames() {
@@ -105,13 +125,13 @@ public abstract class SortingAlgorithm {
     protected void swap(int firstIndex, int secondIndex) {
         if (firstIndex < 0 || firstIndex >= list.size() || secondIndex < 0 || secondIndex >= list.size()) return;
         list.set(firstIndex, list.set(secondIndex, list.get(firstIndex)));
-        currentChanges.add(new SwapChange(firstIndex, secondIndex));
+        currentChanges.add(new SwapUpdate(firstIndex, secondIndex));
     }
 
     protected void move(int index, int targetIndex) {
         if (index < 0 || index >= list.size() || targetIndex < 0 || targetIndex >= list.size() || index == targetIndex) return;
         list.add(targetIndex, list.remove(index));
-        currentChanges.add(new MoveChange(index, targetIndex));
+        currentChanges.add(new MoveUpdate(index, targetIndex));
     }
 
     // [left, mid) and [mid, right)

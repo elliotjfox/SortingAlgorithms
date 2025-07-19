@@ -1,7 +1,12 @@
 package com.example.javafxsortingalgorithms.arraydisplay;
 
+import com.example.javafxsortingalgorithms.AlgorithmController;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 public class BasicArrayDisplay extends SimpleArrayDisplay<Rectangle> {
 
@@ -20,5 +25,15 @@ public class BasicArrayDisplay extends SimpleArrayDisplay<Rectangle> {
         element.setHeight(value * currentSettings.heightMultiplier());
         element.setWidth(currentSettings.elementWidth());
         element.setFill(Color.hsb(hue, 1.0 ,1.0));
+    }
+
+    @Override
+    protected Timeline moveElement(Rectangle element, int targetIndex) {
+        return new Timeline(
+                new KeyFrame(
+                        Duration.millis(AlgorithmController.ANIMATION_LENGTH),
+                        new KeyValue(element.xProperty(), currentSettings.elementWidth() * targetIndex)
+                )
+        );
     }
 }

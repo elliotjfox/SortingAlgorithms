@@ -58,6 +58,7 @@ public class MainDisplay extends VBox {
 
     public void setMode(DisplayMode mode) {
         currentMode = mode;
+        algorithmController.setMode(mode);
         buttonPanel.setMode(mode);
     }
 

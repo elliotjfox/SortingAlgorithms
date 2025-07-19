@@ -1,11 +1,13 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
-import com.example.javafxsortingalgorithms.animation.AnimatedItem;
-import com.example.javafxsortingalgorithms.animation.ItemBuilder;
-import com.example.javafxsortingalgorithms.animation.Pointer;
+import com.example.javafxsortingalgorithms.animation.*;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 import com.example.javafxsortingalgorithms.TestEntry;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 import java.util.List;
 
@@ -37,9 +39,16 @@ public class BubbleSort extends SortingAlgorithm {
 
     protected void runAlgorithm() {
         boolean hasSwapped;
+
+        NewAnimatedItem leftPointer = createPointer();
+        NewAnimatedItem rightPointer = createPointer();
+
         for (int i = 0; i < list.size(); i++) {
             hasSwapped = false;
             for (int j = 0; j < list.size() - 1 - i; j++) {
+                movePointer(leftPointer, j);
+                movePointer(rightPointer, j + 1);
+                addAnimatedFrame();
                 if (list.get(j) > list.get(j + 1)) {
                     swap(j, j + 1);
                     hasSwapped = true;
@@ -48,19 +57,6 @@ public class BubbleSort extends SortingAlgorithm {
             }
             if (!hasSwapped) return;
         }
-//        Pointer i = createPointer();
-//        Pointer j = createPointer();
-//        for (i.setValue(0); i.getValue() < list.size(); i.increment()) {
-//            hasSwapped = false;
-//            for (j.setValue(0); j.getValue() < list.size() - 1 - i.getValue(); j.increment()) {
-//                if (list.get(j.getValue()) > list.get(j.getValue() + 1)) {
-//                    swap(j.getValue(), j.getValue() + 1);
-//                    hasSwapped = true;
-//                }
-//                addFrame();
-//            }
-//            if (!hasSwapped) return;
-//        }
     }
 
     @Override

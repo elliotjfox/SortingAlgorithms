@@ -1,20 +1,20 @@
-package com.example.javafxsortingalgorithms.arraydisplay;
+package com.example.javafxsortingalgorithms.algorithmupdates;
 
 import java.util.List;
 
-public class MoveChange implements ListChange {
+public class MoveUpdate implements ListUpdate {
 
     private final int index;
     private final int targetIndex;
 
-    public MoveChange(int index, int targetIndex) {
+    public MoveUpdate(int index, int targetIndex) {
         this.index = index;
         this.targetIndex = targetIndex;
     }
 
     @Override
-    public void performChange(List<Integer> list) {
-        list.add(targetIndex, list.remove(index));
+    public void performChange(List<?> list) {
+        ListUpdate.move(list, index, targetIndex);
     }
 
     @Override

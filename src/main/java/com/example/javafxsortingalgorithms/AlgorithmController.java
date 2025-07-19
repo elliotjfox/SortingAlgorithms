@@ -1,9 +1,10 @@
 package com.example.javafxsortingalgorithms;
 
 import com.example.javafxsortingalgorithms.algorithms.SortingAlgorithm;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplayBase;
-import com.example.javafxsortingalgorithms.arraydisplay.DisplayFrame;
-import com.example.javafxsortingalgorithms.arraydisplay.DisplaySettings;
+import com.example.javafxsortingalgorithms.algorithmupdates.AlgorithmUpdate;
+import com.example.javafxsortingalgorithms.algorithmupdates.DisplayUpdate;
+import com.example.javafxsortingalgorithms.arraydisplay.*;
+import com.example.javafxsortingalgorithms.algorithmupdates.ListUpdate;
 import com.example.javafxsortingalgorithms.settings.Settings;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -15,6 +16,10 @@ import java.util.List;
 
 public class AlgorithmController {
 
+    public static final int ANIMATION_LENGTH = 400;
+    public static final int ANIMATION_COOLDOWN = 75;
+
+
     private MainDisplay display;
     private ArrayDisplayBase arrayDisplay;
     private SortingAlgorithm algorithm;
@@ -23,18 +28,34 @@ public class AlgorithmController {
     private boolean hasRunAlgorithm;
 
     private final Timeline normalTimeline;
+    private final Timeline animatedTimeline;
+
+    private Timeline currentTimeline;
 
     private List<Integer> list;
 
+    private List<ListUpdate> currentListUpdates;
+
     public AlgorithmController(MainDisplay display) {
         this.display = display;
+
         normalTimeline = new Timeline(
                 new KeyFrame(
                         Duration.millis(1),
-                        _ -> showNextFrame()
+                        _ -> createNextFrame()
                 )
         );
         normalTimeline.setCycleCount(Animation.INDEFINITE);
+
+        animatedTimeline = new Timeline(
+                new KeyFrame(
+                        Duration.millis(ANIMATION_LENGTH + ANIMATION_COOLDOWN),
+                        _ -> createNextFrame()
+                )
+        );
+        animatedTimeline.setCycleCount(Animation.INDEFINITE);
+
+        currentTimeline = normalTimeline;
     }
 
     public void linkToDisplay(ArrayDisplayBase arrayDisplay) {
@@ -63,29 +84,37 @@ public class AlgorithmController {
         currentFrame = -1;
     }
 
+    public void setMode(DisplayMode mode) {
+        switch (mode) {
+            case NORMAL -> currentTimeline = normalTimeline;
+            case ANIMATED -> currentTimeline = animatedTimeline;
+            default -> currentTimeline = normalTimeline;
+        }
+    }
+
     public void play() {
         runAlgorithm();
-        normalTimeline.play();
+        currentTimeline.play();
     }
 
     public void resume() {
-        normalTimeline.play();
+        currentTimeline.play();
     }
 
     public void stop() {
-        normalTimeline.stop();
+        currentTimeline.stop();
     }
 
     public void step() {
-        normalTimeline.stop();
+        currentTimeline.stop();
         if (!hasRunAlgorithm) {
             runAlgorithm();
         }
-        showNextFrame();
+        createNextFrame();
     }
 
     public void reset() {
-        normalTimeline.stop();
+        currentTimeline.stop();
         hasRunAlgorithm = false;
         int listSize = display.getSettings().getDisplaySettings().getNumberElements();
         list = Settings.getRandomUniformList(listSize);
@@ -106,13 +135,24 @@ public class AlgorithmController {
         arrayDisplay.initializeElements(list);
     }
 
-    private void showNextFrame() {
+    private void createNextFrame() {
         if (currentFrame + 1 < frames.size()) {
             currentFrame++;
 
+            currentListUpdates = new ArrayList<>();
+
             // Apply changes
             for (int i = 0; i < frames.get(currentFrame).list().size(); i++) {
-                frames.get(currentFrame).list().get(i).performChange(list);
+                AlgorithmUpdate currentUpdate = frames.get(currentFrame).list().get(i);
+
+                if (currentUpdate instanceof ListUpdate listUpdate) {
+                    listUpdate.performChange(list);
+                    currentListUpdates.add(listUpdate);
+                }
+
+                if (currentUpdate instanceof DisplayUpdate displayUpdate) {
+                    displayUpdate.performChange(arrayDisplay);
+                }
             }
 
             showFrame();
@@ -125,7 +165,12 @@ public class AlgorithmController {
             return;
         }
 
-        arrayDisplay.displayList(list);
+        if (display.getMode() != DisplayMode.ANIMATED) {
+            arrayDisplay.displayList(list);
+        } else {
+            arrayDisplay.animateItems(list, currentListUpdates);
+            arrayDisplay.playAnimations();
+        }
     }
 
     public List<Integer> getList() {

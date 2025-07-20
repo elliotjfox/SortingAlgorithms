@@ -1,19 +1,18 @@
 package com.example.javafxsortingalgorithms.algorithmupdates;
 
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedItem;
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplayBase;
+import com.example.javafxsortingalgorithms.newanimation.NewAnimatedItem;
 
-public class CreateItemUpdate implements DisplayUpdate {
+public class RemoveItemUpdate implements DisplayUpdate {
 
     private final NewAnimatedItem animatedItem;
 
-    public CreateItemUpdate(NewAnimatedItem animatedItem) {
+    public RemoveItemUpdate(NewAnimatedItem animatedItem) {
         this.animatedItem = animatedItem;
     }
 
     @Override
     public void performChange(ArrayDisplayBase display) {
-        animatedItem.generateVisuals(display.getSettings());
-        display.getChildren().add(animatedItem);
+        display.getChildren().remove(animatedItem);
     }
 }

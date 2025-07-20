@@ -1,16 +1,13 @@
 package com.example.javafxsortingalgorithms.arraydisplay;
 
 import com.example.javafxsortingalgorithms.AlgorithmController;
-import com.example.javafxsortingalgorithms.settings.SettingsPane;
+import com.example.javafxsortingalgorithms.newanimation.NewAnimatedReadArrow;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class HeatMapDisplay extends SimpleArrayDisplay<Rectangle> {
 
@@ -39,5 +36,14 @@ public class HeatMapDisplay extends SimpleArrayDisplay<Rectangle> {
                         new KeyValue(element.xProperty(), currentSettings.elementWidth() * targetIndex)
                 )
         );
+    }
+
+    @Override
+    public void createReadAnimation(int index, int value) {
+    }
+
+    @Override
+    protected Timeline createReadTimeline(NewAnimatedReadArrow readArrow, int index, int value) {
+        return null;
     }
 }

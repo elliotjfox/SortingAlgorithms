@@ -1,6 +1,7 @@
 package com.example.javafxsortingalgorithms.arraydisplay;
 
 import com.example.javafxsortingalgorithms.AlgorithmController;
+import com.example.javafxsortingalgorithms.newanimation.NewAnimatedReadArrow;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -19,6 +20,15 @@ public class CircularDisplay extends SimpleArrayDisplay<Arc> {
     public void initializeSettings(DisplaySettings settings) {
         super.initializeSettings(settings);
         radius = Math.min(settings.size() * settings.elementWidth(), settings.maxValue() * settings.heightMultiplier()) / 2;
+    }
+
+    @Override
+    public void createReadAnimation(int index, int value) {
+    }
+
+    @Override
+    protected Timeline createReadTimeline(NewAnimatedReadArrow readArrow, int index, int value) {
+        return null;
     }
 
     @Override

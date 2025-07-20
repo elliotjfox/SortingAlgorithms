@@ -1,9 +1,13 @@
 package com.example.javafxsortingalgorithms.arraydisplay;
 
+import com.example.javafxsortingalgorithms.AlgorithmController;
 import com.example.javafxsortingalgorithms.algorithmupdates.AnimationUpdate;
 import com.example.javafxsortingalgorithms.algorithmupdates.ListUpdate;
+import com.example.javafxsortingalgorithms.newanimation.NewAnimatedReadArrow;
+import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Node;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +15,11 @@ import java.util.List;
 public abstract class SimpleArrayDisplay<T extends Node> extends ArrayDisplayBase {
 
     private final List<T> elements;
+    private final List<NewAnimatedReadArrow> arrows;
 
     public SimpleArrayDisplay() {
         elements = new ArrayList<>();
+        arrows = new ArrayList<>();
     }
 
     @Override
@@ -42,12 +48,11 @@ public abstract class SimpleArrayDisplay<T extends Node> extends ArrayDisplayBas
     }
 
     @Override
-    public Timeline moveElement(int index, int targetIndex) {
-        return moveElement(elements.get(index), targetIndex);
-    }
-
-    @Override
     public void animateItems(List<Integer> list, List<ListUpdate> changes) {
+        // Clean up read arrows
+        getChildren().removeAll(arrows);
+        arrows.clear();
+
         for (ListUpdate change : changes) {
             change.performChange(elements);
         }
@@ -62,6 +67,19 @@ public abstract class SimpleArrayDisplay<T extends Node> extends ArrayDisplayBas
         }
     }
 
+    @Override
+    public void createReadAnimation(int index, int value) {
+        NewAnimatedReadArrow readArrow = new NewAnimatedReadArrow();
+        getChildren().add(readArrow);
+        readArrow.generateVisuals(currentSettings);
+        Timeline timeline = createReadTimeline(readArrow, index, value);
+
+        if (timeline.getKeyFrames().getLast().getTime().equals(Duration.ZERO)) {
+            timeline.getKeyFrames().add(new KeyFrame(Duration.millis(AlgorithmController.ANIMATION_LENGTH)));
+        }
+    }
+
+    protected abstract Timeline createReadTimeline(NewAnimatedReadArrow readArrow, int index, int value);
     protected abstract T createElement();
     protected abstract void formatElement(int index, int value, T element);
     protected abstract Timeline moveElement(T element, int targetIndex);

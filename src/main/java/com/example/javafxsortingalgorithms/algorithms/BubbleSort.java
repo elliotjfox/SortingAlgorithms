@@ -1,13 +1,9 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.animation.*;
-import com.example.javafxsortingalgorithms.arraydisplay.*;
 import com.example.javafxsortingalgorithms.TestEntry;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
+import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
+import com.example.javafxsortingalgorithms.newanimation.NewAnimatedItem;
 
 import java.util.List;
 
@@ -40,16 +36,23 @@ public class BubbleSort extends SortingAlgorithm {
     protected void runAlgorithm() {
         boolean hasSwapped;
 
-        NewAnimatedItem leftPointer = createPointer();
-        NewAnimatedItem rightPointer = createPointer();
+        NewAnimatedArrow leftPointer = createArrow();
+        NewAnimatedArrow rightPointer = createArrow();
+        setItemHeight(leftPointer, 0);
+        setItemHeight(rightPointer, 0);
+        setItemIndex(leftPointer, 0);
+        setItemIndex(rightPointer, 1);
 
         for (int i = 0; i < list.size(); i++) {
             hasSwapped = false;
             for (int j = 0; j < list.size() - 1 - i; j++) {
-                movePointer(leftPointer, j);
-                movePointer(rightPointer, j + 1);
+                moveItem(leftPointer, j);
+                moveItem(rightPointer, j + 1);
                 addAnimatedFrame();
+                readIndex(j);
+                readIndex(j + 1);
                 if (list.get(j) > list.get(j + 1)) {
+                    addAnimatedFrame();
                     swap(j, j + 1);
                     hasSwapped = true;
                 }

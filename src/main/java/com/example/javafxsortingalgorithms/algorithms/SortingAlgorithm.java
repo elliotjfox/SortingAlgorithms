@@ -1,13 +1,13 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.algorithmupdates.AlgorithmUpdate;
-import com.example.javafxsortingalgorithms.algorithmupdates.CreateItemUpdate;
-import com.example.javafxsortingalgorithms.algorithmupdates.MoveUpdate;
-import com.example.javafxsortingalgorithms.algorithmupdates.SwapUpdate;
+import com.example.javafxsortingalgorithms.algorithmupdates.*;
 import com.example.javafxsortingalgorithms.animation.*;
 import com.example.javafxsortingalgorithms.TestDisplay;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
+import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
+import com.example.javafxsortingalgorithms.newanimation.NewAnimatedItem;
+import com.example.javafxsortingalgorithms.newanimation.NewAnimatedReadArrow;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -16,6 +16,8 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 // TODO: Finish replacing ArrayLists with Lists
 // TODO: There might still be a few bugs around when an algorithm is finished or not
@@ -27,6 +29,7 @@ public abstract class SortingAlgorithm {
 
     protected List<DisplayFrame> frames;
     protected List<AlgorithmUpdate> currentChanges;
+    protected List<AlgorithmUpdate> nextChanges;
 
     public enum ColourAction {
         READ, WRITE
@@ -39,6 +42,7 @@ public abstract class SortingAlgorithm {
 
         this.frames = new ArrayList<>();
         currentChanges = new ArrayList<>();
+        nextChanges = new ArrayList<>();
     }
 
     protected void runAlgorithm(ArrayDisplay display) {}
@@ -51,32 +55,6 @@ public abstract class SortingAlgorithm {
 
     protected void runAlgorithm() {
         System.out.println("TODO: Implement this algorithm!");
-    }
-
-    protected void addFrame() {
-        frames.add(new DisplayFrame(currentChanges));
-        currentChanges.clear();
-    }
-
-    protected void addAnimatedFrame() {
-        if (mode == DisplayMode.ANIMATED) {
-            addFrame();
-        }
-    }
-
-    protected NewAnimatedItem createPointer() {
-        if (mode == DisplayMode.ANIMATED) {
-            NewAnimatedItem tmp = new NewAnimatedItem();
-            currentChanges.add(new CreateItemUpdate(tmp));
-            return tmp;
-        }
-        return null;
-    }
-
-    protected void movePointer(NewAnimatedItem item, int index) {
-        if (item == null) return;
-
-        currentChanges.add(item.moveToIndex(index));
     }
 
     public List<DisplayFrame> getFrames() {
@@ -184,5 +162,72 @@ public abstract class SortingAlgorithm {
             }
         }
         return true;
+    }
+
+    // ---------- Animation methods ----------
+
+    protected void addFrame() {
+        frames.add(new DisplayFrame(currentChanges));
+        currentChanges.clear();
+        currentChanges.addAll(nextChanges);
+        nextChanges.clear();
+    }
+
+    protected void addAnimatedFrame() {
+        if (mode == DisplayMode.ANIMATED) {
+            addFrame();
+        }
+    }
+
+    protected NewAnimatedArrow createArrow() {
+        if (mode == DisplayMode.ANIMATED) {
+            NewAnimatedArrow tmp = new NewAnimatedArrow();
+            currentChanges.add(new CreateItemUpdate(tmp));
+            return tmp;
+        }
+        return null;
+    }
+
+    protected void readIndex(int index) {
+        if (mode == DisplayMode.ANIMATED) {
+            currentChanges.add(new ReadUpdate(index, list.get(index)));
+        }
+
+//        NewAnimatedReadArrow readArrow = new NewAnimatedReadArrow();
+//        currentChanges.add(new CreateItemUpdate(readArrow));
+//        currentChanges.add(readArrow.setIndex(index));
+//        currentChanges.add(readArrow.setHeight(0));
+//        currentChanges.add(readArrow.moveToTop(list.get(index)));
+//        nextChanges.add(new RemoveItemUpdate(readArrow));
+    }
+
+    protected void setItemIndex(NewAnimatedItem item, int index) {
+        if (item == null) return;
+
+        currentChanges.add(item.setIndex(index));
+    }
+
+    protected void moveItem(NewAnimatedItem item, int index) {
+        if (item == null) return;
+
+        currentChanges.add(item.moveToIndex(index));
+    }
+
+    protected void setItemHeight(NewAnimatedItem item, double height) {
+        if (item == null) return;
+
+        currentChanges.add(item.setHeight(height));
+    }
+
+    protected void moveItemHeight(NewAnimatedItem item, double height) {
+        if (item == null) return;
+
+        currentChanges.add(item.moveToHeight(height));
+    }
+
+    protected void animateItem(Supplier<AlgorithmUpdate> createUpdate) {
+        try {
+            currentChanges.add(createUpdate.get());
+        } catch (NullPointerException ignored) {}
     }
 }

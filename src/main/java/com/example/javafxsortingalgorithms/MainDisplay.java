@@ -7,13 +7,14 @@ import com.example.javafxsortingalgorithms.settings.AlgorithmType;
 import com.example.javafxsortingalgorithms.settings.SettingsPane;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainDisplay extends VBox {
+public class MainDisplay extends BorderPane {
 
     private AlgorithmController algorithmController;
     private MainButtonPanel buttonPanel;
@@ -29,11 +30,11 @@ public class MainDisplay extends VBox {
         this.algorithmController = new AlgorithmController(this);
 
         this.buttonPanel = new MainButtonPanel(this);
-        getChildren().add(buttonPanel);
+        setTop(buttonPanel);
 
         this.arrayPane = new FlowPane(Orientation.HORIZONTAL);
         arrayPane.setAlignment(Pos.CENTER);
-        getChildren().add(arrayPane);
+        setCenter(arrayPane);
 
         settingsPane = new SettingsPane();
 

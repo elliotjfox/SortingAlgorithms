@@ -8,6 +8,8 @@ import com.example.javafxsortingalgorithms.animation.AnimatedItem;
 import com.example.javafxsortingalgorithms.animation.ItemBuilder;
 import com.example.javafxsortingalgorithms.animation.PolygonWrapper;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
+import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
+import com.example.javafxsortingalgorithms.newanimation.NewAnimatedItem;
 import javafx.scene.paint.Color;
 
 import java.util.List;
@@ -82,10 +84,26 @@ public class SelectionSort extends SortingAlgorithm {
     }
 
     private void runMin() {
+        NewAnimatedArrow minPointer = createArrow();
+        NewAnimatedArrow pointer = createArrow();
+        setItemHeight(minPointer, 0);
+        setItemHeight(pointer, 0);
+        setItemIndex(minPointer, 0);
+        setItemIndex(pointer, 0);
+
         for (int i = 0; i < list.size(); i++) {
             int minIndex = i;
             for (int j = i + 1; j < list.size(); j++) {
-                if (list.get(j) < list.get(minIndex)) minIndex = j;
+                moveItem(pointer, j);
+                addAnimatedFrame();
+                // TODO: Some bug with the animation list, only for the read animations I think?
+                readIndex(j);
+                readIndex(minIndex);
+                if (list.get(j) < list.get(minIndex)) {
+                    addAnimatedFrame();
+                    moveItem(minPointer, j);
+                    minIndex = j;
+                }
                 addFrame();
             }
             swap(minIndex, i);

@@ -6,6 +6,7 @@ import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
 import com.example.javafxsortingalgorithms.animation.AnimatedItem;
 import com.example.javafxsortingalgorithms.animation.ItemBuilder;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
+import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
 
 import java.util.List;
 
@@ -32,12 +33,27 @@ public class PancakeSort extends ActionSortingAlgorithm {
 
     @Override
     protected void runAlgorithm() {
+        NewAnimatedArrow arrow = animation.createArrow();
+        NewAnimatedArrow minArrow = animation.createArrow();
+        animation.setItemPosition(arrow, 0);
+        animation.setItemPosition(minArrow, 0);
+        animation.setItemHeight(arrow, 0);
+        animation.setItemHeight(minArrow, 0);
+
         for (int i = 0; i < list.size() - 1; i++) {
             int smallestIndex = i;
             for (int j = i + 1; j < list.size(); j++) {
+                animation.moveItem(arrow, j);
+                animation.moveItem(minArrow, smallestIndex);
+                animation.addFrame();
+                animation.readIndex(j);
+                animation.readIndex(smallestIndex);
                 if (list.get(j) < list.get(smallestIndex)) {
                     smallestIndex = j;
+                    animation.addFrame();
+                    animation.moveItem(minArrow, smallestIndex);
                 }
+                addFrame();
             }
 
             flip(smallestIndex, list.size() - 1);
@@ -48,9 +64,9 @@ public class PancakeSort extends ActionSortingAlgorithm {
     private void flip(int from, int to) {
         for (int i = 0; i <= (to - from) / 2; i++) {
             swap(from + i, to - i);
-            if (!instantFlips) addFrame();
+            if (!instantFlips && mode != DisplayMode.ANIMATED) addFrame();
         }
-        if (instantFlips) addFrame();
+        if (instantFlips || mode == DisplayMode.ANIMATED) addFrame();
     }
 
     @Override

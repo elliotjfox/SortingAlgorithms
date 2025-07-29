@@ -16,9 +16,9 @@ public class QuickSort extends ActionSortingAlgorithm {
     private static final Color IN_PROGRESS_COLOUR = Color.rgb(110, 110, 110);
 
     public enum PartitionType {
-        LEFT,
-        RIGHT,
-        MIDDLE
+        HOARE,
+        LOMUTO_LEFT,
+        LOMUTO_RIGHT
     }
 
     private AnimatedSection section;
@@ -30,21 +30,48 @@ public class QuickSort extends ActionSortingAlgorithm {
 
         this.partitionType = partitionType;
         switch (partitionType) {
-            case LEFT -> setInitialActions(new LeftPartition(0, arrayList.size() - 1));
-            case RIGHT -> setInitialActions(new RightPartition(0, arrayList.size() - 1));
-            case MIDDLE -> System.out.println("Need to implement still!");
+            case HOARE -> setInitialActions(new LeftPartition(0, arrayList.size() - 1));
+            case LOMUTO_LEFT -> setInitialActions(new RightPartition(0, arrayList.size() - 1));
         }
     }
 
     @Override
     protected void runAlgorithm() {
         switch (partitionType) {
-            case LEFT -> leftPartition(0, list.size() - 1);
-            case RIGHT -> rightPartition(0, list.size() - 1);
+            case HOARE -> hoarePartition(0, list.size() - 1);
+            case LOMUTO_LEFT -> lomutoLeftPartition(0, list.size() - 1);
+            case LOMUTO_RIGHT -> lomutoRightPartition(0, list.size() - 1);
         }
     }
 
-    private void leftPartition(int from, int to) {
+    // Hoare Partition
+    private void hoarePartition(int from, int to) {
+        if (to <= from) return;
+        int i = from - 1;
+        int j = to + 1;
+
+        while (true) {
+            do {
+                i++;
+                addFrame();
+            } while (list.get(i) < list.get(from));
+
+            do {
+                j--;
+                addFrame();
+            } while (list.get(j) > list.get(from));
+
+            if (i >= j) break;
+            swap(i, j);
+            addFrame();
+        }
+
+        hoarePartition(from, j);
+        hoarePartition(j + 1, to);
+    }
+
+    private void lomutoLeftPartition(int from, int to) {
+        if (to <= from) return;
         int k = to;
         for (int i = to; i > from; i--) {
             if (list.get(i) > list.get(from)) {
@@ -57,22 +84,34 @@ public class QuickSort extends ActionSortingAlgorithm {
         swap(k, from);
         addFrame();
 
-        if (from < k - 1) leftPartition(from, k - 1);
-        if (k + 1 < to) leftPartition(k + 1, to);
+        lomutoLeftPartition(from, k - 1);
+        lomutoLeftPartition(k + 1, to);
     }
 
-    // TODO
-    private void rightPartition(int from, int to) {
+    private void lomutoRightPartition(int from, int to) {
+        if (to <= from) return;
+        int pivot = list.get(to);
+        int k = from;
+        for (int i = from; i < to; i++) {
+            if (list.get(i) <= pivot) {
+                swap(k, i);
+                k++;
+            }
+            addFrame();
+        }
+        swap(k, to);
+        addFrame();
 
+        lomutoRightPartition(from, k - 1);
+        lomutoRightPartition(k + 1, to);
     }
-
 
     @Override
     protected void instantAlgorithm(TestEntry entry) {
-        leftPartition(0, list.size() - 1, entry);
+        lomutoPartition(0, list.size() - 1, entry);
     }
 
-    private void leftPartition(int from, int to, TestEntry entry) {
+    private void lomutoPartition(int from, int to, TestEntry entry) {
         int k = to;
         for (int i = to; i > from; i--) {
             if (list.get(i) > list.get(from)) {
@@ -85,11 +124,11 @@ public class QuickSort extends ActionSortingAlgorithm {
         swap(k, from);
         entry.addWrite(2);
         if (from < k - 1) {
-            leftPartition(from, k - 1, entry);
+            lomutoPartition(from, k - 1, entry);
         } else {
             entry.updateProgress((double) k / list.size());
         }
-        if (k + 1 < to) leftPartition(k + 1, to, entry);
+        if (k + 1 < to) lomutoPartition(k + 1, to, entry);
     }
 
     @Override
@@ -103,17 +142,16 @@ public class QuickSort extends ActionSortingAlgorithm {
         // Reset actions, and add two visual ones after the sorting algorithm
         actions.clear();
         switch (partitionType) {
-            case LEFT -> setInitialActions(
+            case HOARE -> setInitialActions(
                     new LeftPartition(0, list.size() - 1),
                     new LaterAction(() -> section.setSectionFill(FINISHED_COLOUR)),
                     new AnimationAction(display.recolourTimeline())
             );
-            case RIGHT -> setInitialActions(
+            case LOMUTO_LEFT -> setInitialActions(
                     new RightPartition(0, list.size() - 1),
                     new LaterAction(() -> section.setSectionFill(FINISHED_COLOUR)),
                     new AnimationAction(display.recolourTimeline())
             );
-            case MIDDLE -> System.out.println("Need to implement still!");
         }
     }
 
@@ -325,7 +363,7 @@ public class QuickSort extends ActionSortingAlgorithm {
 //    }
 
     public static AlgorithmSettings<QuickSort> getSettings() {
-        AlgorithmSettingsComboBox<PartitionType> partitionSetting = new AlgorithmSettingsComboBox<>("Partition Type", PartitionType.values(), PartitionType.LEFT);
+        AlgorithmSettingsComboBox<PartitionType> partitionSetting = new AlgorithmSettingsComboBox<>("Partition Type", PartitionType.values(), PartitionType.HOARE);
 
         return new AlgorithmSettings<>(
                 "Quick Sort",

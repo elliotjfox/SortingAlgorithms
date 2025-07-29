@@ -13,6 +13,7 @@ import javafx.util.Duration;
 public class CircularDisplay extends SimpleArrayDisplay<Arc> {
 
     private static final double COLOUR_RANGE = 360;
+    private static final double MIN_RADIUS_FRACTION = 0.2;
 
     private double radius;
 
@@ -40,10 +41,11 @@ public class CircularDisplay extends SimpleArrayDisplay<Arc> {
     protected void formatElement(int index, int value, Arc element) {
         double length = 360.0 / currentSettings.size();
         double hue = COLOUR_RANGE * value / currentSettings.maxValue();
+        double arcRadius = radius * (1 - MIN_RADIUS_FRACTION) * value / currentSettings.maxValue() + radius * MIN_RADIUS_FRACTION;
         element.setCenterX(currentSettings.size() * currentSettings.elementWidth() / 2);
         element.setCenterY(currentSettings.maxValue() * currentSettings.heightMultiplier() / 2);
-        element.setRadiusX(radius * value / currentSettings.maxValue());
-        element.setRadiusY(radius * value / currentSettings.maxValue());
+        element.setRadiusX(arcRadius);
+        element.setRadiusY(arcRadius);
         element.setStartAngle(index * length);
         element.setLength(length);
         element.setType(ArcType.ROUND);

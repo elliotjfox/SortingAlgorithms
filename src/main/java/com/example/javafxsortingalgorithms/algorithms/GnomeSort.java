@@ -6,55 +6,36 @@ import com.example.javafxsortingalgorithms.animation.AnimatedItem;
 import com.example.javafxsortingalgorithms.animation.ItemBuilder;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 import com.example.javafxsortingalgorithms.TestEntry;
+import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
 
 import java.util.List;
 
 public class GnomeSort extends SortingAlgorithm {
 
-    private int currentSpot;
-
-    private AnimatedItem leftArrow;
-    private AnimatedItem rightArrow;
-
     public GnomeSort(List<Integer> arrayList, boolean isInstant) {
         super(arrayList, isInstant);
-
-        currentSpot = 0;
-    }
-
-    @Override
-    protected void runAlgorithm(ArrayDisplay display) {
-        if (currentSpot + 1 >= list.size()) {
-            isDone = true;
-            return;
-        }
-
-        if (currentSpot < 0) {
-            currentSpot++;
-            return;
-        }
-
-        display.readIndex(currentSpot);
-        display.readIndex(currentSpot + 1);
-        if (list.get(currentSpot) <= list.get(currentSpot + 1)) {
-            currentSpot++;
-            return;
-        }
-
-        display.writeIndex(currentSpot);
-        display.writeIndex(currentSpot + 1);
-        swap(currentSpot, currentSpot + 1);
-        currentSpot--;
     }
 
     @Override
     protected void runAlgorithm() {
+        NewAnimatedArrow arrow = animation.createArrow();
+        animation.setItemHeight(arrow, 0);
+        animation.setItemIndex(arrow, 0);
+
         int i = 0;
         while (i + 1 < list.size()) {
+            animation.moveItem(arrow, i);
+            // We need to read if we are inside the list
+            if (i >= 0) {
+                animation.addFrame();
+                animation.readIndex(i);
+                animation.readIndex(i + 1);
+            }
             if (i < 0) i++;
             else if (list.get(i) <= list.get(i + 1)) {
                 i++;
             } else {
+                animation.addFrame();
                 swap(i, i + 1);
                 i--;
             }
@@ -82,59 +63,6 @@ public class GnomeSort extends SortingAlgorithm {
                 i--;
             }
         }
-    }
-
-    @Override
-    public void startAnimated(AnimatedArrayDisplay display) {
-        leftArrow = ItemBuilder.defaultArrow(display, 0);
-        display.addItem(leftArrow);
-
-        rightArrow = ItemBuilder.defaultArrow(display, 1);
-        display.addItem(rightArrow);
-
-        display.setCurrentTask("Sorting...");
-        display.updateInfo("Left index", 0);
-        display.updateInfo("Left value", list.getFirst());
-        display.updateInfo("Right index", 1);
-        display.updateInfo("Right value", list.get(1));
-    }
-
-    @Override
-    public void iterateAnimated(AnimatedArrayDisplay display) {
-        leftArrow.moveToIndex(currentSpot, 0);
-        rightArrow.moveToIndex(currentSpot + 1, 0);
-
-        if (currentSpot + 1 >= list.size()) {
-            isDone = true;
-            return;
-        }
-
-        if (currentSpot < 0) {
-            currentSpot++;
-            // TODO: Keep this or not?
-            display.updateInfoWhenDone("Left index", AnimatedInfo.OUT_OF_BOUNDS_INDEX);
-            display.updateInfoWhenDone("Left value", AnimatedInfo.OUT_OF_BOUND_VALUE);
-            display.updateInfoWhenDone("Right index", currentSpot);
-            display.updateInfoWhenDone("Right value", list.get(currentSpot));
-            return;
-        }
-
-        display.updateInfoWhenDone("Left index", currentSpot);
-        display.updateInfoWhenDone("Left value", list.get(currentSpot));
-        display.updateInfoWhenDone("Right index", currentSpot + 1);
-        display.updateInfoWhenDone("Right value", list.get(currentSpot + 1));
-        display.newGroup();
-        display.comparing(currentSpot, currentSpot + 1);
-
-        if (list.get(currentSpot) <= list.get(currentSpot + 1)) {
-            currentSpot++;
-            return;
-        }
-
-        swap(currentSpot, currentSpot + 1);
-        display.swap(currentSpot, currentSpot + 1);
-
-        currentSpot--;
     }
 
     @Override

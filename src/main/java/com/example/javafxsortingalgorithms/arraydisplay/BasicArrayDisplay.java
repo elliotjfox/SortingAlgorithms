@@ -58,6 +58,7 @@ public class BasicArrayDisplay extends SimpleArrayDisplay<Rectangle> {
         );
     }
 
+    // TODO: Should this be overridden?
     @Override
     public void createReadAnimation(int index, int value) {
         NewAnimatedReadArrow readArrow = new NewAnimatedReadArrow();
@@ -82,7 +83,6 @@ public class BasicArrayDisplay extends SimpleArrayDisplay<Rectangle> {
 
         AnimationUpdate animation = new AnimationUpdate(timeline, () -> {});
         animation.performChange(this);
-
     }
 
     @Override

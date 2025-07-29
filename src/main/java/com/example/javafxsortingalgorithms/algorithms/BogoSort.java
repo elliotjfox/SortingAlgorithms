@@ -14,6 +14,8 @@ public class BogoSort extends ActionSortingAlgorithm {
         setInitialActions(new Randomize());
     }
 
+    // TODO: Make a way to run this on a thread, so you aren't just waiting forever
+    //  And generically, if the algorithm is taking too long, start a thread for it
     @Override
     protected void runAlgorithm() {
         Random r = new Random();

@@ -26,6 +26,7 @@ public abstract class ArrayDisplayBase extends Pane {
     public abstract void displayList(List<Integer> list);
     public abstract void animateItems(List<Integer> list, List<ListUpdate> changes);
     public abstract void createReadAnimation(int index, int value);
+//    public abstract void finished();
 
     public void playAnimations() {
         for (AnimationUpdate animation : currentAnimations) {

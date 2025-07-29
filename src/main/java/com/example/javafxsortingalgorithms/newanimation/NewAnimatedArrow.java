@@ -1,9 +1,15 @@
 package com.example.javafxsortingalgorithms.newanimation;
 
+import com.example.javafxsortingalgorithms.AlgorithmController;
+import com.example.javafxsortingalgorithms.algorithmupdates.AnimationUpdate;
 import com.example.javafxsortingalgorithms.arraydisplay.DisplaySettings;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Polygon;
+import javafx.util.Duration;
 
 public class NewAnimatedArrow extends NewAnimatedItem {
 
@@ -55,5 +61,18 @@ public class NewAnimatedArrow extends NewAnimatedItem {
             );
         }
         arrow.setFill(fill);
+    }
+
+    @Override
+    public AnimationUpdate changeFill(Paint fill) {
+        return new AnimationUpdate(
+                new Timeline(
+                        new KeyFrame(
+                                Duration.millis(AlgorithmController.ANIMATION_LENGTH),
+                                new KeyValue(arrow.fillProperty(), fill)
+                        )
+                ),
+                () -> arrow.setFill(fill)
+        );
     }
 }

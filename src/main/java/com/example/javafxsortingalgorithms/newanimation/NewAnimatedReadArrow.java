@@ -1,6 +1,7 @@
 package com.example.javafxsortingalgorithms.newanimation;
 
 import com.example.javafxsortingalgorithms.AlgorithmController;
+import com.example.javafxsortingalgorithms.algorithmupdates.AnimationUpdate;
 import com.example.javafxsortingalgorithms.algorithmupdates.GenerateAnimationUpdate;
 import com.example.javafxsortingalgorithms.arraydisplay.DisplaySettings;
 import javafx.animation.KeyFrame;
@@ -47,6 +48,19 @@ public class NewAnimatedReadArrow extends NewAnimatedItem {
                         )
                 ),
                 settings -> setLayoutY((settings.maxValue() - value) * settings.heightMultiplier())
+        );
+    }
+
+    @Override
+    public AnimationUpdate changeFill(Paint fill) {
+        return new AnimationUpdate(
+                new Timeline(
+                        new KeyFrame(
+                                Duration.millis(AlgorithmController.ANIMATION_LENGTH),
+                                new KeyValue(polygon.fillProperty(), fill)
+                        )
+                ),
+                () -> polygon.setFill(fill)
         );
     }
 }

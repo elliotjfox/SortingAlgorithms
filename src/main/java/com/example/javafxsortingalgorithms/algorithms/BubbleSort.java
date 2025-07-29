@@ -18,41 +18,34 @@ import java.util.List;
  */
 public class BubbleSort extends SortingAlgorithm {
 
-    private int sorted;
-    private int lastPos;
-    private boolean hasMadeSwap;
-
-    private AnimatedItem leftArrow;
-    private AnimatedItem rightArrow;
-
-    public BubbleSort(List<Integer> arrayList, boolean isInstant) {
-        super(arrayList, isInstant);
-
-        sorted = 0;
-        lastPos = 0;
-        hasMadeSwap = false;
+    public BubbleSort(List<Integer> list, boolean isInstant) {
+        super(list, isInstant);
     }
 
     protected void runAlgorithm() {
         boolean hasSwapped;
 
-        NewAnimatedArrow leftPointer = createArrow();
-        NewAnimatedArrow rightPointer = createArrow();
-        setItemHeight(leftPointer, 0);
-        setItemHeight(rightPointer, 0);
-        setItemIndex(leftPointer, 0);
-        setItemIndex(rightPointer, 1);
+        // Initialize animation items
+        NewAnimatedArrow leftPointer = animation.createArrow();
+        NewAnimatedArrow rightPointer = animation.createArrow();
+        animation.setItemHeight(leftPointer, 0);
+        animation.setItemHeight(rightPointer, 0);
+        animation.setItemIndex(leftPointer, 0);
+        animation.setItemIndex(rightPointer, 1);
 
         for (int i = 0; i < list.size(); i++) {
             hasSwapped = false;
             for (int j = 0; j < list.size() - 1 - i; j++) {
-                moveItem(leftPointer, j);
-                moveItem(rightPointer, j + 1);
-                addAnimatedFrame();
-                readIndex(j);
-                readIndex(j + 1);
+                // Move animation items
+                animation.moveItem(leftPointer, j);
+                animation.moveItem(rightPointer, j + 1);
+                animation.addFrame();
+                animation.readIndex(j);
+                animation.readIndex(j + 1);
+
                 if (list.get(j) > list.get(j + 1)) {
-                    addAnimatedFrame();
+                    // If we are going to swap, make an animated frame right before
+                    animation.addFrame();
                     swap(j, j + 1);
                     hasSwapped = true;
                 }
@@ -79,64 +72,6 @@ public class BubbleSort extends SortingAlgorithm {
 
             entry.updateProgress((double) i / list.size());
         }
-    }
-
-    @Override
-    public void startAnimated(AnimatedArrayDisplay display) {
-        leftArrow = ItemBuilder.defaultArrow(display, 0);
-        display.addItem(leftArrow);
-
-        rightArrow = ItemBuilder.defaultArrow(display, 1);
-        display.addItem(rightArrow);
-
-        display.updateInfo("Number sorted", 0);
-        display.updateInfo("Left index", 0);
-        display.updateInfo("Left value", list.get(0));
-        display.updateInfo("Right index", 1);
-        display.updateInfo("Right value", list.get(1));
-    }
-
-    @Override
-    public void iterateAnimated(AnimatedArrayDisplay display) {
-        // Check if the next position would be outside the array, and reset if we need to.
-        if (lastPos + 1 >= list.size() - sorted) {
-            sorted++;
-            lastPos = 0;
-
-            if (!hasMadeSwap) {
-                isDone = true;
-                return;
-            }
-            hasMadeSwap = false;
-
-            leftArrow.moveToIndex(lastPos, 0);
-            rightArrow.moveToIndex(lastPos + 1, 0);
-            updateInfo(display);
-        }
-
-        leftArrow.moveToIndex(lastPos, 0);
-        rightArrow.moveToIndex(lastPos + 1, 0);
-        updateInfo(display);
-        display.newGroup();
-        display.comparing(lastPos, lastPos + 1);
-
-        if (list.get(lastPos) > list.get(lastPos + 1)) {
-            hasMadeSwap = true;
-            swap(lastPos, lastPos + 1);
-            display.swap(lastPos, lastPos + 1);
-            updateInfo(display);
-        }
-
-        // Increase the position
-        lastPos++;
-    }
-
-    private void updateInfo(AnimatedArrayDisplay display) {
-        display.updateInfoWhenDone("Number sorted", sorted);
-        display.updateInfoWhenDone("Left index", lastPos);
-        display.updateInfoWhenDone("Left value", list.get(lastPos));
-        display.updateInfoWhenDone("Right index", lastPos + 1);
-        display.updateInfoWhenDone("Right value", list.get(lastPos + 1));
     }
 
     @Override

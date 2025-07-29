@@ -3,7 +3,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
 
 import java.util.List;
 
@@ -61,8 +61,8 @@ public class SelectionSort extends SortingAlgorithm {
     }
 
     private void runMin() {
-        NewAnimatedArrow minPointer = animation.createArrow();
-        NewAnimatedArrow pointer = animation.createArrow();
+        AnimatedArrow minPointer = animation.createArrow();
+        AnimatedArrow pointer = animation.createArrow();
         animation.setItemHeight(minPointer, 0);
         animation.setItemHeight(pointer, 0);
         animation.setItemIndex(minPointer, 0);
@@ -89,8 +89,8 @@ public class SelectionSort extends SortingAlgorithm {
     }
 
     private void runMax() {
-        NewAnimatedArrow maxArrow = animation.createArrow();
-        NewAnimatedArrow pointer = animation.createArrow();
+        AnimatedArrow maxArrow = animation.createArrow();
+        AnimatedArrow pointer = animation.createArrow();
         animation.setItemHeight(maxArrow, 0);
         animation.setItemHeight(pointer, 0);
         animation.setItemIndex(maxArrow, 0);
@@ -117,9 +117,9 @@ public class SelectionSort extends SortingAlgorithm {
     }
 
     private void runBoth() {
-        NewAnimatedArrow pointer = animation.createArrow();
-        NewAnimatedArrow minPointer = animation.createArrow();
-        NewAnimatedArrow maxPointer = animation.createArrow();
+        AnimatedArrow pointer = animation.createArrow();
+        AnimatedArrow minPointer = animation.createArrow();
+        AnimatedArrow maxPointer = animation.createArrow();
         animation.setItemHeight(pointer, 0);
         animation.setItemHeight(minPointer, 0);
         animation.setItemHeight(maxPointer, 0);

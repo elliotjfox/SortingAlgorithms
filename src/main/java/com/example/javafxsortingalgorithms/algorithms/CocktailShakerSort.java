@@ -1,7 +1,7 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
 
 import java.util.List;
 
@@ -24,8 +24,8 @@ public class CocktailShakerSort extends SortingAlgorithm {
     @Override
     protected void runAlgorithm() {
         // Initialize animation items
-        NewAnimatedArrow leftArrow = animation.createArrow();
-        NewAnimatedArrow rightArrow = animation.createArrow();
+        AnimatedArrow leftArrow = animation.createArrow();
+        AnimatedArrow rightArrow = animation.createArrow();
         animation.setItemHeight(leftArrow, 0);
         animation.setItemHeight(rightArrow, 0);
         animation.setItemIndex(leftArrow, 0);

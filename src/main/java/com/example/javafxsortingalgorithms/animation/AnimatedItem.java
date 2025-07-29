@@ -1,4 +1,4 @@
-package com.example.javafxsortingalgorithms.newanimation;
+package com.example.javafxsortingalgorithms.animation;
 
 import com.example.javafxsortingalgorithms.AlgorithmController;
 import com.example.javafxsortingalgorithms.algorithmupdates.AnimationUpdate;
@@ -12,7 +12,7 @@ import javafx.scene.Group;
 import javafx.scene.paint.Paint;
 import javafx.util.Duration;
 
-public abstract class NewAnimatedItem extends Group {
+public abstract class AnimatedItem extends Group {
 
     public abstract void generateVisuals(DisplaySettings settings);
 

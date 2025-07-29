@@ -3,7 +3,7 @@ package com.example.javafxsortingalgorithms.arraydisplay;
 import com.example.javafxsortingalgorithms.AlgorithmController;
 import com.example.javafxsortingalgorithms.algorithmupdates.AnimationUpdate;
 import com.example.javafxsortingalgorithms.algorithmupdates.ListUpdate;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedReadArrow;
+import com.example.javafxsortingalgorithms.animation.AnimatedReadArrow;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -18,7 +18,7 @@ public class BasicArrayDisplay extends SimpleArrayDisplay<Rectangle> {
 
     private static final double COLOUR_RANGE = 360;
 
-    private final List<NewAnimatedReadArrow> arrows;
+    private final List<AnimatedReadArrow> arrows;
 
     public BasicArrayDisplay() {
         super();
@@ -61,7 +61,7 @@ public class BasicArrayDisplay extends SimpleArrayDisplay<Rectangle> {
     // TODO: Should this be overridden?
     @Override
     public void createReadAnimation(int index, int value) {
-        NewAnimatedReadArrow readArrow = new NewAnimatedReadArrow();
+        AnimatedReadArrow readArrow = new AnimatedReadArrow();
         getChildren().add(readArrow);
         readArrow.generateVisuals(currentSettings);
         readArrow.setLayoutX(currentSettings.elementWidth() * index);
@@ -86,7 +86,7 @@ public class BasicArrayDisplay extends SimpleArrayDisplay<Rectangle> {
     }
 
     @Override
-    protected Timeline createReadTimeline(NewAnimatedReadArrow readArrow, int index, int value) {
+    protected Timeline createReadTimeline(AnimatedReadArrow readArrow, int index, int value) {
         return new Timeline(
                 new KeyFrame(
                         Duration.millis((double) value / currentSettings.maxValue() * AlgorithmController.ANIMATION_LENGTH),

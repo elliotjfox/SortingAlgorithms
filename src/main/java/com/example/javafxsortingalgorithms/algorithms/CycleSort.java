@@ -1,6 +1,6 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
 
 import java.util.*;
 
@@ -13,9 +13,9 @@ public class CycleSort extends SortingAlgorithm {
     @Override
     protected void runAlgorithm() {
 
-        NewAnimatedArrow cycleStartArrow = animation.createArrow();
-        NewAnimatedArrow targetPosArrow = animation.createArrow();
-        NewAnimatedArrow iArrow = animation.createArrow();
+        AnimatedArrow cycleStartArrow = animation.createArrow();
+        AnimatedArrow targetPosArrow = animation.createArrow();
+        AnimatedArrow iArrow = animation.createArrow();
         animation.setItemIndex(cycleStartArrow, 0);
         animation.setItemIndex(targetPosArrow, 0);
         animation.setItemIndex(iArrow, 1);

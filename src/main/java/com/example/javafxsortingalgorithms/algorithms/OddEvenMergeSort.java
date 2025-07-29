@@ -2,7 +2,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.algorithmupdates.CreateItemUpdate;
 import com.example.javafxsortingalgorithms.arraydisplay.DisplayMode;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedSortingNetwork;
+import com.example.javafxsortingalgorithms.animation.AnimatedSortingNetwork;
 
 import java.util.List;
 
@@ -14,9 +14,9 @@ public class OddEvenMergeSort extends SortingAlgorithm {
 
     @Override
     protected void runAlgorithm() {
-        NewAnimatedSortingNetwork sortingNetwork = null;
+        AnimatedSortingNetwork sortingNetwork = null;
         if (mode == DisplayMode.ANIMATED) {
-            sortingNetwork = new NewAnimatedSortingNetwork();
+            sortingNetwork = new AnimatedSortingNetwork();
             currentChanges.add(new CreateItemUpdate(sortingNetwork));
         }
 

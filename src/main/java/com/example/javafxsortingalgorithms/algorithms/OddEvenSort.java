@@ -1,8 +1,8 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedSection;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
+import com.example.javafxsortingalgorithms.animation.AnimatedSection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,17 +18,17 @@ public class OddEvenSort extends SortingAlgorithm {
 
     @Override
     protected void runAlgorithm() {
-        NewAnimatedArrow leftArrow = animation.createArrow();
-        NewAnimatedArrow rightArrow = animation.createArrow();
+        AnimatedArrow leftArrow = animation.createArrow();
+        AnimatedArrow rightArrow = animation.createArrow();
 
         animation.setItemIndex(leftArrow, 0);
         animation.setItemHeight(leftArrow, ARROW_HEIGHT);
         animation.setItemIndex(rightArrow, 1);
         animation.setItemHeight(rightArrow, ARROW_HEIGHT);
 
-        List<NewAnimatedSection> sections = new ArrayList<>();
+        List<AnimatedSection> sections = new ArrayList<>();
         for (int i = 0; i < list.size() - 1; i += 2) {
-            NewAnimatedSection section = animation.createSection(1);
+            AnimatedSection section = animation.createSection(1);
             sections.add(section);
             animation.setItemPosition(section, i + 0.5);
             animation.setItemHeight(section, SECTION_HEIGHT);

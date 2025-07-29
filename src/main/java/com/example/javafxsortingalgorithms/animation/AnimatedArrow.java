@@ -1,4 +1,4 @@
-package com.example.javafxsortingalgorithms.newanimation;
+package com.example.javafxsortingalgorithms.animation;
 
 import com.example.javafxsortingalgorithms.AlgorithmController;
 import com.example.javafxsortingalgorithms.algorithmupdates.AnimationUpdate;
@@ -11,7 +11,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Polygon;
 import javafx.util.Duration;
 
-public class NewAnimatedArrow extends NewAnimatedItem {
+public class AnimatedArrow extends AnimatedItem {
 
     private static final Paint DEFAULT_PAINT = Color.BLACK;
     private static final boolean DEFAULT_DIRECTION = true;
@@ -21,7 +21,7 @@ public class NewAnimatedArrow extends NewAnimatedItem {
 
     private final Polygon arrow;
 
-    public NewAnimatedArrow(Paint fill, boolean facingUp) {
+    public AnimatedArrow(Paint fill, boolean facingUp) {
         this.fill = fill;
         this.facingUp = facingUp;
 
@@ -29,15 +29,15 @@ public class NewAnimatedArrow extends NewAnimatedItem {
         getChildren().add(arrow);
     }
 
-    public NewAnimatedArrow(Paint fill) {
+    public AnimatedArrow(Paint fill) {
         this(fill, DEFAULT_DIRECTION);
     }
 
-    public NewAnimatedArrow(boolean facingUp) {
+    public AnimatedArrow(boolean facingUp) {
         this(DEFAULT_PAINT, facingUp);
     }
 
-    public NewAnimatedArrow() {
+    public AnimatedArrow() {
         this(DEFAULT_PAINT, DEFAULT_DIRECTION);
     }
 

@@ -3,8 +3,8 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsInputBox;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedSection;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
+import com.example.javafxsortingalgorithms.animation.AnimatedSection;
 
 import java.util.List;
 
@@ -25,15 +25,15 @@ public class CombSort extends SortingAlgorithm {
     protected void runAlgorithm() {
         int gapSize = (int) (list.size() / shrinkFactor);
 
-        NewAnimatedArrow left = animation.createArrow();
+        AnimatedArrow left = animation.createArrow();
         animation.setItemHeight(left, ARROW_HEIGHT);
         animation.setItemIndex(left, 0);
 
-        NewAnimatedArrow right = animation.createArrow();
+        AnimatedArrow right = animation.createArrow();
         animation.setItemHeight(right, ARROW_HEIGHT);
         animation.setItemIndex(right, gapSize);
 
-        NewAnimatedSection section = animation.createSection(gapSize + 1);
+        AnimatedSection section = animation.createSection(gapSize + 1);
         animation.setItemHeight(section, SECTION_HEIGHT);
         animation.setItemIndex(section, 0);
 

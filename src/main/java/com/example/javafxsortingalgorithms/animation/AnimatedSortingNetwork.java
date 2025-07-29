@@ -1,4 +1,4 @@
-package com.example.javafxsortingalgorithms.newanimation;
+package com.example.javafxsortingalgorithms.animation;
 
 import com.example.javafxsortingalgorithms.AlgorithmController;
 import com.example.javafxsortingalgorithms.algorithmupdates.AnimationUpdate;
@@ -17,14 +17,14 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewAnimatedSortingNetwork extends NewAnimatedItem {
+public class AnimatedSortingNetwork extends AnimatedItem {
 
     private final List<Line> lines;
     private final List<List<Integer>> comparisons;
     private final List<List<Node>> visuals;
     private List<Integer> currentComparisons;
 
-    public NewAnimatedSortingNetwork() {
+    public AnimatedSortingNetwork() {
         lines = new ArrayList<>();
         comparisons = new ArrayList<>();
         visuals = new ArrayList<>();

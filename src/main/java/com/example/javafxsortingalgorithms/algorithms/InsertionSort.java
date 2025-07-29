@@ -3,8 +3,8 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedSection;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
+import com.example.javafxsortingalgorithms.animation.AnimatedSection;
 
 import java.util.List;
 import java.util.Objects;
@@ -48,8 +48,8 @@ public class InsertionSort extends SortingAlgorithm {
     }
 
     private void rightSearch() {
-        NewAnimatedSection searchSection = animation.createSection(0);
-        NewAnimatedArrow arrow = animation.createArrow();
+        AnimatedSection searchSection = animation.createSection(0);
+        AnimatedArrow arrow = animation.createArrow();
         animation.setItemIndex(searchSection, 0);
         animation.setItemIndex(arrow, 0);
         animation.setItemHeight(searchSection, SECTION_HEIGHT);
@@ -76,8 +76,8 @@ public class InsertionSort extends SortingAlgorithm {
     }
 
     private void leftSearch() {
-        NewAnimatedSection searchSection = animation.createSection(0);
-        NewAnimatedArrow arrow = animation.createArrow();
+        AnimatedSection searchSection = animation.createSection(0);
+        AnimatedArrow arrow = animation.createArrow();
         animation.setItemIndex(searchSection, 0);
         animation.setItemIndex(arrow, 0);
         animation.setItemHeight(searchSection, SECTION_HEIGHT);
@@ -104,8 +104,8 @@ public class InsertionSort extends SortingAlgorithm {
     }
 
     private void binarySearch() {
-        NewAnimatedSection searchSection = animation.createSection(0);
-        NewAnimatedArrow arrow = animation.createArrow();
+        AnimatedSection searchSection = animation.createSection(0);
+        AnimatedArrow arrow = animation.createArrow();
         animation.setItemIndex(searchSection, 0);
         animation.setItemIndex(arrow, 0);
         animation.setItemHeight(searchSection, SECTION_HEIGHT);

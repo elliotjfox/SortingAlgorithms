@@ -1,13 +1,13 @@
 package com.example.javafxsortingalgorithms.algorithmupdates;
 
 import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplayBase;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedItem;
+import com.example.javafxsortingalgorithms.animation.AnimatedItem;
 
 public class RemoveItemUpdate implements DisplayUpdate {
 
-    private final NewAnimatedItem animatedItem;
+    private final AnimatedItem animatedItem;
 
-    public RemoveItemUpdate(NewAnimatedItem animatedItem) {
+    public RemoveItemUpdate(AnimatedItem animatedItem) {
         this.animatedItem = animatedItem;
     }
 

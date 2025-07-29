@@ -3,7 +3,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.*;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
 
 import java.util.List;
 
@@ -19,8 +19,8 @@ public class PancakeSort extends SortingAlgorithm {
 
     @Override
     protected void runAlgorithm() {
-        NewAnimatedArrow arrow = animation.createArrow();
-        NewAnimatedArrow minArrow = animation.createArrow();
+        AnimatedArrow arrow = animation.createArrow();
+        AnimatedArrow minArrow = animation.createArrow();
         animation.setItemPosition(arrow, 0);
         animation.setItemPosition(minArrow, 0);
         animation.setItemHeight(arrow, 0);

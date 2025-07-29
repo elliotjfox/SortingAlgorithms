@@ -1,7 +1,7 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
 
 import java.util.List;
 
@@ -24,8 +24,8 @@ public class BubbleSort extends SortingAlgorithm {
         boolean hasSwapped;
 
         // Initialize animation items
-        NewAnimatedArrow leftPointer = animation.createArrow();
-        NewAnimatedArrow rightPointer = animation.createArrow();
+        AnimatedArrow leftPointer = animation.createArrow();
+        AnimatedArrow rightPointer = animation.createArrow();
         animation.setItemHeight(leftPointer, 0);
         animation.setItemHeight(rightPointer, 0);
         animation.setItemIndex(leftPointer, 0);

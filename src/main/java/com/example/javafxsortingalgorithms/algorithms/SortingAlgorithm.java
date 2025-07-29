@@ -4,9 +4,9 @@ import com.example.javafxsortingalgorithms.algorithmupdates.*;
 import com.example.javafxsortingalgorithms.TestDisplay;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedItem;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedSection;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
+import com.example.javafxsortingalgorithms.animation.AnimatedItem;
+import com.example.javafxsortingalgorithms.animation.AnimatedSection;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -171,34 +171,34 @@ public abstract class SortingAlgorithm {
             }
         }
 
-        protected NewAnimatedArrow createArrow() {
+        protected AnimatedArrow createArrow() {
             if (algorithm.mode == DisplayMode.ANIMATED) {
-                NewAnimatedArrow tmp = new NewAnimatedArrow();
+                AnimatedArrow tmp = new AnimatedArrow();
                 algorithm.currentChanges.add(new CreateItemUpdate(tmp));
                 return tmp;
             }
             return null;
         }
 
-        protected NewAnimatedSection createSection(double width) {
+        protected AnimatedSection createSection(double width) {
             if (algorithm.mode == DisplayMode.ANIMATED) {
-                NewAnimatedSection section = new NewAnimatedSection(width);
+                AnimatedSection section = new AnimatedSection(width);
                 algorithm.currentChanges.add(new CreateItemUpdate(section));
                 return section;
             }
             return null;
         }
 
-        protected NewAnimatedSection createSection(int width) {
+        protected AnimatedSection createSection(int width) {
             if (algorithm.mode == DisplayMode.ANIMATED) {
-                NewAnimatedSection section = new NewAnimatedSection(width);
+                AnimatedSection section = new AnimatedSection(width);
                 algorithm.currentChanges.add(new CreateItemUpdate(section));
                 return section;
             }
             return null;
         }
 
-        protected void removeItem(NewAnimatedItem item) {
+        protected void removeItem(AnimatedItem item) {
             if (algorithm.mode == DisplayMode.ANIMATED) {
                 algorithm.currentChanges.add(new RemoveItemUpdate(item));
             }
@@ -211,61 +211,61 @@ public abstract class SortingAlgorithm {
             }
         }
 
-        protected void setItemIndex(NewAnimatedItem item, int index) {
+        protected void setItemIndex(AnimatedItem item, int index) {
             if (item == null) return;
 
             algorithm.currentChanges.add(item.setIndex(index));
         }
 
-        protected void setItemPosition(NewAnimatedItem item, double position) {
+        protected void setItemPosition(AnimatedItem item, double position) {
             if (item == null) return;
 
             algorithm.currentChanges.add(item.setPosition(position));
         }
 
-        protected void moveItem(NewAnimatedItem item, int index) {
+        protected void moveItem(AnimatedItem item, int index) {
             if (item == null) return;
 
             algorithm.currentChanges.add(item.moveToIndex(index));
         }
 
-        protected void moveItem(NewAnimatedItem item, double position) {
+        protected void moveItem(AnimatedItem item, double position) {
             if (item == null) return;
 
             algorithm.currentChanges.add(item.moveToPosition(position));
         }
 
-        protected void setItemHeight(NewAnimatedItem item, double height) {
+        protected void setItemHeight(AnimatedItem item, double height) {
             if (item == null) return;
 
             algorithm.currentChanges.add(item.setHeight(height));
         }
 
-        protected void moveItemHeight(NewAnimatedItem item, double height) {
+        protected void moveItemHeight(AnimatedItem item, double height) {
             if (item == null) return;
 
             algorithm.currentChanges.add(item.moveToHeight(height));
         }
 
-        protected void changeItemFill(NewAnimatedItem item, Paint fill) {
+        protected void changeItemFill(AnimatedItem item, Paint fill) {
             if (item == null) return;
 
             algorithm.currentChanges.add(item.changeFill(fill));
         }
 
-        protected void setSectionWidth(NewAnimatedSection section, double width) {
+        protected void setSectionWidth(AnimatedSection section, double width) {
             if (section == null) return;
 
             algorithm.currentChanges.add(section.setWidth(width));
         }
 
-        protected void changeSectionWidth(NewAnimatedSection section, double width) {
+        protected void changeSectionWidth(AnimatedSection section, double width) {
             if (section == null) return;
 
             algorithm.currentChanges.add(section.changeWidth(width));
         }
 
-        protected void changeSectionWidth(NewAnimatedSection section, int width) {
+        protected void changeSectionWidth(AnimatedSection section, int width) {
             if (section == null) return;
 
             algorithm.currentChanges.add(section.changeWidth(width));

@@ -1,7 +1,7 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public class GnomeSort extends SortingAlgorithm {
 
     @Override
     protected void runAlgorithm() {
-        NewAnimatedArrow arrow = animation.createArrow();
+        AnimatedArrow arrow = animation.createArrow();
         animation.setItemHeight(arrow, 0);
         animation.setItemIndex(arrow, 0);
 

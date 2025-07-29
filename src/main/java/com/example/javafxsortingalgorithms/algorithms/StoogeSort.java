@@ -3,14 +3,14 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithmupdates.CreateItemUpdate;
 import com.example.javafxsortingalgorithms.arraydisplay.DisplayMode;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedSection;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimationSectionList;
+import com.example.javafxsortingalgorithms.animation.AnimatedSection;
+import com.example.javafxsortingalgorithms.animation.AnimationSectionList;
 
 import java.util.List;
 
 public class StoogeSort extends SortingAlgorithm {
 
-    private NewAnimationSectionList sectionList;
+    private AnimationSectionList sectionList;
 
     public StoogeSort(List<Integer> arrayList) {
         super(arrayList);
@@ -19,11 +19,11 @@ public class StoogeSort extends SortingAlgorithm {
     @Override
     protected void runAlgorithm() {
         if (mode == DisplayMode.ANIMATED) {
-            sectionList = new NewAnimationSectionList();
+            sectionList = new AnimationSectionList();
             currentChanges.add(new CreateItemUpdate(sectionList));
             animation.setItemHeight(sectionList, 0);
             animation.addFrame();
-            NewAnimatedSection section = new NewAnimatedSection(list.size());
+            AnimatedSection section = new AnimatedSection(list.size());
             currentChanges.add(section.setIndex(0));
             currentChanges.add(sectionList.addSectionsToStart(section));
             animation.addFrame();
@@ -47,9 +47,9 @@ public class StoogeSort extends SortingAlgorithm {
         if (to - from + 1 > 2) {
             int third = (to - from + 1) / 3;
             if (sectionList != null) {
-                NewAnimatedSection section1 = new NewAnimatedSection((to - third) - from + 1);
-                NewAnimatedSection section2 = new NewAnimatedSection(to - (from + third) + 1);
-                NewAnimatedSection section3 = new NewAnimatedSection((to - third) - from + 1);
+                AnimatedSection section1 = new AnimatedSection((to - third) - from + 1);
+                AnimatedSection section2 = new AnimatedSection(to - (from + third) + 1);
+                AnimatedSection section3 = new AnimatedSection((to - third) - from + 1);
                 currentChanges.add(section1.setIndex(from));
                 currentChanges.add(section2.setIndex(from + third));
                 currentChanges.add(section3.setIndex(from));

@@ -3,8 +3,8 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithnSettingsCheckBox;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedSection;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
+import com.example.javafxsortingalgorithms.animation.AnimatedSection;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
@@ -22,7 +22,7 @@ public class MergeSort extends SortingAlgorithm {
 
     @Override
     protected void runAlgorithm() {
-        NewAnimatedSection section = animation.createSection(list.size());
+        AnimatedSection section = animation.createSection(list.size());
         animation.setItemIndex(section, 0);
         animation.setItemHeight(section, -SECTION_OFFSET);
         divide(0, list.size(), -SECTION_OFFSET, section);
@@ -31,9 +31,9 @@ public class MergeSort extends SortingAlgorithm {
     }
 
     // [from, to)
-    private void divide(int from, int to, double height, NewAnimatedSection parentSection) {
-        NewAnimatedSection leftSection = null;
-        NewAnimatedSection rightSection = null;
+    private void divide(int from, int to, double height, AnimatedSection parentSection) {
+        AnimatedSection leftSection = null;
+        AnimatedSection rightSection = null;
         if (to - from >= 2) {
             int half = (from + to) / 2;
             leftSection = animation.createSection(half - from);
@@ -71,8 +71,8 @@ public class MergeSort extends SortingAlgorithm {
     private void merge(int left, int end) {
         int right = (left + end) / 2;
 
-        NewAnimatedArrow leftArrow = animation.createArrow();
-        NewAnimatedArrow rightArrow = animation.createArrow();
+        AnimatedArrow leftArrow = animation.createArrow();
+        AnimatedArrow rightArrow = animation.createArrow();
         animation.setItemIndex(leftArrow, left);
         animation.setItemHeight(leftArrow, 0);
         animation.setItemIndex(rightArrow, right);

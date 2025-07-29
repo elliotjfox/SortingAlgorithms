@@ -1,7 +1,7 @@
 package com.example.javafxsortingalgorithms.arraydisplay;
 
 import com.example.javafxsortingalgorithms.AlgorithmController;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedReadArrow;
+import com.example.javafxsortingalgorithms.animation.AnimatedReadArrow;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -43,7 +43,7 @@ public class HeatMapDisplay extends SimpleArrayDisplay<Rectangle> {
     }
 
     @Override
-    protected Timeline createReadTimeline(NewAnimatedReadArrow readArrow, int index, int value) {
+    protected Timeline createReadTimeline(AnimatedReadArrow readArrow, int index, int value) {
         return null;
     }
 }

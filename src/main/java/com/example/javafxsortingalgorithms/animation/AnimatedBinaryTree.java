@@ -1,4 +1,4 @@
-package com.example.javafxsortingalgorithms.newanimation;
+package com.example.javafxsortingalgorithms.animation;
 
 import com.example.javafxsortingalgorithms.AlgorithmController;
 import com.example.javafxsortingalgorithms.algorithmupdates.AnimationUpdate;
@@ -20,7 +20,7 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewAnimatedBinaryTree extends NewAnimatedItem {
+public class AnimatedBinaryTree extends AnimatedItem {
 
     private static final double VERTICAL_PADDING_FRACTION = 0.25;
     private static final double HORIZONTAL_PADDING_FRACTION = 0.25;
@@ -28,7 +28,7 @@ public class NewAnimatedBinaryTree extends NewAnimatedItem {
     private final List<AnimatedBinaryTreeItem> initialNodes;
     private final List<AnimatedBinaryTreeItem> nodes;
 
-    public NewAnimatedBinaryTree(List<Integer> list) {
+    public AnimatedBinaryTree(List<Integer> list) {
         initialNodes = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             AnimatedBinaryTreeItem item = new AnimatedBinaryTreeItem(list.get(i));
@@ -91,7 +91,7 @@ public class NewAnimatedBinaryTree extends NewAnimatedItem {
     }
 
     public GenerateAnimationUpdate readIndex(int index) {
-        NewAnimatedReadArrow readArrow = new NewAnimatedReadArrow();
+        AnimatedReadArrow readArrow = new AnimatedReadArrow();
         int nodesSize = nodes.size();
         return new GenerateAnimationUpdate(
                 settings -> {
@@ -130,7 +130,7 @@ public class NewAnimatedBinaryTree extends NewAnimatedItem {
         return (int) (Math.log(i + 1) / Math.log(2));
     }
 
-    private static class AnimatedBinaryTreeItem extends NewAnimatedItem {
+    private static class AnimatedBinaryTreeItem extends AnimatedItem {
 
         private final int value;
         private final StackPane stackPane;

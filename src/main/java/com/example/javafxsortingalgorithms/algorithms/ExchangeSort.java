@@ -2,7 +2,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
 
 import java.util.List;
 
@@ -31,8 +31,8 @@ public class ExchangeSort extends SortingAlgorithm {
     }
 
     private void runUp() {
-        NewAnimatedArrow outerArrow = animation.createArrow();
-        NewAnimatedArrow innerArrow = animation.createArrow();
+        AnimatedArrow outerArrow = animation.createArrow();
+        AnimatedArrow innerArrow = animation.createArrow();
         animation.setItemIndex(outerArrow, 0);
         animation.setItemIndex(innerArrow, 1);
         animation.setItemHeight(outerArrow, 0);
@@ -55,8 +55,8 @@ public class ExchangeSort extends SortingAlgorithm {
     }
 
     private void runDown() {
-        NewAnimatedArrow outerArrow = animation.createArrow();
-        NewAnimatedArrow innerArrow = animation.createArrow();
+        AnimatedArrow outerArrow = animation.createArrow();
+        AnimatedArrow innerArrow = animation.createArrow();
         animation.setItemIndex(outerArrow, 0);
         animation.setItemIndex(innerArrow, 1);
         animation.setItemHeight(outerArrow, 0);

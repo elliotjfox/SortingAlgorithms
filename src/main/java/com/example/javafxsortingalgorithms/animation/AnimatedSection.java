@@ -1,4 +1,4 @@
-package com.example.javafxsortingalgorithms.newanimation;
+package com.example.javafxsortingalgorithms.animation;
 
 import com.example.javafxsortingalgorithms.AlgorithmController;
 import com.example.javafxsortingalgorithms.algorithmupdates.AnimationUpdate;
@@ -12,7 +12,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-public class NewAnimatedSection extends NewAnimatedItem {
+public class AnimatedSection extends AnimatedItem {
 
     private double exactWidth;
     private double indexWidth;
@@ -21,7 +21,7 @@ public class NewAnimatedSection extends NewAnimatedItem {
     private final Rectangle left;
     private final Rectangle right;
 
-    public NewAnimatedSection(double exactWidth) {
+    public AnimatedSection(double exactWidth) {
         this.exactWidth = exactWidth;
 
         middle = new Rectangle();
@@ -29,7 +29,7 @@ public class NewAnimatedSection extends NewAnimatedItem {
         right = new Rectangle();
     }
 
-    public NewAnimatedSection(int indexWidth) {
+    public AnimatedSection(int indexWidth) {
         this.indexWidth = indexWidth;
         this.exactWidth = -1;
 

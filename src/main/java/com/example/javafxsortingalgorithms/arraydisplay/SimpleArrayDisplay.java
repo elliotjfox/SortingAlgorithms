@@ -3,7 +3,7 @@ package com.example.javafxsortingalgorithms.arraydisplay;
 import com.example.javafxsortingalgorithms.AlgorithmController;
 import com.example.javafxsortingalgorithms.algorithmupdates.AnimationUpdate;
 import com.example.javafxsortingalgorithms.algorithmupdates.ListUpdate;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedReadArrow;
+import com.example.javafxsortingalgorithms.animation.AnimatedReadArrow;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Node;
@@ -15,7 +15,7 @@ import java.util.List;
 public abstract class SimpleArrayDisplay<T extends Node> extends ArrayDisplayBase {
 
     private final List<T> elements;
-    private final List<NewAnimatedReadArrow> arrows;
+    private final List<AnimatedReadArrow> arrows;
 
     public SimpleArrayDisplay() {
         elements = new ArrayList<>();
@@ -69,7 +69,7 @@ public abstract class SimpleArrayDisplay<T extends Node> extends ArrayDisplayBas
 
     @Override
     public void createReadAnimation(int index, int value) {
-        NewAnimatedReadArrow readArrow = new NewAnimatedReadArrow();
+        AnimatedReadArrow readArrow = new AnimatedReadArrow();
         getChildren().add(readArrow);
         readArrow.generateVisuals(currentSettings);
         Timeline timeline = createReadTimeline(readArrow, index, value);
@@ -79,7 +79,7 @@ public abstract class SimpleArrayDisplay<T extends Node> extends ArrayDisplayBas
         }
     }
 
-    protected abstract Timeline createReadTimeline(NewAnimatedReadArrow readArrow, int index, int value);
+    protected abstract Timeline createReadTimeline(AnimatedReadArrow readArrow, int index, int value);
     protected abstract T createElement();
     protected abstract void formatElement(int index, int value, T element);
     protected abstract Timeline moveElement(T element, int targetIndex);

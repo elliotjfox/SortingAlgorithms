@@ -1,4 +1,4 @@
-package com.example.javafxsortingalgorithms.newanimation;
+package com.example.javafxsortingalgorithms.animation;
 
 import com.example.javafxsortingalgorithms.AlgorithmController;
 import com.example.javafxsortingalgorithms.algorithmupdates.AnimationUpdate;
@@ -12,13 +12,13 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Polygon;
 import javafx.util.Duration;
 
-public class NewAnimatedReadArrow extends NewAnimatedItem {
+public class AnimatedReadArrow extends AnimatedItem {
 
     private static final Paint READ_ARROW_COLOUR = Color.BLACK;
 
     private final Polygon polygon;
 
-    public NewAnimatedReadArrow() {
+    public AnimatedReadArrow() {
         polygon = new Polygon();
         getChildren().add(polygon);
     }

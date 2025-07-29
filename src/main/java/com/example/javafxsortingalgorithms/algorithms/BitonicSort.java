@@ -5,7 +5,7 @@ import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.Algorith
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithnSettingsCheckBox;
 import com.example.javafxsortingalgorithms.algorithmupdates.CreateItemUpdate;
 import com.example.javafxsortingalgorithms.arraydisplay.DisplayMode;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedSortingNetwork;
+import com.example.javafxsortingalgorithms.animation.AnimatedSortingNetwork;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public class BitonicSort extends SortingAlgorithm {
 
     private final boolean fastMode;
 
-    private NewAnimatedSortingNetwork sortingNetwork;
+    private AnimatedSortingNetwork sortingNetwork;
 
     public BitonicSort(List<Integer> arrayList, boolean fastMode) {
         super(arrayList);
@@ -24,7 +24,7 @@ public class BitonicSort extends SortingAlgorithm {
     @Override
     protected void runAlgorithm() {
         if (mode == DisplayMode.ANIMATED) {
-            sortingNetwork = new NewAnimatedSortingNetwork();
+            sortingNetwork = new AnimatedSortingNetwork();
             currentChanges.add(new CreateItemUpdate(sortingNetwork));
         }
 

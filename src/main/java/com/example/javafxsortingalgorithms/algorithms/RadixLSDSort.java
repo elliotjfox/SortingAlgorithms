@@ -137,7 +137,7 @@ public class RadixLSDSort extends SortingAlgorithm {
 
         return new AlgorithmSettings<>(
                 "Radix Sort",
-                (l, b) -> new RadixLSDSort(l, baseSetting.getValue(), inPlaceSetting.getValue()),
+                list -> new RadixLSDSort(list, baseSetting.getValue(), inPlaceSetting.getValue()),
                 baseSetting,
                 inPlaceSetting
         );

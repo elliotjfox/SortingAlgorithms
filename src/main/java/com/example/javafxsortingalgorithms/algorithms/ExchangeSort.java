@@ -88,7 +88,7 @@ public class ExchangeSort extends SortingAlgorithm {
 
         return new AlgorithmSettings<>(
                 "Exchange Sort",
-                (l, b) -> new ExchangeSort(l, directionSetting.getValue()),
+                list -> new ExchangeSort(list, directionSetting.getValue()),
                 directionSetting
         );
     }

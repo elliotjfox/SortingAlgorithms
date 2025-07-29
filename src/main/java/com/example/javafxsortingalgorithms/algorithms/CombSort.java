@@ -91,7 +91,7 @@ public class CombSort extends SortingAlgorithm {
 
         return new AlgorithmSettings<>(
                 "Comb Sort",
-                (l, b) -> new CombSort(l, shrinkFactorSetting.getValue()),
+                list -> new CombSort(list, shrinkFactorSetting.getValue()),
                 shrinkFactorSetting
         );
     }

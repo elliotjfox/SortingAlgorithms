@@ -150,7 +150,7 @@ public class BitonicSort extends SortingAlgorithm {
 
         return new AlgorithmSettings<>(
                 "Bitonic Sort",
-                (l, b) -> new BitonicSort(l, fastModeSetting.getValue()),
+                list -> new BitonicSort(list, fastModeSetting.getValue()),
                 fastModeSetting
         );
     }

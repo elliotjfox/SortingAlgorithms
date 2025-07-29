@@ -201,7 +201,7 @@ public class SelectionSort extends SortingAlgorithm {
 
         return new AlgorithmSettings<>(
                 "Selection Sort",
-                (l, b) -> new SelectionSort(l, selectionSetting.getValue()),
+                list -> new SelectionSort(list, selectionSetting.getValue()),
                 selectionSetting
         );
     }

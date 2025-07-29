@@ -135,7 +135,7 @@ public class QuickSort extends SortingAlgorithm {
 
         return new AlgorithmSettings<>(
                 "Quick Sort",
-                (l, b) -> new QuickSort(l, partitionSetting.getValue()),
+                list -> new QuickSort(list, partitionSetting.getValue()),
                 partitionSetting
         );
     }

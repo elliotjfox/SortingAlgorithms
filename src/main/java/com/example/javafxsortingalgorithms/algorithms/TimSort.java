@@ -148,7 +148,7 @@ public class TimSort extends SortingAlgorithm {
 
         return new AlgorithmSettings<>(
                 "Tim Sort",
-                (l, b) -> new TimSort(l, alwaysAscendingSetting.getValue()),
+                list -> new TimSort(list, alwaysAscendingSetting.getValue()),
                 alwaysAscendingSetting
         );
     }

@@ -88,7 +88,7 @@ public class PancakeSort extends SortingAlgorithm {
 
         return new AlgorithmSettings<>(
                 "Pancake Sort",
-                (l, b) -> new PancakeSort(l, instantFlipsSetting.getValue()),
+                list -> new PancakeSort(list, instantFlipsSetting.getValue()),
                 instantFlipsSetting
         );
     }

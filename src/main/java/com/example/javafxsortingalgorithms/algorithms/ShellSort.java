@@ -235,7 +235,7 @@ public class ShellSort extends SortingAlgorithm {
 
         return new AlgorithmSettings<>(
                 "Shell Sort",
-                (l, b) -> new ShellSort(l, shrinkFactorSetting.getValue(), modeSetting.getValue()),
+                list -> new ShellSort(list, shrinkFactorSetting.getValue(), modeSetting.getValue()),
                 modeSetting,
                 shrinkFactorSetting
         );

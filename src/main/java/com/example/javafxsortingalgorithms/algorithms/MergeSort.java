@@ -145,7 +145,7 @@ public class MergeSort extends SortingAlgorithm {
 
         return new AlgorithmSettings<>(
                 "Merge Sort",
-                (l, b) -> new MergeSort(l, inPlaceSetting.getValue()),
+                list -> new MergeSort(list, inPlaceSetting.getValue()),
                 inPlaceSetting
         );
     }

@@ -195,7 +195,7 @@ public class InsertionSort extends SortingAlgorithm {
 
         return new AlgorithmSettings<>(
                 "Insertion Sort",
-                (l, b) -> new InsertionSort(l, searchSetting.getValue()),
+                list -> new InsertionSort(list, searchSetting.getValue()),
                 searchSetting
         );
     }

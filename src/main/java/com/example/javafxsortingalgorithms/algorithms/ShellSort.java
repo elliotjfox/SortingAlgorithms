@@ -4,14 +4,10 @@ import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsInputBox;
-import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
-import com.example.javafxsortingalgorithms.animation.AnimatedItem;
-import com.example.javafxsortingalgorithms.animation.ItemBuilder;
-import com.example.javafxsortingalgorithms.arraydisplay.*;
 
 import java.util.List;
 
-public class ShellSort extends ActionSortingAlgorithm {
+public class ShellSort extends SortingAlgorithm {
 
     public enum ShellSortMode {
         // This is sorting each element sequentially
@@ -23,20 +19,11 @@ public class ShellSort extends ActionSortingAlgorithm {
     private final double shrinkFactor;
     private final ShellSortMode mode;
 
-    private AnimatedItem arrow;
-
-    public ShellSort(List<Integer> list, boolean isInstant, double shrinkFactor, ShellSortMode mode) {
-        super(list, isInstant);
+    public ShellSort(List<Integer> list, double shrinkFactor, ShellSortMode mode) {
+        super(list);
 
         this.shrinkFactor = shrinkFactor;
         this.mode = mode;
-
-//        if (!isInstant) {
-//            switch (mode) {
-//                case ONE_BY_ONE -> addOneByOneActions();
-//                case OFFSET_FIRST -> addOffsetFirstActions();
-//            }
-//        }
     }
 
     // TODO: Add animations
@@ -248,7 +235,7 @@ public class ShellSort extends ActionSortingAlgorithm {
 
         return new AlgorithmSettings<>(
                 "Shell Sort",
-                (l, b) -> new ShellSort(l, b, shrinkFactorSetting.getValue(), modeSetting.getValue()),
+                (l, b) -> new ShellSort(l, shrinkFactorSetting.getValue(), modeSetting.getValue()),
                 modeSetting,
                 shrinkFactorSetting
         );

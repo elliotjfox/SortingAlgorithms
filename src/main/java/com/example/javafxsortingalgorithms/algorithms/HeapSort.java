@@ -2,8 +2,6 @@ package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithmupdates.CreateItemUpdate;
-import com.example.javafxsortingalgorithms.algorithmupdates.MoveUpdate;
-import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.DisplayMode;
 import com.example.javafxsortingalgorithms.newanimation.NewAnimatedBinaryTree;
 
@@ -15,8 +13,8 @@ public class HeapSort extends SortingAlgorithm {
 
     private NewAnimatedBinaryTree tree;
 
-    public HeapSort(List<Integer> list, boolean isInstant) {
-        super(list, isInstant);
+    public HeapSort(List<Integer> list) {
+        super(list);
         animation = new HeapAnimation(this);
 
         treeSize = list.size();

@@ -3,10 +3,6 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithnSettingsCheckBox;
-import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
-import com.example.javafxsortingalgorithms.animation.AnimatedSection;
-import com.example.javafxsortingalgorithms.animation.ItemBuilder;
-import com.example.javafxsortingalgorithms.arraydisplay.*;
 import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
 import com.example.javafxsortingalgorithms.newanimation.NewAnimatedSection;
 import javafx.scene.paint.Color;
@@ -20,13 +16,8 @@ public class MergeSort extends SortingAlgorithm {
     private static final double SECTION_DISTANCE = 15;
     private static final Paint COMPLETED_COLOUR = Color.rgb(44, 199, 88);
 
-
-    private final boolean inPlace;
-
-    public MergeSort(List<Integer> arrayList, boolean isInstant, boolean inPlace) {
-        super(arrayList, isInstant);
-
-        this.inPlace = inPlace;
+    public MergeSort(List<Integer> arrayList, boolean inPlace) {
+        super(arrayList);
     }
 
     @Override
@@ -136,13 +127,13 @@ public class MergeSort extends SortingAlgorithm {
         }
     }
 
-    @Override
-    public void startAnimated(AnimatedArrayDisplay display) {
-        AnimatedSection currentSection = new ItemBuilder(display)
-                .at(0, -SECTION_OFFSET)
-                .buildSection(list.size());
-        display.addItem(currentSection);
-    }
+//    @Override
+//    public void startAnimated(AnimatedArrayDisplay display) {
+//        AnimatedSection currentSection = new ItemBuilder(display)
+//                .at(0, -SECTION_OFFSET)
+//                .buildSection(list.size());
+//        display.addItem(currentSection);
+//    }
 
     @Override
     public String getName() {
@@ -154,7 +145,7 @@ public class MergeSort extends SortingAlgorithm {
 
         return new AlgorithmSettings<>(
                 "Merge Sort",
-                (l, b) -> new MergeSort(l, b, inPlaceSetting.getValue()),
+                (l, b) -> new MergeSort(l, inPlaceSetting.getValue()),
                 inPlaceSetting
         );
     }

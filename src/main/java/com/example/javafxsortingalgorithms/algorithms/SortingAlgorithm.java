@@ -1,13 +1,11 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.algorithmupdates.*;
-import com.example.javafxsortingalgorithms.animation.*;
 import com.example.javafxsortingalgorithms.TestDisplay;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
 import com.example.javafxsortingalgorithms.newanimation.NewAnimatedItem;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedReadArrow;
 import com.example.javafxsortingalgorithms.newanimation.NewAnimatedSection;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -18,13 +16,11 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public abstract class SortingAlgorithm {
     protected List<Integer> list;
     protected boolean isDone;
-    protected final boolean isInstant;
     protected DisplayMode mode;
 
     protected List<DisplayFrame> frames;
@@ -36,9 +32,8 @@ public abstract class SortingAlgorithm {
         READ, WRITE
     }
 
-    public SortingAlgorithm(List<Integer> list, boolean isInstant) {
+    public SortingAlgorithm(List<Integer> list) {
         this.list = list;
-        this.isInstant = isInstant;
         isDone = false;
 
         this.frames = new ArrayList<>();
@@ -46,8 +41,6 @@ public abstract class SortingAlgorithm {
         nextChanges = new ArrayList<>();
         animation = new SortingAlgorithmAnimation(this);
     }
-
-    protected void runAlgorithm(ArrayDisplay display) {}
 
     public void startAlgorithm(DisplayMode mode) {
         this.mode = mode;
@@ -57,23 +50,13 @@ public abstract class SortingAlgorithm {
         addFrame();
     }
 
-    protected void runAlgorithm() {
-        System.out.println("TODO: Implement this algorithm!");
-    }
+    protected abstract void runAlgorithm();
 
     public List<DisplayFrame> getFrames() {
         return frames;
     }
 
     protected void instantAlgorithm(TestEntry entry) {}
-
-    public void startAnimated(AnimatedArrayDisplay display) {
-        System.out.println("TODO: Implement detailed start for this algorithm!");
-    }
-
-    public void iterateAnimated(AnimatedArrayDisplay display) {
-        System.out.println("TODO: Implement detailed for this algorithm!");
-    }
 
     public void solveInstant(TestDisplay display) {
         solveInstant(display, () -> {});
@@ -115,8 +98,6 @@ public abstract class SortingAlgorithm {
         list.add(targetIndex, list.remove(index));
         currentChanges.add(new MoveUpdate(index, targetIndex));
     }
-
-
 
     // [left, mid) and [mid, right)
     protected void inPlaceMerge(int left, int mid, int right) {
@@ -296,5 +277,4 @@ public abstract class SortingAlgorithm {
             } catch (NullPointerException ignored) {}
         }
     }
-
 }

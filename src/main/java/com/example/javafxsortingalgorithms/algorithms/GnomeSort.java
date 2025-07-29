@@ -1,10 +1,5 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
-import com.example.javafxsortingalgorithms.animation.AnimatedInfo;
-import com.example.javafxsortingalgorithms.animation.AnimatedItem;
-import com.example.javafxsortingalgorithms.animation.ItemBuilder;
-import com.example.javafxsortingalgorithms.arraydisplay.*;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
 
@@ -12,8 +7,8 @@ import java.util.List;
 
 public class GnomeSort extends SortingAlgorithm {
 
-    public GnomeSort(List<Integer> arrayList, boolean isInstant) {
-        super(arrayList, isInstant);
+    public GnomeSort(List<Integer> arrayList) {
+        super(arrayList);
     }
 
     @Override

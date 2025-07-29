@@ -3,14 +3,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
-import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
-import com.example.javafxsortingalgorithms.animation.AnimatedItem;
-import com.example.javafxsortingalgorithms.animation.ItemBuilder;
-import com.example.javafxsortingalgorithms.animation.PolygonWrapper;
-import com.example.javafxsortingalgorithms.arraydisplay.*;
 import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedItem;
-import javafx.scene.paint.Color;
 
 import java.util.List;
 
@@ -47,8 +40,8 @@ public class SelectionSort extends SortingAlgorithm {
      * @param list The list to sort
      * @param mode The selection mode to use
      */
-    public SelectionSort(List<Integer> list, boolean isInstant, SelectionMode mode) {
-        super(list, isInstant);
+    public SelectionSort(List<Integer> list, SelectionMode mode) {
+        super(list);
 
         this.mode = mode;
 
@@ -208,7 +201,7 @@ public class SelectionSort extends SortingAlgorithm {
 
         return new AlgorithmSettings<>(
                 "Selection Sort",
-                (l, b) -> new SelectionSort(l, b, selectionSetting.getValue()),
+                (l, b) -> new SelectionSort(l, selectionSetting.getValue()),
                 selectionSetting
         );
     }

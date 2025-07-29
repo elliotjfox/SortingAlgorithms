@@ -3,7 +3,6 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithnSettingsCheckBox;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 
 import java.util.List;
 
@@ -13,8 +12,8 @@ public class TimSort extends SortingAlgorithm {
 
     private final boolean alwaysAscending;
 
-    public TimSort(List<Integer> arrayList, boolean isInstant, boolean alwaysAscending) {
-        super(arrayList, isInstant);
+    public TimSort(List<Integer> arrayList, boolean alwaysAscending) {
+        super(arrayList);
 
         this.alwaysAscending = alwaysAscending;
     }
@@ -149,7 +148,7 @@ public class TimSort extends SortingAlgorithm {
 
         return new AlgorithmSettings<>(
                 "Tim Sort",
-                (l, b) -> new TimSort(l, b, alwaysAscendingSetting.getValue()),
+                (l, b) -> new TimSort(l, alwaysAscendingSetting.getValue()),
                 alwaysAscendingSetting
         );
     }

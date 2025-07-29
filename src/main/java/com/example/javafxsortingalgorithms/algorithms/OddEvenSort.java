@@ -1,8 +1,6 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.animation.*;
-import com.example.javafxsortingalgorithms.arraydisplay.*;
 import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
 import com.example.javafxsortingalgorithms.newanimation.NewAnimatedSection;
 
@@ -14,8 +12,8 @@ public class OddEvenSort extends SortingAlgorithm {
     private static final double SECTION_HEIGHT = -7;
     private static final double ARROW_HEIGHT = -15;
 
-    public OddEvenSort(List<Integer> arrayList, boolean isInstant) {
-        super(arrayList, isInstant);
+    public OddEvenSort(List<Integer> arrayList) {
+        super(arrayList);
     }
 
     @Override

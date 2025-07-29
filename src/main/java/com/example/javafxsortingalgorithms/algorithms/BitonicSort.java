@@ -4,14 +4,9 @@ import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithnSettingsCheckBox;
 import com.example.javafxsortingalgorithms.algorithmupdates.CreateItemUpdate;
-import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
-import com.example.javafxsortingalgorithms.animation.AnimatedSortingNetwork;
 import com.example.javafxsortingalgorithms.arraydisplay.DisplayMode;
 import com.example.javafxsortingalgorithms.newanimation.NewAnimatedSortingNetwork;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class BitonicSort extends SortingAlgorithm {
@@ -20,8 +15,8 @@ public class BitonicSort extends SortingAlgorithm {
 
     private NewAnimatedSortingNetwork sortingNetwork;
 
-    public BitonicSort(List<Integer> arrayList, boolean isInstant, boolean fastMode) {
-        super(arrayList, isInstant);
+    public BitonicSort(List<Integer> arrayList, boolean fastMode) {
+        super(arrayList);
 
         this.fastMode = fastMode;
     }
@@ -155,7 +150,7 @@ public class BitonicSort extends SortingAlgorithm {
 
         return new AlgorithmSettings<>(
                 "Bitonic Sort",
-                (l, b) -> new BitonicSort(l, b, fastModeSetting.getValue()),
+                (l, b) -> new BitonicSort(l, fastModeSetting.getValue()),
                 fastModeSetting
         );
     }

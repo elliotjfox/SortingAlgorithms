@@ -3,7 +3,6 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.*;
 import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedReadArrow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +51,8 @@ public class RadixLSDSort extends SortingAlgorithm {
 
     private final int base;
 
-    public RadixLSDSort(List<Integer> arrayList, boolean isInstant, int base, boolean inPlace) {
-        super(arrayList, isInstant);
+    public RadixLSDSort(List<Integer> arrayList, int base, boolean inPlace) {
+        super(arrayList);
 
         this.base = base;
     }
@@ -138,7 +137,7 @@ public class RadixLSDSort extends SortingAlgorithm {
 
         return new AlgorithmSettings<>(
                 "Radix Sort",
-                (l, b) -> new RadixLSDSort(l, b, baseSetting.getValue(), inPlaceSetting.getValue()),
+                (l, b) -> new RadixLSDSort(l, baseSetting.getValue(), inPlaceSetting.getValue()),
                 baseSetting,
                 inPlaceSetting
         );

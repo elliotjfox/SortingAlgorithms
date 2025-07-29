@@ -1,7 +1,6 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
 
 import java.util.List;
@@ -18,20 +17,8 @@ import java.util.List;
  */
 public class CocktailShakerSort extends SortingAlgorithm {
 
-    private int lastPos;
-    private boolean goingUp;
-    private int sortedLeft;
-    private int sortedRight;
-    private boolean hasMadeSwap;
-
-    public CocktailShakerSort(List<Integer> arrayList, boolean isInstant) {
-        super(arrayList, isInstant);
-
-        lastPos = 0;
-        goingUp = true;
-        sortedLeft = 0;
-        sortedRight = 0;
-        hasMadeSwap = false;
+    public CocktailShakerSort(List<Integer> arrayList) {
+        super(arrayList);
     }
 
     @Override

@@ -3,14 +3,11 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
-import com.example.javafxsortingalgorithms.animation.*;
-import com.example.javafxsortingalgorithms.arraydisplay.*;
 import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
 import com.example.javafxsortingalgorithms.newanimation.NewAnimatedSection;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 
 public class InsertionSort extends SortingAlgorithm {
 
@@ -35,8 +32,8 @@ public class InsertionSort extends SortingAlgorithm {
 
     private final SearchType searchType;
 
-    public InsertionSort(List<Integer> arrayList, boolean isInstant, SearchType searchType) {
-        super(arrayList, isInstant);
+    public InsertionSort(List<Integer> arrayList, SearchType searchType) {
+        super(arrayList);
 
         this.searchType = searchType;
     }
@@ -198,7 +195,7 @@ public class InsertionSort extends SortingAlgorithm {
 
         return new AlgorithmSettings<>(
                 "Insertion Sort",
-                (l, b) -> new InsertionSort(l, b, searchSetting.getValue()),
+                (l, b) -> new InsertionSort(l, searchSetting.getValue()),
                 searchSetting
         );
     }

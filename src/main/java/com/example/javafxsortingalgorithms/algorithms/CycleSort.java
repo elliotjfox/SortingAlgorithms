@@ -1,15 +1,13 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
 
 import java.util.*;
 
 public class CycleSort extends SortingAlgorithm {
 
-    public CycleSort(List<Integer> list, boolean isInstant) {
-        super(list, isInstant);
+    public CycleSort(List<Integer> list) {
+        super(list);
     }
 
     @Override

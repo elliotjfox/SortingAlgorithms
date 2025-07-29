@@ -1,9 +1,7 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
 
 import java.util.List;
@@ -18,8 +16,8 @@ public class ExchangeSort extends SortingAlgorithm {
 
     private final Direction direction;
 
-    public ExchangeSort(List<Integer> list, boolean isInstant, Direction direction) {
-        super(list, isInstant);
+    public ExchangeSort(List<Integer> list, Direction direction) {
+        super(list);
 
         this.direction = direction;
     }
@@ -90,7 +88,7 @@ public class ExchangeSort extends SortingAlgorithm {
 
         return new AlgorithmSettings<>(
                 "Exchange Sort",
-                (l, b) -> new ExchangeSort(l, b, directionSetting.getValue()),
+                (l, b) -> new ExchangeSort(l, directionSetting.getValue()),
                 directionSetting
         );
     }

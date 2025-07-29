@@ -1,9 +1,7 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.animation.*;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.newanimation.NewAnimatedArrow;
-import com.example.javafxsortingalgorithms.newanimation.NewAnimatedItem;
 
 import java.util.List;
 
@@ -18,8 +16,8 @@ import java.util.List;
  */
 public class BubbleSort extends SortingAlgorithm {
 
-    public BubbleSort(List<Integer> list, boolean isInstant) {
-        super(list, isInstant);
+    public BubbleSort(List<Integer> list) {
+        super(list);
     }
 
     protected void runAlgorithm() {

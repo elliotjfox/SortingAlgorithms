@@ -15,8 +15,8 @@ public class CombSort extends SortingAlgorithm {
 
     private final double shrinkFactor;
 
-    public CombSort(List<Integer> arrayList, boolean isInstant, double shrinkFactor) {
-        super(arrayList, isInstant);
+    public CombSort(List<Integer> arrayList, double shrinkFactor) {
+        super(arrayList);
 
         this.shrinkFactor = shrinkFactor;
     }
@@ -91,7 +91,7 @@ public class CombSort extends SortingAlgorithm {
 
         return new AlgorithmSettings<>(
                 "Comb Sort",
-                (l, b) -> new CombSort(l, b, shrinkFactorSetting.getValue()),
+                (l, b) -> new CombSort(l, shrinkFactorSetting.getValue()),
                 shrinkFactorSetting
         );
     }

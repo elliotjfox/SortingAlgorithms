@@ -1,9 +1,7 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class GravitySort extends SortingAlgorithm {
@@ -12,8 +10,8 @@ public class GravitySort extends SortingAlgorithm {
     private int counter;
     private final boolean[][] booleanArray;
 
-    public GravitySort(List<Integer> list, boolean isInstant) {
-        super(list, isInstant);
+    public GravitySort(List<Integer> list) {
+        super(list);
 
         // We are assuming the max value is <= list.size();
         booleanArray = new boolean[list.size()][list.size()];
@@ -29,39 +27,44 @@ public class GravitySort extends SortingAlgorithm {
         counter = 0;
     }
 
-    // TODO: Doesn't sort properly, overwrote some values wrong
+    // TODO
     @Override
-    protected void runAlgorithm(ArrayDisplay display) {
-        if (isListSorted(list)) {
-            isDone = true;
-            return;
-        }
+    protected void runAlgorithm() {
 
-        if (checkingArray) {
-            for (int row = 0; row < booleanArray.length; row++) {
-                for (int i = booleanArray[row].length - 1; i > 0; i--) {
-                    if (!booleanArray[row][i] && booleanArray[row][i - 1]) {
-                        booleanArray[row][i - 1] = false;
-                        booleanArray[row][i] = true;
-                    }
-                }
-            }
-            checkingArray = false;
-            counter = 0;
-        } else {
-            int c = 0;
-            for (boolean[] booleans : booleanArray) {
-                if (booleans[counter]) {
-                    c++;
-                }
-            }
-            list.set(counter, c);
-            counter++;
-            if (counter >= list.size()) {
-                checkingArray = true;
-            }
-        }
     }
+
+//    @Override
+//    protected void runAlgorithm(ArrayDisplay display) {
+//        if (isListSorted(list)) {
+//            isDone = true;
+//            return;
+//        }
+//
+//        if (checkingArray) {
+//            for (int row = 0; row < booleanArray.length; row++) {
+//                for (int i = booleanArray[row].length - 1; i > 0; i--) {
+//                    if (!booleanArray[row][i] && booleanArray[row][i - 1]) {
+//                        booleanArray[row][i - 1] = false;
+//                        booleanArray[row][i] = true;
+//                    }
+//                }
+//            }
+//            checkingArray = false;
+//            counter = 0;
+//        } else {
+//            int c = 0;
+//            for (boolean[] booleans : booleanArray) {
+//                if (booleans[counter]) {
+//                    c++;
+//                }
+//            }
+//            list.set(counter, c);
+//            counter++;
+//            if (counter >= list.size()) {
+//                checkingArray = true;
+//            }
+//        }
+//    }
 
     @Override
     protected void instantAlgorithm(TestEntry entry) {

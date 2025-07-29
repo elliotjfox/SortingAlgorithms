@@ -1,8 +1,6 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithmupdates.CreateItemUpdate;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 import com.example.javafxsortingalgorithms.arraydisplay.DisplayMode;
 import com.example.javafxsortingalgorithms.newanimation.NewAnimatedSortingNetwork;
 
@@ -10,8 +8,8 @@ import java.util.List;
 
 public class OddEvenMergeSort extends SortingAlgorithm {
 
-    public OddEvenMergeSort(List<Integer> arrayList, boolean isInstant) {
-        super(arrayList, isInstant);
+    public OddEvenMergeSort(List<Integer> arrayList) {
+        super(arrayList);
     }
 
     @Override

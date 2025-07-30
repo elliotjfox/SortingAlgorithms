@@ -104,7 +104,7 @@ public class TimSort extends SortingAlgorithm {
         for (int size = RUN_SIZE; size < list.size(); size *= 2) {
             // Merge all blocks of the same size
             for (int left = 0; left < list.size(); left += 2 * size) {
-                inPlaceMerge(left, left + size, left + 2 * size);
+                instantMerge(left, left + size, left + 2 * size);
             }
         }
     }
@@ -122,6 +122,17 @@ public class TimSort extends SortingAlgorithm {
             }
             list.set(j + 1, tmp);
             i++;
+        }
+    }
+
+    private void instantMerge(int left, int right, int end) {
+        if (end > list.size()) end = list.size();
+        while (left < right && right < end) {
+            if (list.get(right) < list.get(left)) {
+                move(right, left);
+                right++;
+            }
+            left++;
         }
     }
 

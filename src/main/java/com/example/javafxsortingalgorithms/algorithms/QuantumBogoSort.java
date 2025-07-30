@@ -51,11 +51,6 @@ public class QuantumBogoSort extends SortingAlgorithm {
     }
 
     @Override
-    public boolean isDone() {
-        return isDone;
-    }
-
-    @Override
     public String getName() {
         return null;
     }

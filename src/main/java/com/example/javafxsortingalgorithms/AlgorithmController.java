@@ -77,14 +77,19 @@ public class AlgorithmController {
             return;
         }
 
-        algorithm.startAlgorithm(display.getMode());
+        frames = new ArrayList<>();
         hasRunAlgorithm = true;
-        frames = algorithm.getFrames();
-        System.out.println("# frames: " + frames.size());
         currentFrame = -1;
+        algorithm.startAlgorithm(display.getMode(), this::acceptFrames);
+    }
+
+    private void acceptFrames(List<DisplayFrame> newFrames) {
+//        System.out.println("Frames " + frames.size() + " + " + newFrames.size() + " -> " + (frames.size() + newFrames.size()));
+        frames.addAll(newFrames);
     }
 
     public void setMode(DisplayMode mode) {
+//        stop();
         switch (mode) {
             case NORMAL -> currentTimeline = normalTimeline;
             case ANIMATED -> currentTimeline = animatedTimeline;
@@ -103,6 +108,7 @@ public class AlgorithmController {
 
     public void stop() {
         currentTimeline.stop();
+        algorithm.stop();
     }
 
     public void step() {

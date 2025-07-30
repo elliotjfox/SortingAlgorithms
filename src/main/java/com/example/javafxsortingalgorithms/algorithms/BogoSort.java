@@ -7,20 +7,21 @@ import java.util.Random;
 
 public class BogoSort extends SortingAlgorithm {
 
+    private static final int BOGO_SORT_MAX_SIZE = 10;
+
     public BogoSort(List<Integer> arrayList) {
         super(arrayList);
     }
 
-    // TODO: Make a way to run this on a thread, so you aren't just waiting forever
-    //  And generically, if the algorithm is taking too long, start a thread for it
     @Override
     protected void runAlgorithm() {
+        if (list.size() > BOGO_SORT_MAX_SIZE) return;
         Random r = new Random();
         while (!isListSorted(list)) {
             for (int i = list.size(); i > 1; i--) {
                 swap(i - 1, r.nextInt(i));
-                addFrame();
             }
+            addFrame();
         }
     }
 
@@ -33,11 +34,6 @@ public class BogoSort extends SortingAlgorithm {
 //                swap(i - 1, random.nextInt(i));
 //            }
 //        }
-    }
-
-    @Override
-    public boolean isDone() {
-        return isDone;
     }
 
     @Override

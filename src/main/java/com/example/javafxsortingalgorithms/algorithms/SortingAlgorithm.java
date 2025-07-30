@@ -16,9 +16,15 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public abstract class SortingAlgorithm {
+
+    private static final int MIN_FRAME_LIST_SIZE = 50_000;
+    private static Thread runningThread;
+    private static final boolean usingThread = true;
+
     protected List<Integer> list;
     protected boolean isDone;
     protected DisplayMode mode;
@@ -28,9 +34,7 @@ public abstract class SortingAlgorithm {
     protected List<AlgorithmUpdate> nextChanges;
     protected SortingAlgorithmAnimation animation;
 
-    public enum ColourAction {
-        READ, WRITE
-    }
+    private Consumer<List<DisplayFrame>> frameAcceptor;
 
     public SortingAlgorithm(List<Integer> list) {
         this.list = list;
@@ -42,18 +46,55 @@ public abstract class SortingAlgorithm {
         animation = new SortingAlgorithmAnimation(this);
     }
 
-    public void startAlgorithm(DisplayMode mode) {
+    public void startAlgorithm(DisplayMode mode, Consumer<List<DisplayFrame>> frameAcceptor) {
         this.mode = mode;
-        runAlgorithm();
-        addFrame();
-        currentChanges.add(new FinishUpdate());
-        addFrame();
+        this.frameAcceptor = frameAcceptor;
+
+        if (usingThread) {
+            stop();
+
+            runningThread = new Thread(() -> {
+                runAlgorithm();
+                addFrame();
+                currentChanges.add(new FinishUpdate());
+                addFrame();
+                sendFrames();
+                runningThread = null;
+            });
+            runningThread.start();
+        } else {
+            runAlgorithm();
+            addFrame();
+            currentChanges.add(new FinishUpdate());
+            addFrame();
+            sendFrames();
+        }
+    }
+
+    public void stop() {
+        if (runningThread != null) {
+            runningThread.interrupt();
+        }
     }
 
     protected abstract void runAlgorithm();
 
-    public List<DisplayFrame> getFrames() {
-        return frames;
+    protected void addFrame() {
+        frames.add(new DisplayFrame(currentChanges));
+        currentChanges.clear();
+        currentChanges.addAll(nextChanges);
+        nextChanges.clear();
+
+        if (usingThread && frames.size() >= MIN_FRAME_LIST_SIZE) {
+            sendFrames();
+        }
+    }
+
+    private void sendFrames() {
+        System.out.println("Sending " + frames.size());
+        List<DisplayFrame> framesPackage = frames;
+        frames = new ArrayList<>();
+        frameAcceptor.accept(framesPackage);
     }
 
     protected void instantAlgorithm(TestEntry entry) {}
@@ -83,10 +124,6 @@ public abstract class SortingAlgorithm {
         updateTimeline.play();
     }
 
-    public boolean isDone() {
-        return isDone;
-    }
-
     protected void swap(int firstIndex, int secondIndex) {
         if (firstIndex < 0 || firstIndex >= list.size() || secondIndex < 0 || secondIndex >= list.size()) return;
         list.set(firstIndex, list.set(secondIndex, list.get(firstIndex)));
@@ -97,32 +134,6 @@ public abstract class SortingAlgorithm {
         if (index < 0 || index >= list.size() || targetIndex < 0 || targetIndex >= list.size() || index == targetIndex) return;
         list.add(targetIndex, list.remove(index));
         currentChanges.add(new MoveUpdate(index, targetIndex));
-    }
-
-    // [left, mid) and [mid, right)
-    protected void inPlaceMerge(int left, int mid, int right) {
-        // Clamp edges
-        if (left < 0) left = 0;
-        if (right > list.size()) right = list.size();
-
-        // Make sure left <= mid <= right
-        if (!increasing(left, mid, right)) return;
-
-
-        int l = left;
-        int r = mid;
-
-        while (r < right && l < r) {
-            if (list.get(l) > list.get(r)) {
-                move(r, l);
-                r++;
-            }
-            l++;
-        }
-    }
-
-    private boolean increasing(int i1, int i2, int i3) {
-        return i1 <= i2 && i2 <= i3;
     }
 
     public List<Integer> getList() {
@@ -149,13 +160,6 @@ public abstract class SortingAlgorithm {
             }
         }
         return true;
-    }
-
-    protected void addFrame() {
-        frames.add(new DisplayFrame(currentChanges));
-        currentChanges.clear();
-        currentChanges.addAll(nextChanges);
-        nextChanges.clear();
     }
 
     protected static class SortingAlgorithmAnimation {

@@ -6,13 +6,11 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import org.controlsfx.control.action.Action;
 
 import java.util.Arrays;
 import java.util.List;
@@ -68,51 +66,51 @@ public class MainButtonPanel extends FlowPane {
     private Menu createAlgorithmSelector() {
         Menu basic = new Menu(
                 "Basic", null,
-                createMenuItem(AlgorithmType.SELECTION),
-                createMenuItem(AlgorithmType.INSERTION),
-                createMenuItem(AlgorithmType.BUBBLE),
-                createMenuItem(AlgorithmType.GNOME)
+                createAlgorithmMenuItem(AlgorithmType.SELECTION),
+                createAlgorithmMenuItem(AlgorithmType.INSERTION),
+                createAlgorithmMenuItem(AlgorithmType.BUBBLE),
+                createAlgorithmMenuItem(AlgorithmType.GNOME)
         );
 
         Menu improved = new Menu(
                 "Improved", null,
-                createMenuItem(AlgorithmType.COCKTAIL),
-                createMenuItem(AlgorithmType.COMB),
-                createMenuItem(AlgorithmType.HEAP),
-                createMenuItem(AlgorithmType.SHELL)
+                createAlgorithmMenuItem(AlgorithmType.COCKTAIL),
+                createAlgorithmMenuItem(AlgorithmType.COMB),
+                createAlgorithmMenuItem(AlgorithmType.HEAP),
+                createAlgorithmMenuItem(AlgorithmType.SHELL)
         );
 
         Menu recursive = new Menu(
                 "Recursive", null,
-                createMenuItem(AlgorithmType.MERGE),
-                createMenuItem(AlgorithmType.QUICK)
+                createAlgorithmMenuItem(AlgorithmType.MERGE),
+                createAlgorithmMenuItem(AlgorithmType.QUICK)
         );
 
         Menu sortingNetworks = new Menu(
                 "Sorting Networks", null,
-                createMenuItem(AlgorithmType.BITONIC),
-                createMenuItem(AlgorithmType.ODD_EVEN_MERGE)
+                createAlgorithmMenuItem(AlgorithmType.BITONIC),
+                createAlgorithmMenuItem(AlgorithmType.ODD_EVEN_MERGE)
         );
 
         Menu miscellaneous = new Menu(
                 "Miscellaneous", null,
-                createMenuItem(AlgorithmType.TIM),
-                createMenuItem(AlgorithmType.RADIX),
-                createMenuItem(AlgorithmType.ODD_EVEN),
-                createMenuItem(AlgorithmType.EXCHANGE),
-                createMenuItem(AlgorithmType.STRAND),
-                createMenuItem(AlgorithmType.CARTESIAN),
-                createMenuItem(AlgorithmType.CYCLE),
-                createMenuItem(AlgorithmType.PANCAKE)
+                createAlgorithmMenuItem(AlgorithmType.TIM),
+                createAlgorithmMenuItem(AlgorithmType.RADIX),
+                createAlgorithmMenuItem(AlgorithmType.ODD_EVEN),
+                createAlgorithmMenuItem(AlgorithmType.EXCHANGE),
+                createAlgorithmMenuItem(AlgorithmType.STRAND),
+                createAlgorithmMenuItem(AlgorithmType.CARTESIAN),
+                createAlgorithmMenuItem(AlgorithmType.CYCLE),
+                createAlgorithmMenuItem(AlgorithmType.PANCAKE)
         );
 
         Menu jokeAlgorithms = new Menu(
                 "Joke Algorithms", null,
-                createMenuItem(AlgorithmType.SLEEP),
-                createMenuItem(AlgorithmType.STOOGE),
-                createMenuItem(AlgorithmType.BOGO),
-                createMenuItem(AlgorithmType.QUANTUM_BOGO),
-                createMenuItem(AlgorithmType.GRAVITY)
+                createAlgorithmMenuItem(AlgorithmType.SLEEP),
+                createAlgorithmMenuItem(AlgorithmType.STOOGE),
+                createAlgorithmMenuItem(AlgorithmType.BOGO),
+                createAlgorithmMenuItem(AlgorithmType.QUANTUM_BOGO),
+                createAlgorithmMenuItem(AlgorithmType.GRAVITY)
         );
 
         return new Menu(
@@ -126,10 +124,32 @@ public class MainButtonPanel extends FlowPane {
         );
     }
 
-    private MenuItem createMenuItem(AlgorithmType algorithm) {
+    private MenuItem createAlgorithmMenuItem(AlgorithmType algorithm) {
         MenuItem item = new MenuItem();
         item.setText(algorithm.getDisplayName());
         item.setOnAction(_ -> display.algorithmSelected(algorithm));
+        return item;
+    }
+
+    private MenuItem createMenuItem(String text, EventHandler<ActionEvent> onAction) {
+        MenuItem item = new MenuItem();
+        item.setText(text);
+        item.setOnAction(onAction);
+        return item;
+    }
+
+    private MenuItem createMenuItem(Node graphic, EventHandler<ActionEvent> onAction) {
+        MenuItem item = new MenuItem();
+        item.setGraphic(graphic);
+        item.setOnAction(onAction);
+        return item;
+    }
+
+    private MenuItem createMenuItem(String text, Node graphic, EventHandler<ActionEvent> onAction) {
+        MenuItem item = new MenuItem();
+        item.setText(text);
+        item.setGraphic(graphic);
+        item.setOnAction(onAction);
         return item;
     }
 

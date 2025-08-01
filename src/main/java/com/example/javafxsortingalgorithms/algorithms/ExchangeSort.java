@@ -1,9 +1,8 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
 
 import java.util.List;
 
@@ -15,55 +14,73 @@ public class ExchangeSort extends SortingAlgorithm {
         DOWN
     }
 
-    private int sorted;
-    private int curIndex;
     private final Direction direction;
 
-    public ExchangeSort(List<Integer> list, boolean isInstant, Direction direction) {
-        super(list, isInstant);
+    public ExchangeSort(List<Integer> list, Direction direction) {
+        super(list);
 
-        sorted = 0;
-        curIndex = direction == Direction.UP ? 1 : list.size() - 1;
         this.direction = direction;
     }
 
     @Override
-    protected void runAlgorithm(ArrayDisplay display) {
-        if (curIndex >= list.size() || curIndex <= sorted) {
-            sorted++;
-            curIndex = direction == Direction.UP ? sorted + 1 : list.size() - 1;
-
-            if (sorted >= list.size()) {
-                isDone = true;
-            }
-
-            return;
-        }
-
-        if (list.get(curIndex) < list.get(sorted)) {
-            swap(curIndex, sorted);
-            display.writeIndex(curIndex);
-            display.writeIndex(sorted);
-        } else {
-            display.readIndex(curIndex);
-            display.readIndex(sorted);
-        }
-
-        if (direction == Direction.UP) {
-            curIndex++;
-        } else {
-            curIndex--;
+    protected void runAlgorithm() {
+        switch (direction) {
+            case UP -> runUp();
+            case DOWN -> runDown();
         }
     }
 
-    @Override
-    protected void instantAlgorithm(TestEntry entry) {
+    private void runUp() {
+        AnimatedArrow outerArrow = animation.createArrow();
+        AnimatedArrow innerArrow = animation.createArrow();
+        animation.setItemIndex(outerArrow, 0);
+        animation.setItemIndex(innerArrow, 1);
+        animation.setItemHeight(outerArrow, 0);
+        animation.setItemHeight(innerArrow, 0);
 
+        for (int i = 0; i < list.size(); i++) {
+            for (int j = i + 1; j < list.size(); j++) {
+                animation.moveItem(outerArrow, i);
+                animation.moveItem(innerArrow, j);
+                animation.addFrame();
+                animation.readIndex(j);
+                animation.readIndex(i);
+                if (list.get(j) < list.get(i)) {
+                    animation.addFrame();
+                    swap(i, j);
+                }
+                addFrame();
+            }
+        }
+    }
+
+    private void runDown() {
+        AnimatedArrow outerArrow = animation.createArrow();
+        AnimatedArrow innerArrow = animation.createArrow();
+        animation.setItemIndex(outerArrow, 0);
+        animation.setItemIndex(innerArrow, 1);
+        animation.setItemHeight(outerArrow, 0);
+        animation.setItemHeight(innerArrow, list.size() - 1);
+
+        for (int i = 0; i < list.size(); i++) {
+            for (int j = list.size() - 1; j > i; j--) {
+                animation.moveItem(outerArrow, i);
+                animation.moveItem(innerArrow, j);
+                animation.addFrame();
+                animation.readIndex(j);
+                animation.readIndex(i);
+                if (list.get(j) < list.get(i)) {
+                    animation.addFrame();
+                    swap(i, j);
+                }
+                addFrame();
+            }
+        }
     }
 
     @Override
     public String getName() {
-        return null;
+        return "Exchange Sort\nDirection: " + direction;
     }
 
     public static AlgorithmSettings<ExchangeSort> getSettings() {
@@ -71,7 +88,7 @@ public class ExchangeSort extends SortingAlgorithm {
 
         return new AlgorithmSettings<>(
                 "Exchange Sort",
-                (l, b) -> new ExchangeSort(l, b, directionSetting.getValue()),
+                list -> new ExchangeSort(list, directionSetting.getValue()),
                 directionSetting
         );
     }

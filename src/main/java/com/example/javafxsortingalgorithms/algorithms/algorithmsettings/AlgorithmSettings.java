@@ -7,18 +7,19 @@ import javafx.scene.control.Label;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class AlgorithmSettings<T extends SortingAlgorithm> extends SettingsSection {
 
     private T algorithm;
-    protected final BiFunction<List<Integer>, Boolean, T> createAlgorithm;
+    protected final Function<List<Integer>, T> createAlgorithm;
     protected final List<AlgorithmSettingObject> settings;
 
     private AlgorithmSettingsInputBox<Integer> speedSetting;
 
     private static final String speedInfo = "This determines how many steps the algorithm takes per millisecond";
 
-    public AlgorithmSettings(String algorithmName, BiFunction<List<Integer>, Boolean, T> createAlgorithm, AlgorithmSettingObject... settings) {
+    public AlgorithmSettings(String algorithmName, Function<List<Integer>, T> createAlgorithm, AlgorithmSettingObject... settings) {
         super();
 
         this.createAlgorithm = createAlgorithm;
@@ -57,11 +58,11 @@ public class AlgorithmSettings<T extends SortingAlgorithm> extends SettingsSecti
     }
 
     public T createAlgorithm(List<Integer> array) {
-        return algorithm = createAlgorithm.apply(array, false);
+        return algorithm = createAlgorithm.apply(array);
     }
 
     public T createInstantAlgorithm(List<Integer> array) {
-        return algorithm = createAlgorithm.apply(array, true);
+        return algorithm = createAlgorithm.apply(array);
     }
 
     public T getAlgorithm() {

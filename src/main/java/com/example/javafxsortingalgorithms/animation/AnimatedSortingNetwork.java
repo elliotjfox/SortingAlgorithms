@@ -1,108 +1,127 @@
 package com.example.javafxsortingalgorithms.animation;
 
+import com.example.javafxsortingalgorithms.AlgorithmController;
+import com.example.javafxsortingalgorithms.algorithmupdates.AnimationUpdate;
+import com.example.javafxsortingalgorithms.algorithmupdates.GenerateAnimationUpdate;
+import com.example.javafxsortingalgorithms.arraydisplay.DisplaySettings;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-// TODO: Add coloured boxes around sections
 public class AnimatedSortingNetwork extends AnimatedItem {
 
-    private final List<Integer> list;
-    private final List<List<Integer>> allComparisons;
-    private final List<List<Node>> visuals;
     private final List<Line> lines;
+    private final List<List<Integer>> comparisons;
+    private final List<List<Node>> visuals;
+    private List<Integer> currentComparisons;
 
-    public AnimatedSortingNetwork(AnimatedArrayDisplay display, List<Integer> list) {
-        // TODO Fix
-        super(display, null, null);
-        this.list = list;
-        allComparisons = new ArrayList<>();
-        visuals = new ArrayList<>();
+    public AnimatedSortingNetwork() {
         lines = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            Line line = new Line(i * 25 + 12.5, 0, i * 25 + 12.5, 0);
+        comparisons = new ArrayList<>();
+        visuals = new ArrayList<>();
+
+        currentComparisons = new ArrayList<>();
+    }
+
+    public GenerateAnimationUpdate startNewSection() {
+        comparisons.add(currentComparisons);
+        currentComparisons = new ArrayList<>();
+
+        return new GenerateAnimationUpdate(
+                settings -> {
+                    Timeline timeline = new Timeline();
+                    List<KeyValue> keyValues = new ArrayList<>();
+                    for (List<Node> row : visuals) {
+                        if (row == visuals.getFirst()) continue;
+                        for (Node node : row) {
+                            // Move each node up
+                            keyValues.add(new KeyValue(node.layoutYProperty(), node.getLayoutY() - settings.elementWidth()));
+                        }
+                    }
+
+                    timeline.getKeyFrames().addAll(
+                            new KeyFrame(
+                                    Duration.ZERO,
+                                    _ -> {
+                                        getChildren().removeAll(visuals.getFirst());
+                                        visuals.removeFirst();
+                                    }
+                            ),
+                            new KeyFrame(
+                                    Duration.millis(AlgorithmController.ANIMATION_LENGTH),
+                                    "",
+                                    _ -> {},
+                                    keyValues
+                            )
+                    );
+
+                    return timeline;
+                },
+                settings -> {}
+        );
+    }
+
+    public void addComparison(int i1, int i2) {
+        currentComparisons.add(i1);
+        currentComparisons.add(i2);
+    }
+
+    @Override
+    public void generateVisuals(DisplaySettings settings) {
+        getChildren().clear();
+        lines.clear();
+        visuals.clear();
+
+        for (int i = 0; i < settings.size(); i++) {
+            Line line = new Line();
             getChildren().add(line);
             lines.add(line);
         }
-    }
 
-    public void addComparisons(List<Integer> comparisons) {
-        drawNewRow(comparisons, allComparisons.size() * 25);
-        allComparisons.add(comparisons);
-        for (Line line : lines) {
-            line.setEndY(allComparisons.size() * 25);
-        }
-    }
-
-    public Timeline moveUp() {
-        Timeline timeline = new Timeline();
-        ArrayList<KeyValue> values = new ArrayList<>();
-        for (List<Node> row : visuals) {
-            if (row == visuals.getFirst()) continue;
-            for (Node node : row) {
-                values.add(new KeyValue(node.layoutYProperty(), node.getLayoutY() - 25));
-            }
-        }
-        timeline.getKeyFrames().addAll(
-                new KeyFrame(
-                        Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),
-                        "",
-                        event -> {},
-                        values
-                )
-        );
-        return timeline;
-    }
-
-    public Timeline removeFirst() {
-        if (visuals.isEmpty()) return new Timeline();
-        return new Timeline(
-                new KeyFrame(
-                        Duration.ZERO,
-                        event -> {
-                            getChildren().removeAll(visuals.getFirst());
-                            visuals.removeFirst();
-                        }
-                ),
-                new KeyFrame(
-                        Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),
-                        event -> {}
-                )
-        );
-    }
-
-    private void drawNewRow(List<Integer> comparisons, double y) {
-        List<Node> row = new ArrayList<>();
-        for (int i = 0; i < comparisons.size() - 1; i += 2) {
-
-            Circle left = new Circle(10, Color.WHITE);
-            Circle right = new Circle(10, Color.WHITE);
-            // 2.5 = (width - (radius * 2)) / 2
-            left.relocate(25 * comparisons.get(i) + 2.5, y);
-            right.relocate(25 * comparisons.get(i + 1) + 2.5, y);
-            Line line = new Line(left.getLayoutX(), left.getLayoutY(), right.getLayoutX(), right.getLayoutY());
-            if (comparisons.get(i) >= list.size() || comparisons.get(i + 1) >= list.size()) {
-                left.setStroke(Color.RED);
-                right.setStroke(Color.RED);
-                line.setStroke(Color.RED);
-            } else {
+        double circleDiameter = settings.elementWidth() * 4 / 5;
+        for (int i = 0; i < comparisons.size(); i++) {
+            List<Integer> currentLine = comparisons.get(i);
+            List<Node> currentRow = new ArrayList<>();
+            for (int j = 0; j < currentLine.size() - 1; j += 2) {
+                Circle left = new Circle(circleDiameter / 2, Color.WHITE);
+                left.relocate(settings.elementWidth() * currentLine.get(j) + settings.elementWidth() / 10, settings.height() + settings.elementWidth() * i);
                 left.setStroke(Color.BLACK);
-                // TODO: Don't use 25 blindly in so many places
+                Circle right = new Circle(circleDiameter / 2, Color.WHITE);
+                right.relocate(settings.elementWidth() * currentLine.get(j + 1) + settings.elementWidth() / 10, settings.height() + settings.elementWidth() * i);
                 right.setStroke(Color.BLACK);
-                line.setStroke(Color.BLACK);
+                Line line = new Line(
+                        left.getLayoutX(),
+                        left.getLayoutY(),
+                        right.getLayoutX(),
+                        right.getLayoutY()
+                );
+                currentRow.add(left);
+                currentRow.add(right);
+                currentRow.add(line);
+                getChildren().addAll(line, left, right);
             }
-            row.add(left);
-            row.add(right);
-            row.add(line);
-            getChildren().addAll(line, left, right);
+            visuals.add(currentRow);
         }
-        visuals.add(row);
+
+        for (int i = 0; i < lines.size(); i++) {
+            lines.get(i).setStartX((i + 0.5) * settings.elementWidth());
+            lines.get(i).setStartY(settings.height());
+            lines.get(i).setEndX((i + 0.5) * settings.elementWidth());
+            lines.get(i).setEndY(settings.height() + visuals.size() * settings.elementWidth());
+        }
+    }
+
+    @Override
+    public AnimationUpdate changeFill(Paint fill) {
+        return new AnimationUpdate(new Timeline(), () -> {});
     }
 }

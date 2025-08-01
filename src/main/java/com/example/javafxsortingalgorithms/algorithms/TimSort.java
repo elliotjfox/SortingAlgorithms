@@ -3,55 +3,95 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithnSettingsCheckBox;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 
 import java.util.List;
 
-public class TimSort extends ActionSortingAlgorithm {
+public class TimSort extends SortingAlgorithm {
 
     private final int RUN_SIZE = 32;
 
     private final boolean alwaysAscending;
 
-    public TimSort(List<Integer> arrayList, boolean isInstant, boolean alwaysAscending) {
-        super(arrayList, isInstant);
+    public TimSort(List<Integer> arrayList, boolean alwaysAscending) {
+        super(arrayList);
 
         this.alwaysAscending = alwaysAscending;
+    }
 
+    @Override
+    protected void runAlgorithm() {
         // Insertion sort step
         for (int i = 0; i < list.size(); i += RUN_SIZE) {
-            // If the list is only one element, we don't have to do anything
+            // If the list has only one element left
             if (i + 1 >= list.size()) {
+                addFrame();
                 continue;
             }
 
-            boolean ascending;
-
-            if (alwaysAscending) {
-                ascending = true;
+            if (alwaysAscending || list.get(i) <= list.get(i + 1)) {
+                ascendingInsertionSort(i, i + RUN_SIZE - 1);
             } else {
-                // We know there is at least two elements in this run, so this is safe
-                ascending = list.get(i) <= list.get(i + 1);
-            }
-
-            int end = Math.min(i + RUN_SIZE, list.size());
-            addToStart(new TimSortInsertion(ascending, i, end));
-
-            // Flip it now so we don't have to deal with flipping them when merging
-            if (!ascending) {
-                addToStart(new Flip(i, end - 1));
+                descendingInsertionSort(i, i + RUN_SIZE - 1);
             }
         }
 
-        // Merge step
+        // Merge Step
         for (int size = RUN_SIZE; size < list.size(); size *= 2) {
             for (int left = 0; left < list.size(); left += 2 * size) {
-                // Make sure we aren't going out of bounds
-                addToStart(new InPlaceMerge(left, left + size, Math.min(left + 2 * size, list.size())));
+                merge(left, left + size, left + 2 * size);
             }
         }
+    }
 
-        catchUpActions();
+    // [from, to]
+    private void ascendingInsertionSort(int from, int to) {
+        if (to >= list.size()) to = list.size() - 1;
+        int i = from + 1;
+        while (i <= to) {
+            int j = i - 1;
+
+            while (j >= from && list.get(j) > list.get(i)) {
+                j--;
+                addFrame();
+            }
+            move(i, j + 1);
+            addFrame();
+            i++;
+        }
+    }
+
+    private void descendingInsertionSort(int from, int to) {
+        if (to >= list.size()) to = list.size() - 1;
+        int i = from + 1;
+        while (i <= to) {
+            int j = i - 1;
+
+            while (j >= from && list.get(j) < list.get(i)) {
+                j--;
+                addFrame();
+            }
+            move(i, j + 1);
+            addFrame();
+            i++;
+        }
+
+        // Flip
+        for (int j = 0; j <= (to - from) / 2; j++) {
+            swap(from + j, to - j);
+            addFrame();
+        }
+    }
+
+    private void merge(int left, int right, int end) {
+        if (end > list.size()) end = list.size();
+        while (right < end && left < right) {
+            if (list.get(left) >= list.get(right)) {
+                move(right, left);
+                right++;
+            }
+            left++;
+            addFrame();
+        }
     }
 
     @Override
@@ -64,7 +104,7 @@ public class TimSort extends ActionSortingAlgorithm {
         for (int size = RUN_SIZE; size < list.size(); size *= 2) {
             // Merge all blocks of the same size
             for (int left = 0; left < list.size(); left += 2 * size) {
-                inPlaceMerge(left, left + size, left + 2 * size);
+                instantMerge(left, left + size, left + 2 * size);
             }
         }
     }
@@ -82,6 +122,17 @@ public class TimSort extends ActionSortingAlgorithm {
             }
             list.set(j + 1, tmp);
             i++;
+        }
+    }
+
+    private void instantMerge(int left, int right, int end) {
+        if (end > list.size()) end = list.size();
+        while (left < right && right < end) {
+            if (list.get(right) < list.get(left)) {
+                move(right, left);
+                right++;
+            }
+            left++;
         }
     }
 
@@ -103,61 +154,12 @@ public class TimSort extends ActionSortingAlgorithm {
         return n == (int) (Math.pow(2, (int) (Math.log(n) / Math.log(2))));
     }
 
-    protected static class TimSortInsertion extends AlgorithmAction {
-        private final boolean ascending;
-
-        private final int left;
-        private final int right;
-        private final int index;
-
-        public TimSortInsertion(boolean ascending, int left, int right) {
-            this(ascending, left, right, left);
-        }
-
-        public TimSortInsertion(boolean ascending, int left, int right, int index) {
-            this.left = left;
-            this.right = right;
-            this.index = index;
-            this.ascending = ascending;
-        }
-
-        @Override
-        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
-            if (ascending) {
-                for (int i = index - 1; i >= left; i--) {
-                    if (algorithm.list.get(i) < algorithm.list.get(index)) {
-                        next(algorithm, i + 1);
-                        return;
-                    }
-                    algorithm.addToStart(new Wait());
-                }
-                next(algorithm, left);
-            } else {
-                for (int i = index - 1; i >= left; i--) {
-                    if (algorithm.list.get(i) > algorithm.list.get(index)) {
-                        next(algorithm, i + 1);
-                        return;
-                    }
-                    algorithm.addToStart(new Wait());
-                }
-                next(algorithm, left);
-            }
-        }
-
-        private void next(ActionSortingAlgorithm algorithm, int to) {
-            algorithm.addToStart(new Move(index, to));
-            if (index + 1 < right) {
-                algorithm.addToStart(new TimSortInsertion(ascending, left, right, index + 1));
-            }
-        }
-    }
-
     public static AlgorithmSettings<TimSort> getSettings() {
         AlgorithnSettingsCheckBox alwaysAscendingSetting = new AlgorithnSettingsCheckBox("Always Ascending", false);
 
         return new AlgorithmSettings<>(
                 "Tim Sort",
-                (l, b) -> new TimSort(l, b, alwaysAscendingSetting.getValue()),
+                list -> new TimSort(list, alwaysAscendingSetting.getValue()),
                 alwaysAscendingSetting
         );
     }

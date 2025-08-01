@@ -3,13 +3,16 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
-import com.example.javafxsortingalgorithms.animation.*;
-import com.example.javafxsortingalgorithms.arraydisplay.*;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
+import com.example.javafxsortingalgorithms.animation.AnimatedSection;
 
 import java.util.List;
-import java.util.function.Function;
+import java.util.Objects;
 
-public class InsertionSort extends ActionSortingAlgorithm {
+public class InsertionSort extends SortingAlgorithm {
+
+    private static final double SECTION_HEIGHT = -10;
+    private static final double ARROW_HEIGHT = 0;
 
     public enum SearchType {
         LEFT_LINEAR("Left-most index", "Left-most value"),
@@ -29,18 +32,114 @@ public class InsertionSort extends ActionSortingAlgorithm {
 
     private final SearchType searchType;
 
-    private AnimatedSection searchSection;
-    private AnimatedItem arrow;
-
-    private final double sectionHeight = -10;
-    private final double arrowHeight = 0;
-
-    public InsertionSort(List<Integer> arrayList, boolean isInstant, SearchType searchType) {
-        super(arrayList, isInstant);
+    public InsertionSort(List<Integer> arrayList, SearchType searchType) {
+        super(arrayList);
 
         this.searchType = searchType;
+    }
 
-        setInitialActions(new Root());
+    @Override
+    protected void runAlgorithm() {
+        switch (searchType) {
+            case RIGHT_LINEAR -> rightSearch();
+            case LEFT_LINEAR -> leftSearch();
+            case BINARY -> binarySearch();
+        }
+    }
+
+    private void rightSearch() {
+        AnimatedSection searchSection = animation.createSection(0);
+        AnimatedArrow arrow = animation.createArrow();
+        animation.setItemIndex(searchSection, 0);
+        animation.setItemIndex(arrow, 0);
+        animation.setItemHeight(searchSection, SECTION_HEIGHT);
+        animation.setItemHeight(arrow, ARROW_HEIGHT);
+        for (int i = 1; i < list.size(); i++) {
+            int j = i - 1;
+            animation.moveItem(arrow, i);
+            animation.changeSectionWidth(searchSection, j + 1);
+            animation.addFrame();
+
+            while (j >= 0) {
+                // Make sure we play the animations
+                animation.readIndex(j);
+                animation.readIndex(i);
+                animation.addFrame();
+                if (list.get(j) <= list.get(i)) break;
+                j--;
+                animation.changeSectionWidth(searchSection, j + 1);
+                addFrame();
+            }
+            move(i, j + 1);
+            if (i != j + 1) addFrame();
+        }
+    }
+
+    private void leftSearch() {
+        AnimatedSection searchSection = animation.createSection(0);
+        AnimatedArrow arrow = animation.createArrow();
+        animation.setItemIndex(searchSection, 0);
+        animation.setItemIndex(arrow, 0);
+        animation.setItemHeight(searchSection, SECTION_HEIGHT);
+        animation.setItemHeight(arrow, ARROW_HEIGHT);
+        for (int i = 1; i < list.size(); i++) {
+            int j = 0;
+            animation.moveItem(arrow, i);
+            animation.changeSectionWidth(searchSection, i);
+            animation.moveItem(searchSection, 0);
+            animation.addFrame();
+            while (j < i) {
+                animation.readIndex(j);
+                animation.readIndex(i);
+                animation.addFrame();
+                if (list.get(j) >= list.get(i)) break;
+                j++;
+                animation.changeSectionWidth(searchSection, i - j);
+                animation.moveItem(searchSection, j);
+                addFrame();
+            }
+            move(i, j);
+            if (i != j) addFrame();
+        }
+    }
+
+    private void binarySearch() {
+        AnimatedSection searchSection = animation.createSection(0);
+        AnimatedArrow arrow = animation.createArrow();
+        animation.setItemIndex(searchSection, 0);
+        animation.setItemIndex(arrow, 0);
+        animation.setItemHeight(searchSection, SECTION_HEIGHT);
+        animation.setItemHeight(arrow, ARROW_HEIGHT);
+        for (int i = 1; i < list.size(); i++) {
+            int left = 0;
+            int right = i - 1;
+            animation.moveItem(arrow, i);
+            animation.moveItem(searchSection, left);
+            animation.changeSectionWidth(searchSection, right - left + 1);
+            animation.addFrame();
+            int position = left;
+            while (left <= right) {
+                int mid = (left + right) / 2;
+                animation.readIndex(i);
+                animation.readIndex(mid);
+                animation.addFrame();
+                if (Objects.equals(list.get(i), list.get(mid))) {
+                    position = mid + 1;
+                    break;
+                } else if (list.get(i) > list.get(mid)) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+                animation.changeSectionWidth(searchSection, right - left + 1);
+                animation.moveItem(searchSection, left);
+                position = left;
+                addFrame();
+            }
+
+            move(i, position);
+            if (i != position) addFrame();
+        }
     }
 
     @Override
@@ -83,24 +182,6 @@ public class InsertionSort extends ActionSortingAlgorithm {
     }
 
     @Override
-    public void startAnimated(AnimatedArrayDisplay display) {
-        searchSection = new ItemBuilder(display)
-                .at(0, sectionHeight)
-                .buildSection(1, true);
-        display.addItem(searchSection);
-
-        arrow = ItemBuilder.defaultArrow(display, 0);
-        display.addItem(arrow);
-
-        display.setCurrentTask("Searching for correct position");
-        display.updateInfo("Sorted", 1);
-        display.updateInfo(searchType.index, 0);
-        display.updateInfo(searchType.value, 0);
-        display.updateInfo("Current index", 0);
-        display.updateInfo("Current value", 0);
-    }
-
-    @Override
     public String getName() {
         return switch (searchType) {
             case LEFT_LINEAR -> "Insertion Sort\nLeft Search";
@@ -109,270 +190,15 @@ public class InsertionSort extends ActionSortingAlgorithm {
         };
     }
 
-    private static class Root extends AlgorithmAction {
-        @Override
-        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
-            if (algorithm instanceof InsertionSort insertionSort) {
-                switch (insertionSort.searchType) {
-                    case RIGHT_LINEAR -> {
-                        for (int i = 1; i < algorithm.list.size(); i++) algorithm.addToStart(new RightSearch(i - 1, i));
-                    }
-                    case LEFT_LINEAR -> {
-                        for (int i = 1; i < algorithm.list.size(); i++) algorithm.addToStart(new LeftSearch(0, i - 1, i));
-                    }
-                    case BINARY -> {
-                        for (int i = 1; i < algorithm.list.size(); i++) algorithm.addToStart(new BinarySearch(0, i - 1, i));
-                    }
-                }
-            }
-        }
-
-        @Override
-        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
-            if (!(algorithm instanceof InsertionSort insertionSort)) return;
-            Function<Integer, InsertionSearchAction> addSearch = switch (insertionSort.searchType) {
-                case RIGHT_LINEAR -> (i) -> new RightSearch(i - 1, i);
-                case LEFT_LINEAR -> (i) -> new LeftSearch(0, i - 1, i);
-                case BINARY -> (i) -> new BinarySearch(0, i - 1, i);
-            };
-
-            for (int i = 1; i < algorithm.list.size(); i++) {
-                int finalI = i + 1;
-                algorithm.addToStart(
-                        addSearch.apply(i),
-                        new LaterAction(() -> display.updateInfo("Sorted", finalI))
-                );
-            }
-        }
-    }
-
-    private static abstract class InsertionSearchAction extends AlgorithmAction {
-
-        protected final int from;
-        protected final int to;
-        protected final int index;
-
-        public InsertionSearchAction(int from, int to, int index) {
-            this.from = from;
-            this.to = to;
-            this.index = index;
-        }
-
-        @Override
-        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
-            if (algorithm instanceof InsertionSort) {
-                search((InsertionSort) algorithm, display);
-            }
-        }
-
-        @Override
-        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
-            if (algorithm instanceof InsertionSort) {
-                searchDetailed((InsertionSort) algorithm, display);
-            }
-        }
-
-        protected abstract void search(InsertionSort algorithm, ArrayDisplay display);
-
-        protected abstract void searchDetailed(InsertionSort algorithm, AnimatedArrayDisplay display);
-    }
-
-    private static class LeftSearch extends InsertionSearchAction {
-
-        public LeftSearch(int from, int to, int index) {
-            super(from, to, index);
-        }
-
-        @Override
-        protected void search(InsertionSort algorithm, ArrayDisplay display) {
-            if (from > to) {
-                algorithm.addToStart(new Move(index, from));
-                return;
-            }
-            if (algorithm.list.get(index) < algorithm.list.get(from)) {
-                algorithm.addToStart(new Move(index, from));
-            } else {
-                algorithm.addToStart(new LeftSearch(from + 1, to, index));
-            }
-            display.readIndex(from);
-        }
-
-        @Override
-        protected void searchDetailed(InsertionSort algorithm, AnimatedArrayDisplay display) {
-            if (from > to) {
-                algorithm.searchSection.moveToIndex(from, algorithm.sectionHeight);
-                algorithm.searchSection.resize(to - from + 1);
-
-                algorithm.addToStart(new Move(index, from));
-                return;
-            }
-
-            algorithm.arrow.moveToIndex(index, algorithm.arrowHeight);
-            algorithm.searchSection.moveToIndex(from, algorithm.sectionHeight);
-            algorithm.searchSection.resize(to - from + 1);
-            display.newGroup();
-            display.comparing(index, from);
-
-            if (algorithm.list.get(index) < algorithm.list.get(from)) {
-                algorithm.addToStart(new Move(index, from));
-            } else {
-                algorithm.addToStart(new LeftSearch(from + 1, to, index));
-            }
-        }
-    }
-
-    private static class RightSearch extends InsertionSearchAction {
-
-        public RightSearch(int to, int index) {
-            super(0, to, index);
-        }
-
-        @Override
-        protected void search(InsertionSort algorithm, ArrayDisplay display) {
-            if (to < 0) {
-                algorithm.addToStart(new Move(index, 0));
-                return;
-            }
-            if (algorithm.list.get(index) > algorithm.list.get(to)) {
-                algorithm.addToStart(new Move(index, to + 1));
-            } else {
-                algorithm.addToStart(new RightSearch(to - 1, index));
-            }
-            display.readIndex(to);
-        }
-
-        @Override
-        public void searchDetailed(InsertionSort algorithm, AnimatedArrayDisplay display) {
-            if (to < 0) {
-                algorithm.searchSection.moveToIndex(from, algorithm.sectionHeight);
-                algorithm.searchSection.resize(to - from + 1);
-                display.updateInfoWhenDone(SearchType.RIGHT_LINEAR.index, AnimatedInfo.OUT_OF_BOUNDS_INDEX);
-                display.updateInfoWhenDone(SearchType.RIGHT_LINEAR.value, AnimatedInfo.OUT_OF_BOUND_VALUE);
-
-                algorithm.addToStart(
-                        new LaterAction(() -> display.setCurrentTask("Moving to correct position")),
-                        new Move(index, 0),
-                        new LaterAction(() -> display.setCurrentTask("Searching for correct position"))
-                );
-                return;
-            }
-
-            algorithm.arrow.moveToIndex(index, algorithm.arrowHeight);
-            algorithm.searchSection.moveToIndex(from, algorithm.sectionHeight);
-            algorithm.searchSection.resize(to - from + 1);
-            display.updateInfoWhenDone(SearchType.RIGHT_LINEAR.index, to);
-            display.updateInfoWhenDone(SearchType.RIGHT_LINEAR.value, algorithm.getList().get(to));
-            display.updateInfoWhenDone("Current index", index);
-            display.updateInfoWhenDone("Current value", algorithm.getList().get(index));
-            display.newGroup();
-            display.comparing(index, to);
-
-            if (algorithm.list.get(index) > algorithm.list.get(to)) {
-                algorithm.addToStart(
-                        new LaterAction(() -> display.setCurrentTask("Moving to correct position")),
-                        new Move(index, to + 1),
-                        new LaterAction(() -> display.setCurrentTask("Searching for correct position"))
-                );
-            } else {
-                algorithm.addToStart(new RightSearch(to - 1, index));
-            }
-            display.readIndex(to);
-        }
-    }
-
-    private static class BinarySearch extends InsertionSearchAction {
-
-        public BinarySearch(int from, int to, int index) {
-            super(from, to, index);
-        }
-
-        @Override
-        protected void search(InsertionSort algorithm, ArrayDisplay display) {
-            if (from >= to) {
-                if (algorithm.list.get(index) > algorithm.list.get(from)) {
-                    algorithm.addToStart(new Move(index, from + 1));
-                } else {
-                    algorithm.addToStart(new Move(index, from));
-                }
-            } else {
-                int mid = (from + to) / 2;
-                if (algorithm.list.get(index) > algorithm.list.get(mid)) {
-                    algorithm.addToStart(new BinarySearch(mid + 1, to, index));
-                } else if (algorithm.list.get(index) < algorithm.list.get(mid)) {
-                    algorithm.addToStart(new BinarySearch(from, mid - 1, index));
-                } else {
-                    // AKA: array.get(index) == array.get(mid)
-                    algorithm.addToStart(new Move(index, mid));
-                }
-                display.readIndex(mid);
-            }
-        }
-
-        @Override
-        protected void searchDetailed(InsertionSort algorithm, AnimatedArrayDisplay display) {
-            if (from >= to) {
-                algorithm.searchSection.moveToIndex(from, algorithm.sectionHeight);
-                algorithm.searchSection.resize(to - from + 1);
-                display.newGroup();
-                display.comparing(index, from);
-//                display.addAnimations(
-//                        new AnimationGroup(
-//                                display.moveItemToElementAnimation(algorithm.searchSection, from, algorithm.sectionHeight),
-//                                algorithm.searchSection.resizeTimeline((to - from + 1) * 25)
-//                        ),
-//                        new AnimationGroup(
-//                                display.readAnimation(index),
-//                                display.readAnimation(from)
-//                        )
-//                );
-                if (algorithm.list.get(index) > algorithm.list.get(from)) {
-                    algorithm.addToStart(new Move(index, from + 1));
-                } else {
-                    algorithm.addToStart(new Move(index, from));
-                }
-            } else {
-                int mid = (from + to) / 2;
-
-                algorithm.arrow.moveToIndex(index, algorithm.arrowHeight);
-                algorithm.searchSection.moveToIndex(index, algorithm.sectionHeight);
-                algorithm.searchSection.resize(to - from + 1);
-                display.newGroup();
-                display.comparing(index, mid);
-//                display.addAnimations(
-//                        new AnimationGroup(
-//                                display.moveItemToElementAnimation(algorithm.arrow, index, algorithm.arrowHeight),
-//                                display.moveItemToElementAnimation(algorithm.searchSection, from, algorithm.sectionHeight),
-//                                algorithm.searchSection.resizeTimeline((to - from + 1) * 25)
-//                        ),
-//                        new AnimationGroup(
-//                                display.readAnimation(index),
-//                                display.readAnimation(mid)
-//                        )
-//                );
-
-                if (algorithm.list.get(index) > algorithm.list.get(mid)) {
-                    algorithm.addToStart(new BinarySearch(mid + 1, to, index));
-                } else if (algorithm.list.get(index) < algorithm.list.get(mid)) {
-                    algorithm.addToStart(new BinarySearch(from, mid - 1, index));
-                } else {
-                    // AKA: array.get(index) == array.get(mid)
-                    algorithm.addToStart(new Move(index, mid));
-                }
-                display.readIndex(mid);
-            }
-        }
-    }
-
     public static AlgorithmSettings<InsertionSort> getSettings() {
         AlgorithmSettingsComboBox<SearchType> searchSetting = new AlgorithmSettingsComboBox<>("Search Type", SearchType.description, SearchType.values(), SearchType.RIGHT_LINEAR);
 
         return new AlgorithmSettings<>(
                 "Insertion Sort",
-                (l, b) -> new InsertionSort(l, b, searchSetting.getValue()),
+                list -> new InsertionSort(list, searchSetting.getValue()),
                 searchSetting
         );
     }
-
 
     // Right linear search
 //    void insertionSort() {
@@ -384,13 +210,5 @@ public class InsertionSort extends ActionSortingAlgorithm {
 //            move(i, j + 1);
 //        }
 //    }
-
-
-
-
-
-
-
-
 
 }

@@ -1,45 +1,103 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
+import com.example.javafxsortingalgorithms.algorithmupdates.*;
 import com.example.javafxsortingalgorithms.TestDisplay;
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
+import com.example.javafxsortingalgorithms.arraydisplay.*;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
+import com.example.javafxsortingalgorithms.animation.AnimatedItem;
+import com.example.javafxsortingalgorithms.animation.AnimatedSection;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.scene.paint.Paint;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-// TODO: Finish replacing ArrayLists with Lists
-// TODO: There might still be a few bugs around when an algorithm is finished or not
 public abstract class SortingAlgorithm {
+
+    private static final int MIN_FRAME_LIST_SIZE = 50_000;
+    private static Thread runningThread;
+    private static final boolean usingThread = true;
+
     protected List<Integer> list;
     protected boolean isDone;
-    protected final boolean isInstant;
+    protected DisplayMode mode;
 
-    public enum ColourAction {
-        READ, WRITE
-    }
+    protected List<DisplayFrame> frames;
+    protected List<AlgorithmUpdate> currentChanges;
+    protected List<AlgorithmUpdate> nextChanges;
+    protected SortingAlgorithmAnimation animation;
 
-    public SortingAlgorithm(List<Integer> list, boolean isInstant) {
+    private Consumer<List<DisplayFrame>> frameAcceptor;
+
+    public SortingAlgorithm(List<Integer> list) {
         this.list = list;
-        this.isInstant = isInstant;
         isDone = false;
+
+        this.frames = new ArrayList<>();
+        currentChanges = new ArrayList<>();
+        nextChanges = new ArrayList<>();
+        animation = new SortingAlgorithmAnimation(this);
     }
 
-    protected abstract void runAlgorithm(ArrayDisplay display);
+    public void startAlgorithm(DisplayMode mode, Consumer<List<DisplayFrame>> frameAcceptor) {
+        this.mode = mode;
+        this.frameAcceptor = frameAcceptor;
 
-    protected abstract void instantAlgorithm(TestEntry entry);
+        if (usingThread) {
+            stop();
 
-    public void startAnimated(AnimatedArrayDisplay display) {
-        System.out.println("TODO: Implement detailed start for this algorithm!");
+            runningThread = new Thread(() -> {
+                runAlgorithm();
+                addFrame();
+                currentChanges.add(new FinishUpdate());
+                addFrame();
+                sendFrames();
+                runningThread = null;
+            });
+            runningThread.start();
+        } else {
+            runAlgorithm();
+            addFrame();
+            currentChanges.add(new FinishUpdate());
+            addFrame();
+            sendFrames();
+        }
     }
 
-    public void iterateAnimated(AnimatedArrayDisplay display) {
-        System.out.println("TODO: Implement detailed for this algorithm!");
+    public void stop() {
+        if (runningThread != null) {
+            runningThread.interrupt();
+        }
     }
+
+    protected abstract void runAlgorithm();
+
+    protected void addFrame() {
+        frames.add(new DisplayFrame(currentChanges));
+        currentChanges.clear();
+        currentChanges.addAll(nextChanges);
+        nextChanges.clear();
+
+        if (usingThread && frames.size() >= MIN_FRAME_LIST_SIZE) {
+            sendFrames();
+        }
+    }
+
+    private void sendFrames() {
+        System.out.println("Sending " + frames.size());
+        List<DisplayFrame> framesPackage = frames;
+        frames = new ArrayList<>();
+        frameAcceptor.accept(framesPackage);
+    }
+
+    protected void instantAlgorithm(TestEntry entry) {}
 
     public void solveInstant(TestDisplay display) {
         solveInstant(display, () -> {});
@@ -66,49 +124,16 @@ public abstract class SortingAlgorithm {
         updateTimeline.play();
     }
 
-    // TODO: Probably just delete this
-    public void iterate(ArrayDisplay display) {
-        runAlgorithm(display);
-    }
-
-    public boolean isDone() {
-        return isDone;
-    }
-
     protected void swap(int firstIndex, int secondIndex) {
         if (firstIndex < 0 || firstIndex >= list.size() || secondIndex < 0 || secondIndex >= list.size()) return;
         list.set(firstIndex, list.set(secondIndex, list.get(firstIndex)));
+        currentChanges.add(new SwapUpdate(firstIndex, secondIndex));
     }
 
     protected void move(int index, int targetIndex) {
         if (index < 0 || index >= list.size() || targetIndex < 0 || targetIndex >= list.size() || index == targetIndex) return;
         list.add(targetIndex, list.remove(index));
-    }
-
-    // [left, mid) and [mid, right)
-    protected void inPlaceMerge(int left, int mid, int right) {
-        // Clamp edges
-        if (left < 0) left = 0;
-        if (right > list.size()) right = list.size();
-
-        // Make sure left <= mid <= right
-        if (!increasing(left, mid, right)) return;
-
-
-        int l = left;
-        int r = mid;
-
-        while (r < right && l < r) {
-            if (list.get(l) > list.get(r)) {
-                move(r, l);
-                r++;
-            }
-            l++;
-        }
-    }
-
-    private boolean increasing(int i1, int i2, int i3) {
-        return i1 <= i2 && i2 <= i3;
+        currentChanges.add(new MoveUpdate(index, targetIndex));
     }
 
     public List<Integer> getList() {
@@ -135,5 +160,125 @@ public abstract class SortingAlgorithm {
             }
         }
         return true;
+    }
+
+    protected static class SortingAlgorithmAnimation {
+        private final SortingAlgorithm algorithm;
+
+        public SortingAlgorithmAnimation(SortingAlgorithm algorithm) {
+            this.algorithm = algorithm;
+        }
+
+        public void addFrame() {
+            if (algorithm.mode == DisplayMode.ANIMATED) {
+                algorithm.addFrame();
+            }
+        }
+
+        protected AnimatedArrow createArrow() {
+            if (algorithm.mode == DisplayMode.ANIMATED) {
+                AnimatedArrow tmp = new AnimatedArrow();
+                algorithm.currentChanges.add(new CreateItemUpdate(tmp));
+                return tmp;
+            }
+            return null;
+        }
+
+        protected AnimatedSection createSection(double width) {
+            if (algorithm.mode == DisplayMode.ANIMATED) {
+                AnimatedSection section = new AnimatedSection(width);
+                algorithm.currentChanges.add(new CreateItemUpdate(section));
+                return section;
+            }
+            return null;
+        }
+
+        protected AnimatedSection createSection(int width) {
+            if (algorithm.mode == DisplayMode.ANIMATED) {
+                AnimatedSection section = new AnimatedSection(width);
+                algorithm.currentChanges.add(new CreateItemUpdate(section));
+                return section;
+            }
+            return null;
+        }
+
+        protected void removeItem(AnimatedItem item) {
+            if (algorithm.mode == DisplayMode.ANIMATED) {
+                algorithm.currentChanges.add(new RemoveItemUpdate(item));
+            }
+        }
+
+        protected void readIndex(int index) {
+            if (index < 0 || index >= algorithm.list.size()) return;
+            if (algorithm.mode == DisplayMode.ANIMATED) {
+                algorithm.currentChanges.add(new ReadUpdate(index, algorithm.list.get(index)));
+            }
+        }
+
+        protected void setItemIndex(AnimatedItem item, int index) {
+            if (item == null) return;
+
+            algorithm.currentChanges.add(item.setIndex(index));
+        }
+
+        protected void setItemPosition(AnimatedItem item, double position) {
+            if (item == null) return;
+
+            algorithm.currentChanges.add(item.setPosition(position));
+        }
+
+        protected void moveItem(AnimatedItem item, int index) {
+            if (item == null) return;
+
+            algorithm.currentChanges.add(item.moveToIndex(index));
+        }
+
+        protected void moveItem(AnimatedItem item, double position) {
+            if (item == null) return;
+
+            algorithm.currentChanges.add(item.moveToPosition(position));
+        }
+
+        protected void setItemHeight(AnimatedItem item, double height) {
+            if (item == null) return;
+
+            algorithm.currentChanges.add(item.setHeight(height));
+        }
+
+        protected void moveItemHeight(AnimatedItem item, double height) {
+            if (item == null) return;
+
+            algorithm.currentChanges.add(item.moveToHeight(height));
+        }
+
+        protected void changeItemFill(AnimatedItem item, Paint fill) {
+            if (item == null) return;
+
+            algorithm.currentChanges.add(item.changeFill(fill));
+        }
+
+        protected void setSectionWidth(AnimatedSection section, double width) {
+            if (section == null) return;
+
+            algorithm.currentChanges.add(section.setWidth(width));
+        }
+
+        protected void changeSectionWidth(AnimatedSection section, double width) {
+            if (section == null) return;
+
+            algorithm.currentChanges.add(section.changeWidth(width));
+        }
+
+        protected void changeSectionWidth(AnimatedSection section, int width) {
+            if (section == null) return;
+
+            algorithm.currentChanges.add(section.changeWidth(width));
+        }
+
+        protected void animateItem(Supplier<AlgorithmUpdate> createUpdate) {
+            try {
+                algorithm.currentChanges.add(createUpdate.get());
+            } catch (NullPointerException ignored) {}
+        }
     }
 }

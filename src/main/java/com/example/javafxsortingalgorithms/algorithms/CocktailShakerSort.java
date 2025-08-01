@@ -1,7 +1,7 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
 
 import java.util.List;
 
@@ -17,74 +17,61 @@ import java.util.List;
  */
 public class CocktailShakerSort extends SortingAlgorithm {
 
-    private int lastPos;
-    private boolean goingUp;
-    private int sortedLeft;
-    private int sortedRight;
-    private boolean hasMadeSwap;
-
-    public CocktailShakerSort(List<Integer> arrayList, boolean isInstant) {
-        super(arrayList, isInstant);
-
-        lastPos = 0;
-        goingUp = true;
-        sortedLeft = 0;
-        sortedRight = 0;
-        hasMadeSwap = false;
+    public CocktailShakerSort(List<Integer> arrayList) {
+        super(arrayList);
     }
 
     @Override
-    protected void runAlgorithm(ArrayDisplay display) {
-        // Check if we are at the edge, and turn around if needed. If we do, it uses a step to take so.
-        if (goingUp) {
-            // We have reached the right end
-            if (lastPos + 1 >= list.size() - sortedRight) {
-                sortedRight++;
-                goingUp = false;
-                if (!hasMadeSwap) {
-                    isDone = true;
-                    return;
-                }
-                hasMadeSwap = false;
-                return;
-            }
-        } else {
-            // We have reached the left end
-            if (lastPos - 1 < sortedLeft) {
-                sortedLeft++;
-                goingUp = true;
-                if (!hasMadeSwap) {
-                    isDone = true;
-                    return;
-                }
-                hasMadeSwap = false;
-                return;
-            }
-        }
+    protected void runAlgorithm() {
+        // Initialize animation items
+        AnimatedArrow leftArrow = animation.createArrow();
+        AnimatedArrow rightArrow = animation.createArrow();
+        animation.setItemHeight(leftArrow, 0);
+        animation.setItemHeight(rightArrow, 0);
+        animation.setItemIndex(leftArrow, 0);
+        animation.setItemIndex(rightArrow, 1);
 
-        // Check if we need to swap the two elements we are comparing, then move in the correct direction. Colour the elements we looked at
-        if (goingUp) {
-            if (list.get(lastPos) > list.get(lastPos + 1)) {
-                swap(lastPos, lastPos + 1);
-                hasMadeSwap = true;
-                display.writeIndex(lastPos);
-                display.writeIndex(lastPos + 1);
-            } else {
-                display.readIndex(lastPos);
-                display.readIndex(lastPos + 1);
+        int start = 0;
+        int end = list.size() - 1;
+        while (true) {
+            boolean swapped = false;
+            for (int i = start; i < end; i++) {
+                animation.moveItem(leftArrow, i);
+                animation.moveItem(rightArrow, i + 1);
+                animation.addFrame();
+                animation.readIndex(i);
+                animation.readIndex(i + 1);
+                if (list.get(i) > list.get(i + 1)) {
+                    animation.addFrame();
+                    swap(i, i + 1);
+                    swapped = true;
+                }
+                addFrame();
             }
-            lastPos++;
-        } else {
-            if (list.get(lastPos) < list.get(lastPos - 1)) {
-                swap(lastPos, lastPos - 1);
-                hasMadeSwap = true;
-                display.writeIndex(lastPos);
-                display.writeIndex(lastPos - 1);
-            } else {
-                display.readIndex(lastPos);
-                display.readIndex(lastPos - 1);
+
+            // If we didn't swap anything, we are done sorting
+            if (!swapped) break;
+
+            end--;
+
+            swapped = false;
+            for (int i = end - 1; i >= start; i--) {
+                animation.moveItem(leftArrow, i);
+                animation.moveItem(rightArrow, i + 1);
+                animation.addFrame();
+                animation.readIndex(i);
+                animation.readIndex(i + 1);
+                if (list.get(i) > list.get(i + 1)) {
+                    animation.addFrame();
+                    swap(i, i + 1);
+                    swapped = true;
+                }
+                addFrame();
             }
-            lastPos--;
+
+            if (!swapped) break;
+
+            start++;
         }
     }
 
@@ -130,8 +117,6 @@ public class CocktailShakerSort extends SortingAlgorithm {
     public String getName() {
         return "Cocktail Shaker Sort";
     }
-
-
 
 //    void cocktailShakerSort() {
 //        int start = 0;

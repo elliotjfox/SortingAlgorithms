@@ -1,156 +1,125 @@
 package com.example.javafxsortingalgorithms.animation;
 
+import com.example.javafxsortingalgorithms.AlgorithmController;
+import com.example.javafxsortingalgorithms.algorithmupdates.AnimationUpdate;
+import com.example.javafxsortingalgorithms.algorithmupdates.DisplayUpdate;
+import com.example.javafxsortingalgorithms.algorithmupdates.GenerateAnimationUpdate;
+import com.example.javafxsortingalgorithms.arraydisplay.DisplaySettings;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.beans.property.DoublePropertyBase;
-import javafx.scene.Node;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-import java.util.List;
-
-/**
- * A class representing a 'section' that algorithms can use in the animated mode to show
- * things like how they are divided, or what part of the list the algorithm is looking at currently
- */
 public class AnimatedSection extends AnimatedItem {
 
-    private static final double SECTION_THICKNESS = 5;
-    private static final Color DEFAULT_COLOUR = Color.BLACK;
+    private double exactWidth;
+    private double indexWidth;
 
-    private final boolean hasEdges;
-    private final DoublePropertyBase widthProperty;
+    private final Rectangle middle;
+    private final Rectangle left;
+    private final Rectangle right;
 
-    private final Rectangle rectangle;
-    private Rectangle left;
-    private Rectangle right;
+    public AnimatedSection(double exactWidth) {
+        this.exactWidth = exactWidth;
 
-    /**
-     * Creates an AnimatedSection that will be used on the provided display.
-     * May also have a position specified, and may have a list of nodes to be added as children.
-     * Initial width is also specified, and whether the section will have edges (extra vertical bars on the edges of the section).
-     *
-     * @param display The display this item will be used by
-     * @param position The position this item should be position at. May be null
-     * @param nodes A list of nodes that are children to this item. May be null or empty
-     * @param exactWidth The initial width of this section
-     * @param hasEdges Whether this section has edges
-     */
-    public AnimatedSection(AnimatedArrayDisplay display, ItemPosition position, List<Node> nodes, double exactWidth, boolean hasEdges) {
-        super(display, position, nodes);
+        middle = new Rectangle();
+        left = new Rectangle();
+        right = new Rectangle();
+    }
 
-        this.hasEdges = hasEdges;
+    public AnimatedSection(int indexWidth) {
+        this.indexWidth = indexWidth;
+        this.exactWidth = -1;
 
-        widthProperty = new DoublePropertyBase() {
-            @Override
-            public Object getBean() {
-                return this;
-            }
+        middle = new Rectangle();
+        left = new Rectangle();
+        right = new Rectangle();
+    }
 
-            @Override
-            public String getName() {
-                return "Width";
-            }
+    @Override
+    public void generateVisuals(DisplaySettings settings) {
+        getChildren().clear();
+
+        double thickness = settings.elementWidth() / 5;
+
+        if (exactWidth == -1) {
+            exactWidth = indexWidth * settings.elementWidth();
+        }
+
+        middle.setHeight(thickness);
+        middle.setWidth(exactWidth);
+
+        left.setWidth(thickness);
+        left.setHeight(2 * thickness);
+        left.setLayoutX(0);
+        left.setLayoutY(-thickness);
+
+        right.setWidth(thickness);
+        right.setHeight(2 * thickness);
+        right.setLayoutX(exactWidth - thickness);
+        right.setLayoutY(-thickness);
+
+        getChildren().addAll(middle, left, right);
+    }
+
+    public DisplayUpdate setWidth(double newExactWidth) {
+        return display -> {
+            this.exactWidth = newExactWidth;
+            left.setWidth(newExactWidth);
+            right.setLayoutX(newExactWidth - display.getSettings().elementWidth() / 5);
         };
-        widthProperty.set(exactWidth);
-
-        rectangle = new Rectangle();
-        rectangle.setHeight(SECTION_THICKNESS);
-        rectangle.widthProperty().bind(widthProperty);
-        getChildren().add(rectangle);
-
-        if (hasEdges) {
-            left = new Rectangle();
-            left.setWidth(SECTION_THICKNESS);
-            left.setHeight(2 * SECTION_THICKNESS);
-            left.setLayoutX(0);
-            left.setLayoutY(-SECTION_THICKNESS);
-
-            right = new Rectangle();
-            right.setWidth(SECTION_THICKNESS);
-            right.setHeight(2 * SECTION_THICKNESS);
-            right.layoutXProperty().bind(widthProperty.subtract(SECTION_THICKNESS));
-            right.setLayoutY(-SECTION_THICKNESS);
-
-            getChildren().addAll(left, right);
-        }
-
-        setSectionFill(DEFAULT_COLOUR);
     }
 
-    /**
-     * Sets the fill of the section.
-     * @param fill The new colour of the section
-     */
-    public void setSectionFill(Paint fill) {
-        rectangle.setFill(fill);
-        if (hasEdges) {
-            left.setFill(fill);
-            right.setFill(fill);
-        }
+    public DisplayUpdate setWidth(int newIndexWidth) {
+        return display -> {
+            this.exactWidth = newIndexWidth * display.getSettings().elementWidth();
+            left.setWidth(exactWidth);
+            right.setLayoutX(exactWidth - display.getSettings().elementWidth() / 5);
+        };
     }
 
-    /**
-     * Queues an animation of this section resizing to the specified width, in number of indices wide.
-     * @param width The number of indices this will be wide
-     */
-    public void resize(int width) {
-        display.animate(resizeTimeline(width));
-    }
-
-    /**
-     * Queues an animation of this section resizing to the specified width.
-     * @param exactWidth The width this will be
-     */
-    public void resize(double exactWidth) {
-        display.animate(resizeTimeline(exactWidth));
-    }
-
-    /**
-     * Creates and returns a timeline of this section resizing to the specified width, in number of elements wide.
-     * @param width The new width for the section, in number of elements wide
-     * @return The timeline
-     */
-    public Timeline resizeTimeline(int width) {
-        return resizeTimeline(toExact(width));
-    }
-
-    /**
-     * Creates and returns a timeline of this section resizing to the specified width.
-     * @param exactWidth The new width for the section
-     * @return The timeline
-     */
-    public Timeline resizeTimeline(double exactWidth) {
-        return new Timeline(
-                new KeyFrame(
-                        Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),
-                        new KeyValue(widthProperty, exactWidth)
-                )
+    public GenerateAnimationUpdate changeWidth(double newExactWidth) {
+        return new GenerateAnimationUpdate(
+                settings -> new Timeline(new KeyFrame(
+                        Duration.millis(AlgorithmController.ANIMATION_LENGTH),
+                        _ -> exactWidth = newExactWidth,
+                        new KeyValue(middle.widthProperty(), newExactWidth),
+                        new KeyValue(right.layoutXProperty(), newExactWidth - settings.elementWidth() / 5)
+                )),
+                settings -> {}
         );
     }
 
-    private double toExact(int width) {
-        return width * display.getElementWidth();
+    public GenerateAnimationUpdate changeWidth(int newIndexWidth) {
+        return new GenerateAnimationUpdate(
+                settings -> new Timeline(new KeyFrame(
+                        Duration.millis(AlgorithmController.ANIMATION_LENGTH),
+                        _ -> exactWidth = newIndexWidth * settings.elementWidth(),
+                        new KeyValue(middle.widthProperty(), newIndexWidth * settings.elementWidth()),
+                        new KeyValue(right.layoutXProperty(), newIndexWidth * settings.elementWidth() - settings.elementWidth() / 5)
+                )),
+                settings -> {}
+        );
     }
 
-//    public Timeline shrinkTimeline() {
-//        return new Timeline(
-//                new KeyFrame(
-//                        Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),
-//                        new KeyValue(scaleYProperty(), 0)
-//                )
-//        );
-//    }
-//
-//    public Timeline unshrinkTimeline() {
-//        return new Timeline(
-//                new KeyFrame(
-//                        Duration.millis(AnimatedArrayDisplay.ANIMATION_LENGTH),
-//                        new KeyValue(scaleYProperty(), 1)
-//                )
-//        );
-//    }
+    @Override
+    public AnimationUpdate changeFill(Paint fill) {
+        return new AnimationUpdate(
+                new Timeline(
+                        new KeyFrame(
+                                Duration.millis(AlgorithmController.ANIMATION_LENGTH),
+                                new KeyValue(middle.fillProperty(), fill),
+                                new KeyValue(left.fillProperty(), fill),
+                                new KeyValue(right.fillProperty(), fill)
+                        )
+                ),
+                () -> {
+                    middle.setFill(fill);
+                    left.setFill(fill);
+                    right.setFill(fill);
+                }
+        );
+    }
 }

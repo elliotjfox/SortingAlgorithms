@@ -3,25 +3,99 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithnSettingsCheckBox;
-import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
 import com.example.javafxsortingalgorithms.animation.AnimatedSection;
-import com.example.javafxsortingalgorithms.animation.ItemBuilder;
-import com.example.javafxsortingalgorithms.arraydisplay.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 import java.util.List;
 
-public class MergeSort extends ActionSortingAlgorithm {
+public class MergeSort extends SortingAlgorithm {
 
     private static final double SECTION_OFFSET = 25 * Math.sin(Math.toRadians(60)) + 10;
+    private static final double SECTION_DISTANCE = 15;
+    private static final Paint COMPLETED_COLOUR = Color.rgb(44, 199, 88);
 
-    private final boolean inPlace;
+    public MergeSort(List<Integer> arrayList, boolean inPlace) {
+        super(arrayList);
+    }
 
-    public MergeSort(List<Integer> arrayList, boolean isInstant, boolean inPlace) {
-        super(arrayList, isInstant);
-        this.inPlace = inPlace;
+    @Override
+    protected void runAlgorithm() {
+        AnimatedSection section = animation.createSection(list.size());
+        animation.setItemIndex(section, 0);
+        animation.setItemHeight(section, -SECTION_OFFSET);
+        divide(0, list.size(), -SECTION_OFFSET, section);
+        animation.removeItem(section);
+        animation.addFrame();
+    }
 
-        if (!isInstant) setInitialActions(new Divide(0, arrayList.size()));
+    // [from, to)
+    private void divide(int from, int to, double height, AnimatedSection parentSection) {
+        AnimatedSection leftSection = null;
+        AnimatedSection rightSection = null;
+        if (to - from >= 2) {
+            int half = (from + to) / 2;
+            leftSection = animation.createSection(half - from);
+            rightSection = animation.createSection(to - half);
+            animation.setItemIndex(leftSection, from);
+            animation.setItemHeight(leftSection, height);
+            animation.setItemIndex(rightSection, from);
+            animation.setItemHeight(rightSection, height);
+
+            animation.moveItem(leftSection, from);
+            animation.moveItemHeight(leftSection, height - SECTION_DISTANCE);
+            animation.moveItem(rightSection, half);
+            animation.moveItemHeight(rightSection, height - SECTION_DISTANCE);
+            animation.addFrame();
+
+            divide(from, half, height - SECTION_DISTANCE, leftSection);
+            divide(half, to, height - SECTION_DISTANCE, rightSection);
+            // Merge adds frames
+            merge(from, to);
+
+            animation.changeSectionWidth(leftSection, to - from);
+            animation.changeSectionWidth(rightSection, to - from);
+            animation.moveItem(rightSection, from);
+            animation.addFrame();
+            animation.moveItemHeight(leftSection, height);
+            animation.moveItemHeight(rightSection, height);
+        }
+        animation.changeItemFill(parentSection, COMPLETED_COLOUR);
+        animation.addFrame();
+        animation.removeItem(leftSection);
+        animation.removeItem(rightSection);
+    }
+
+    // TODO: Add inPlace options
+    private void merge(int left, int end) {
+        int right = (left + end) / 2;
+
+        AnimatedArrow leftArrow = animation.createArrow();
+        AnimatedArrow rightArrow = animation.createArrow();
+        animation.setItemIndex(leftArrow, left);
+        animation.setItemHeight(leftArrow, 0);
+        animation.setItemIndex(rightArrow, right);
+        animation.setItemHeight(rightArrow, 0);
+
+        while (right < end && left < right) {
+            animation.moveItem(leftArrow, left);
+            animation.moveItem(rightArrow, right);
+            animation.addFrame();
+            animation.readIndex(left);
+            animation.readIndex(right);
+
+            if (list.get(left) >= list.get(right)) {
+                animation.addFrame();
+                move(right, left);
+                right++;
+            }
+            left++;
+            addFrame();
+        }
+
+        animation.removeItem(leftArrow);
+        animation.removeItem(rightArrow);
     }
 
     @Override
@@ -53,100 +127,17 @@ public class MergeSort extends ActionSortingAlgorithm {
         }
     }
 
-    @Override
-    public void startAnimated(AnimatedArrayDisplay display) {
-        AnimatedSection currentSection = new ItemBuilder(display)
-                .at(0, -SECTION_OFFSET)
-                .buildSection(list.size());
-        display.addItem(currentSection);
-    }
+//    @Override
+//    public void startAnimated(AnimatedArrayDisplay display) {
+//        AnimatedSection currentSection = new ItemBuilder(display)
+//                .at(0, -SECTION_OFFSET)
+//                .buildSection(list.size());
+//        display.addItem(currentSection);
+//    }
 
     @Override
     public String getName() {
         return "Merge Sort";
-    }
-
-
-    private static class Divide extends AlgorithmAction {
-        private final int min;
-        private final int max;
-        private final int depth;
-
-        public Divide(int min, int max, int depth) {
-            this.min = min;
-            this.max = max;
-            this.depth = depth;
-            takesStep = false;
-        }
-
-        public Divide(int min, int max) {
-            this(min, max, 0);
-        }
-
-        @Override
-        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
-            if (max - min >= 2) {
-                int half = (min + max) / 2;
-                algorithm.addToStart(
-                        new Divide(min, half),
-                        new Divide(half, max)
-                );
-                if (((MergeSort) algorithm).inPlace) {
-                    algorithm.addToStart(new InPlaceMerge(min, half, max));
-                } else {
-                    algorithm.addToStart(new Merge(min, half, max));
-                }
-
-            }
-        }
-
-        @Override
-        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
-            if (max - min >= 2) {
-                int half = (min + max) / 2;
-
-                AnimatedSection leftSection = new ItemBuilder(display)
-                        .at(min, -(depth) * 15 - SECTION_OFFSET)
-                        .buildSection(max - min);
-                AnimatedSection rightSection = new ItemBuilder(display)
-                        .at(min, -(depth) * 15 - SECTION_OFFSET)
-                        .buildSection(max - min);
-
-                algorithm.addToStart(
-                        new LaterAction(() -> {
-                            display.addItem(leftSection);
-                            display.addItem(rightSection);
-                            leftSection.moveToIndex(min, -(depth + 1) * 15 - SECTION_OFFSET);
-                            rightSection.moveToIndex(half, -(depth + 1) * 15 - SECTION_OFFSET);
-                            display.highlight(i -> i >= min && i < max);
-                            leftSection.resize(half - min);
-                            rightSection.resize(max - half);
-                            display.onPlay(() -> display.setCurrentTask("Dividing [" + min + ", " + (max - 1) + "]"));
-                        }, true),
-                        new Divide(min, half, depth + 1),
-                        new Divide(half, max, depth + 1),
-                        new LaterAction(() -> {
-                            leftSection.setSectionFill(Color.LIGHTGREEN);
-                            rightSection.setSectionFill(Color.LIGHTGREEN);
-                            display.highlight(i -> i >= min && i < max);
-                            display.onPlay(() -> display.setCurrentTask("Merging [" + min + ", " + (half - 1) + "] and [" + half + ", " + (max - 1) + "]"));
-                        }),
-                        new InPlaceMerge(min, half, max),
-                        new LaterAction(() -> {
-                            leftSection.setSectionFill(Color.BLACK);
-                            rightSection.setSectionFill(Color.BLACK);
-                        }),
-                        new AnimationAction(
-                                leftSection.moveToIndexTimeline(min, -depth * 15 - SECTION_OFFSET),
-                                leftSection.resizeTimeline(max - min),
-                                rightSection.moveToIndexTimeline(min, -depth * 15 - SECTION_OFFSET),
-                                rightSection.resizeTimeline(max - min)
-                        ),
-                        new Wait(),
-                        new RemoveItem(leftSection, rightSection)
-                );
-            }
-        }
     }
 
     public static AlgorithmSettings<MergeSort> getSettings() {
@@ -154,7 +145,7 @@ public class MergeSort extends ActionSortingAlgorithm {
 
         return new AlgorithmSettings<>(
                 "Merge Sort",
-                (l, b) -> new MergeSort(l, b, inPlaceSetting.getValue()),
+                list -> new MergeSort(list, inPlaceSetting.getValue()),
                 inPlaceSetting
         );
     }

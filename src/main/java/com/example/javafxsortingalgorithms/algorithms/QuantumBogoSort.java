@@ -2,7 +2,6 @@ package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.Main;
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
@@ -17,39 +16,38 @@ import javafx.util.Duration;
 
 import java.util.List;
 
-public class QuantumBogoSort extends ActionSortingAlgorithm {
+public class QuantumBogoSort extends SortingAlgorithm {
 
-    public QuantumBogoSort(List<Integer> arrayList, boolean isInstant) {
-        super(arrayList, isInstant);
-
-        setInitialActions(new Randomize());
+    public QuantumBogoSort(List<Integer> arrayList) {
+        super(arrayList);
     }
 
+    // TODO
     @Override
-    protected void runAlgorithm(ArrayDisplay display) {
-        AlgorithmAction currentAction;
-        do {
-            if (actions.isEmpty()) {
-                isDone = true;
-                if (!isListSorted(list)) {
-                    startUniverseDestruction();
-                    return;
-                }
-            }
-            currentAction = actions.pop();
-            currentAction.execute(this, display);
-            catchUpActions();
-        } while (!currentAction.takesStep);
+    protected void runAlgorithm() {
+
     }
+
+    //    @Override
+//    protected void runAlgorithm(ArrayDisplay display) {
+//        AlgorithmAction currentAction;
+//        do {
+//            if (actions.isEmpty()) {
+//                isDone = true;
+//                if (!isListSorted(list)) {
+//                    startUniverseDestruction();
+//                    return;
+//                }
+//            }
+//            currentAction = actions.pop();
+//            currentAction.execute(this, display);
+//            catchUpActions();
+//        } while (!currentAction.takesStep);
+//    }
 
     @Override
     protected void instantAlgorithm(TestEntry entry) {
 
-    }
-
-    @Override
-    public boolean isDone() {
-        return isDone;
     }
 
     @Override
@@ -92,16 +90,5 @@ public class QuantumBogoSort extends ActionSortingAlgorithm {
         stage.show();
 
         timeline.play();
-    }
-
-    private static class Randomize extends AlgorithmAction {
-
-        @Override
-        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
-            for (int i = 0; i < algorithm.list.size(); i++) {
-                algorithm.addToStart(new Swap(i, (int) (Math.random() * (algorithm.list.size() - i)) + i));
-            }
-            algorithm.addToStart(new CheckIfSorted());
-        }
     }
 }

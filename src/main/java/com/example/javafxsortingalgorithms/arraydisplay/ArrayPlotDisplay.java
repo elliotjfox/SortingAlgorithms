@@ -1,15 +1,15 @@
 package com.example.javafxsortingalgorithms.arraydisplay;
 
-import com.example.javafxsortingalgorithms.settings.SettingsPane;
+import com.example.javafxsortingalgorithms.AlgorithmController;
+import com.example.javafxsortingalgorithms.animation.AnimatedReadArrow;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
-import java.util.List;
-
-public class ArrayPlotDisplay extends ArrayElementDisplay<Rectangle> {
-    public ArrayPlotDisplay(List<Integer> arrayList, SettingsPane settingsPane) {
-        super(arrayList, settingsPane);
-    }
+public class ArrayPlotDisplay extends SimpleArrayDisplay<Rectangle> {
 
     @Override
     protected Rectangle createElement() {
@@ -17,30 +17,30 @@ public class ArrayPlotDisplay extends ArrayElementDisplay<Rectangle> {
     }
 
     @Override
-    public void update() {
-        if (elements == null) return;
+    protected void formatElement(int index, int value, Rectangle element) {
+        element.setFill(Color.hsb(0, 0, 0));
+        element.setX(index * currentSettings.elementWidth());
+        element.setY((currentSettings.maxValue() - value) * currentSettings.heightMultiplier());
+        element.setWidth(currentSettings.elementWidth());
+        element.setHeight(currentSettings.elementWidth());
+    }
 
-        for (int i = 0; i < elements.size(); i++) {
-            double height = list.get(i) * getHeightMultiplier();
-            double bottom = maxValue * getHeightMultiplier();
+    @Override
+    protected Timeline moveElement(Rectangle element, int targetIndex) {
+        return new Timeline(
+                new KeyFrame(
+                        Duration.millis(AlgorithmController.ANIMATION_LENGTH),
+                        new KeyValue(element.xProperty(), currentSettings.elementWidth() * targetIndex)
+                )
+        );
+    }
 
-            Rectangle rect = elements.get(i);
-//            if (colourActions.containsKey(i)) {
-//                if (colourActions.get(i) == ColourAction.READ) {
-//                    rect.setFill(Color.hsb(0, 0, 0.25));
-//                } else if (colourActions.get(i) == ColourAction.WRITE) {
-//                    rect.setFill(Color.hsb(0, 0, 0.5));
-//                }
-//            } else {
-//                rect.setFill(Color.hsb(0, 0, 0));
-//            }
+    @Override
+    public void createReadAnimation(int index, int value) {
+    }
 
-            rect.setFill(Color.hsb(0, 0, 0));
-            rect.setX(getElementWidth() * i);
-            rect.setY(bottom - height);
-            rect.setWidth(getElementWidth());
-            rect.setHeight(getElementWidth());
-        }
-        colourActions.clear();
+    @Override
+    protected Timeline createReadTimeline(AnimatedReadArrow readArrow, int index, int value) {
+        return null;
     }
 }

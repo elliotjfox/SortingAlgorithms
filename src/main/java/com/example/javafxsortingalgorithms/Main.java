@@ -12,14 +12,13 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         Main.stage = stage;
-        AlgorithmDisplay algorithmDisplay = new AlgorithmDisplay();
-        Scene scene = new Scene(algorithmDisplay, 1050, 650);
-//        stage.setOnCloseRequest(windowEvent -> algorithmDisplay.close());
+        MainDisplay display = new MainDisplay();
+        Scene scene = new Scene(display, 1050, 650);
+        stage.setOnCloseRequest(_ -> display.onClose());
 
         stage.setTitle("Sorting Algorithms");
         stage.setScene(scene);
         stage.show();
-
     }
 
     public static void close() {

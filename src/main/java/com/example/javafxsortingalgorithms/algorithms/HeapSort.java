@@ -1,25 +1,77 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
-import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
-import com.example.javafxsortingalgorithms.animation.ItemBuilder;
-import com.example.javafxsortingalgorithms.arraydisplay.ArrayDisplay;
+import com.example.javafxsortingalgorithms.algorithmupdates.CreateItemUpdate;
+import com.example.javafxsortingalgorithms.arraydisplay.DisplayMode;
 import com.example.javafxsortingalgorithms.animation.AnimatedBinaryTree;
-import javafx.animation.Timeline;
 
 import java.util.List;
 
-public class HeapSort extends ActionSortingAlgorithm {
+public class HeapSort extends SortingAlgorithm {
 
-    private int length;
+    private int treeSize;
 
     private AnimatedBinaryTree tree;
 
-    public HeapSort(List<Integer> arrayList, boolean isInstant) {
-        super(arrayList, isInstant);
+    public HeapSort(List<Integer> list) {
+        super(list);
+        animation = new HeapAnimation(this);
 
-        length = arrayList.size();
-        setInitialActions(new BuildMaxHeap(), new ExtractMax());
+        treeSize = list.size();
+    }
+
+    @Override
+    public void runAlgorithm() {
+        if (mode == DisplayMode.ANIMATED) {
+            tree = new AnimatedBinaryTree(list);
+            currentChanges.add(new CreateItemUpdate(tree));
+            animation.setItemIndex(tree, list.size());
+        }
+
+        // Build the heap
+        for (int i = list.size() / 2; i >= 0; i--) {
+            maxHeapify(i);
+        }
+        for (int i = 0; i < list.size(); i++) {
+            swap(0, treeSize - 1);
+            treeSize--;
+            addFrame();
+            if (tree != null) currentChanges.add(tree.removeLast());
+            animation.addFrame();
+            maxHeapify(0);
+        }
+    }
+
+    // A recursive method that fixes the heap from a given point
+    private void maxHeapify(int i) {
+        // If both children are in range
+        if (i * 2 + 2 < treeSize) {
+            animation.readIndex(i);
+            animation.addFrame();
+            animation.readIndex(i * 2 + 1);
+            animation.readIndex(i * 2 + 2);
+            animation.addFrame();
+            // If the current has a child that is bigger than it,
+            if (list.get(i) <= list.get(i * 2 + 1) || list.get(i) <= list.get(i * 2 + 2)) {
+                // We need to swap it with the larger child
+                int largestChild = list.get(i * 2 + 1) > list.get(i * 2 + 2) ? i * 2 + 1 : i * 2 + 2;
+                swap(i, largestChild);
+                addFrame();
+                // And keep recursively doing this process
+                maxHeapify(largestChild);
+            }
+        } else if (i * 2 + 1 < treeSize) {
+            animation.readIndex(i);
+            animation.addFrame();
+            animation.readIndex(i * 2 + 1);
+            animation.addFrame();
+            // One of the children is in range, check if it is bigger
+            if (list.get(i) < list.get(i * 2 + 1)) {
+                swap(i, i * 2 + 1);
+                addFrame();
+                // Don't need to recursively call, since we only had one child, that child can't possibly have a child
+            }
+        }
     }
 
     @Override
@@ -29,8 +81,8 @@ public class HeapSort extends ActionSortingAlgorithm {
             maxHeapify(i, entry);
         }
         for (int i = 0; i < list.size(); i++) {
-            swap(0, length - 1);
-            length--;
+            swap(0, treeSize - 1);
+            treeSize--;
             entry.addWrite(2);
             maxHeapify(0, entry);
             entry.updateProgress((double) i / list.size());
@@ -40,7 +92,7 @@ public class HeapSort extends ActionSortingAlgorithm {
     // A recursive method that fixes the heap from a given point
     private void maxHeapify(int i, TestEntry entry) {
         // If both children are in range
-        if (i * 2 + 2 < length) {
+        if (i * 2 + 2 < treeSize) {
             // If the current is larger than both children, we're done
             if (list.get(i) > list.get(i * 2 + 1) && list.get(i) > list.get(i * 2 + 2)) {
                 entry.addRead(3);
@@ -52,7 +104,7 @@ public class HeapSort extends ActionSortingAlgorithm {
                 entry.addWrite(2);
                 maxHeapify(largestChild, entry);
             }
-        } else if (i * 2 + 1 < length) {
+        } else if (i * 2 + 1 < treeSize) {
             // One of the children is in range, check if it is bigger
             if (list.get(i) < list.get(i * 2 + 1)) {
                 swap(i, i * 2 + 1);
@@ -64,175 +116,31 @@ public class HeapSort extends ActionSortingAlgorithm {
     }
 
     @Override
-    public void startAnimated(AnimatedArrayDisplay display) {
-        tree = new ItemBuilder(display)
-                .at(list.size(), 600)
-                .buildTree(list);
-        display.addItem(tree);
-    }
-
-    @Override
     public String getName() {
         return "Heap Sort";
     }
 
-    private static class BuildMaxHeap extends AlgorithmAction {
-
-        public BuildMaxHeap() {
-            takesStep = false;
-        }
-
-        @Override
-        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
-            for (int i = algorithm.list.size() / 2; i >= 0; i--) {
-                algorithm.addToStart(new MaxHeapify(i));
-            }
-        }
-
-        @Override
-        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
-            display.setCurrentTask("Creating binary tree");
-            for (int i = algorithm.list.size() / 2; i >= 0; i--) {
-                algorithm.addToStart(new MaxHeapify(i));
-            }
-        }
+    @Override
+    protected void swap(int firstIndex, int secondIndex) {
+        super.swap(firstIndex, secondIndex);
+        if (tree != null) currentChanges.add(tree.swapElement(firstIndex, secondIndex));
     }
 
-    private static class MaxHeapify extends AlgorithmAction {
+    private static class HeapAnimation extends SortingAlgorithmAnimation {
 
-        private final int i;
+        private final HeapSort algorithm;
 
-        public MaxHeapify(int i) {
-            this.i = i;
-            takesStep = false;
+        public HeapAnimation(HeapSort algorithm) {
+            super(algorithm);
+            this.algorithm = algorithm;
         }
 
         @Override
-        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
-            if (algorithm instanceof HeapSort) {
-                perform((HeapSort) algorithm);
+        protected void readIndex(int index) {
+            super.readIndex(index);
+            if (algorithm.mode == DisplayMode.ANIMATED && algorithm.tree != null) {
+                algorithm.currentChanges.add(algorithm.tree.readIndex(index));
             }
-        }
-
-        private void perform(HeapSort heapSort) {
-            // If both children are in range
-            if (i * 2 + 2 < heapSort.length) {
-                // If the current one is less than one of its children
-                if (heapSort.getList().get(i) < heapSort.getList().get(i * 2 + 1) || heapSort.getList().get(i) < heapSort.getList().get(i * 2 + 2)) {
-                    // Swap is with the larger child
-                    int largestChild = heapSort.getList().get(i * 2 + 1) > heapSort.getList().get(i * 2 + 2) ? i * 2 + 1 : i * 2 + 2;
-                    heapSort.addToStart(
-                            new Swap(i, largestChild),
-                            new MaxHeapify(largestChild)
-                    );
-                }
-            } else if (i * 2 + 1 < heapSort.length) {
-                // One of the children is in range, check if it is bigger
-                if (heapSort.getList().get(i) < heapSort.getList().get(i * 2 + 1)) {
-                    heapSort.addToStart(new Swap(i, i * 2 + 1));
-                    // Don't need to call max heapify, since the child was at the edge of the
-                }
-            }
-        }
-
-        @Override
-        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
-            if (algorithm instanceof HeapSort) {
-                performDetailed((HeapSort) algorithm, display);
-            }
-        }
-
-        private void performDetailed(HeapSort heapSort, AnimatedArrayDisplay display) {
-            // If both children are in range
-            if (i * 2 + 2 < heapSort.length) {
-                // Read the current and its children
-                display.reading(i);
-                heapSort.tree.read(i);
-                display.newGroup();
-                display.comparing(i * 2 + 1, i * 2 + 2);
-                heapSort.tree.read(i *  2 + 1);
-                heapSort.tree.read(i *  2 + 2);
-                // If the current one is less than one of its children
-                if (heapSort.getList().get(i) < heapSort.getList().get(i * 2 + 1) || heapSort.getList().get(i) < heapSort.getList().get(i * 2 + 2)) {
-                    // Swap is with the larger child
-                    int largestChild = heapSort.getList().get(i * 2 + 1) > heapSort.getList().get(i * 2 + 2) ? i * 2 + 1 : i * 2 + 2;
-                    heapSort.addToStart(
-                            new LaterAction(() -> display.animateFinal(heapSort.tree.swapTimeline(i, largestChild))),
-                            new Swap(i, largestChild),
-                            new MaxHeapify(largestChild)
-                    );
-                } else {
-                    heapSort.addToStart(new Wait());
-                }
-            } else if (i * 2 + 1 < heapSort.length) {
-                display.reading(i);
-                heapSort.tree.read(i);
-                display.newGroup();
-                display.reading(i * 2 + 1);
-                heapSort.tree.read(i * 2 + 1);
-
-                // One of the children is in range, check if it is bigger
-                if (heapSort.getList().get(i) < heapSort.getList().get(i * 2 + 1)) {
-                    heapSort.addToStart(
-                            new LaterAction(() -> display.animateFinal(heapSort.tree.swapTimeline(i, i * 2 + 1))),
-                            new Swap(i, i * 2 + 1)
-                    );
-                    // Don't need to call max heapify, since the child was at the edge of the
-                } else {
-                    heapSort.addToStart(new Wait());
-                }
-            }
-        }
-    }
-
-    private static class ExtractMax extends AlgorithmAction {
-
-        public ExtractMax() {
-            takesStep = false;
-        }
-
-        @Override
-        void execute(ActionSortingAlgorithm algorithm, ArrayDisplay display) {
-            if (algorithm instanceof HeapSort) {
-                perform((HeapSort) algorithm);
-            }
-        }
-
-        private void perform(HeapSort heapSort) {
-            if (heapSort.length <= 1) {
-                return;
-            }
-
-            heapSort.addToStart(new Swap(0, heapSort.length - 1));
-            heapSort.length -= 1;
-            heapSort.addToStart(new MaxHeapify(0));
-            if (heapSort.length > 1) heapSort.addToStart(new ExtractMax());
-        }
-
-        @Override
-        public void executeAnimated(ActionSortingAlgorithm algorithm, AnimatedArrayDisplay display) {
-            if (algorithm instanceof HeapSort) {
-                performDetailed((HeapSort) algorithm, display);
-            }
-        }
-
-        private void performDetailed(HeapSort heapSort, AnimatedArrayDisplay display) {
-            if (heapSort.length <= 1) {
-                return;
-            }
-
-            Timeline extractAnimation = heapSort.tree.extractItemTimeline(0, heapSort.length - 1);
-            heapSort.addToStart(
-                    new LaterAction(() -> {
-                        display.onPlay(() -> display.setCurrentTask("Extracting max"));
-                        display.animateFinal(extractAnimation);
-                    }),
-                    new Swap(0, heapSort.length - 1),
-                    new LaterAction(() -> display.setCurrentTask("Fixing binary tree")),
-                    new MaxHeapify(0)
-            );
-            heapSort.length -= 1;
-            if (heapSort.length > 1) heapSort.addToStart(new ExtractMax());
         }
     }
 

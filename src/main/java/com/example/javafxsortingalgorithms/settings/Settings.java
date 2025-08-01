@@ -1,7 +1,5 @@
 package com.example.javafxsortingalgorithms.settings;
 
-import com.example.javafxsortingalgorithms.algorithms.*;
-import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.*;
 import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -24,37 +22,6 @@ public class Settings {
     public static int defaultTestSize = 5000;
 
     private static final Random random = new Random();
-
-    public static AlgorithmSettings<?> createAlgorithmSettings(String algorithmName) {
-        return switch (algorithmName) {
-            case "Bitonic":     yield BitonicSort.getSettings();
-            case "Bogo":        yield new AlgorithmSettings<>("Bogo Sort", BogoSort::new);
-            case "Bubble":      yield new AlgorithmSettings<>("Bubble Sort", BubbleSort::new);
-            case "Cartesian":   yield new AlgorithmSettings<>("Cartesian Tree Sort", CartesianTreeSort::new);
-            case "Cocktail":    yield new AlgorithmSettings<>("Cocktail Shaker Sort", CocktailShakerSort::new);
-            case "Comb":        yield CombSort.getSettings();
-            case "Exchange":    yield ExchangeSort.getSettings();
-            case "Gnome":       yield new AlgorithmSettings<>("Gnome Sort", GnomeSort::new);
-            case "Gravity":     yield new AlgorithmSettings<>("Gravity Sort", GravitySort::new);
-            case "Heap":        yield new AlgorithmSettings<>("Heap Sort", HeapSort::new);
-            case "Insertion":   yield InsertionSort.getSettings();
-            case "Merge":       yield MergeSort.getSettings();
-            case "OddEven":     yield new AlgorithmSettings<>("Odd-Even Sort", OddEvenSort::new);
-            case "OddEvenMerge":yield new AlgorithmSettings<>("Odd-Even Merge Sort", OddEvenMergeSort::new);
-            case "Pancake":     yield PancakeSort.getSettings();
-            case "QuantumBogo": yield new AlgorithmSettings<>("Quantum Bogo Sort", QuantumBogoSort::new);
-            case "Quick":       yield QuickSort.getSettings();
-            case "Radix":       yield RadixLSDSort.getSettings();
-            case "Selection":   yield SelectionSort.getSettings();
-            case "Sleep":       yield new AlgorithmSettings<>("Sleep Sort", SleepSort::new);
-            case "Shell":       yield ShellSort.getSettings();
-            case "Stooge":      yield new AlgorithmSettings<>("Stooge Sort", StoogeSort::new);
-            case "Strand":      yield new AlgorithmSettings<>("Strand Sort", StrandSort::new);
-            case "Tim":         yield TimSort.getSettings();
-            case "Cycle":       yield new AlgorithmSettings<>("Strand Sort", CycleSort::new);
-            default:            yield new AlgorithmSettings<>("Unknown Algorithm", GnomeSort::new);
-        };
-    }
 
     public static List<Integer> getReverseList(int size) {
         List<Integer> list  = new ArrayList<>();

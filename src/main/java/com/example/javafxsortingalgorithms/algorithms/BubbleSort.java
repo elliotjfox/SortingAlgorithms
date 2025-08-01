@@ -1,10 +1,7 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.animation.AnimatedArrayDisplay;
-import com.example.javafxsortingalgorithms.animation.AnimatedItem;
-import com.example.javafxsortingalgorithms.animation.ItemBuilder;
-import com.example.javafxsortingalgorithms.arraydisplay.*;
 import com.example.javafxsortingalgorithms.TestEntry;
+import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
 
 import java.util.List;
 
@@ -19,53 +16,41 @@ import java.util.List;
  */
 public class BubbleSort extends SortingAlgorithm {
 
-    private int sorted;
-    private int lastPos;
-    private boolean hasMadeSwap;
-
-    private AnimatedItem leftArrow;
-    private AnimatedItem rightArrow;
-
-    public BubbleSort(List<Integer> arrayList, boolean isInstant) {
-        super(arrayList, isInstant);
-
-        sorted = 0;
-        lastPos = 0;
-        hasMadeSwap = false;
+    public BubbleSort(List<Integer> list) {
+        super(list);
     }
 
-    @Override
-    protected void runAlgorithm(ArrayDisplay display) {
-        if (sorted + 1 >= list.size()) {
-            isDone = true;
-            return;
-        }
+    protected void runAlgorithm() {
+        boolean hasSwapped;
 
-        // Check if the next position would be outside the array, and reset if we need to. This does use a step.
-        if (lastPos + 1 >= list.size() - sorted) {
-            sorted++;
-            lastPos = 0;
-            if (!hasMadeSwap) {
-                isDone = true;
-                return;
+        // Initialize animation items
+        AnimatedArrow leftPointer = animation.createArrow();
+        AnimatedArrow rightPointer = animation.createArrow();
+        animation.setItemHeight(leftPointer, 0);
+        animation.setItemHeight(rightPointer, 0);
+        animation.setItemIndex(leftPointer, 0);
+        animation.setItemIndex(rightPointer, 1);
+
+        for (int i = 0; i < list.size(); i++) {
+            hasSwapped = false;
+            for (int j = 0; j < list.size() - 1 - i; j++) {
+                // Move animation items
+                animation.moveItem(leftPointer, j);
+                animation.moveItem(rightPointer, j + 1);
+                animation.addFrame();
+                animation.readIndex(j);
+                animation.readIndex(j + 1);
+
+                if (list.get(j) > list.get(j + 1)) {
+                    // If we are going to swap, make an animated frame right before
+                    animation.addFrame();
+                    swap(j, j + 1);
+                    hasSwapped = true;
+                }
+                addFrame();
             }
-            hasMadeSwap = false;
-            return;
+            if (!hasSwapped) return;
         }
-
-        // Check if we need to swap the elements
-        if (list.get(lastPos) > list.get(lastPos + 1)) {
-            hasMadeSwap = true;
-            swap(lastPos, lastPos + 1);
-            display.writeIndex(lastPos);
-            display.writeIndex(lastPos + 1);
-        } else {
-            display.readIndex(lastPos);
-            display.readIndex(lastPos + 1);
-        }
-
-        // Increase the position
-        lastPos++;
     }
 
     @Override
@@ -88,68 +73,9 @@ public class BubbleSort extends SortingAlgorithm {
     }
 
     @Override
-    public void startAnimated(AnimatedArrayDisplay display) {
-        leftArrow = ItemBuilder.defaultArrow(display, 0);
-        display.addItem(leftArrow);
-
-        rightArrow = ItemBuilder.defaultArrow(display, 1);
-        display.addItem(rightArrow);
-
-        display.updateInfo("Number sorted", 0);
-        display.updateInfo("Left index", 0);
-        display.updateInfo("Left value", list.get(0));
-        display.updateInfo("Right index", 1);
-        display.updateInfo("Right value", list.get(1));
-    }
-
-    @Override
-    public void iterateAnimated(AnimatedArrayDisplay display) {
-        // Check if the next position would be outside the array, and reset if we need to.
-        if (lastPos + 1 >= list.size() - sorted) {
-            sorted++;
-            lastPos = 0;
-
-            if (!hasMadeSwap) {
-                isDone = true;
-                return;
-            }
-            hasMadeSwap = false;
-
-            leftArrow.moveToIndex(lastPos, 0);
-            rightArrow.moveToIndex(lastPos + 1, 0);
-            updateInfo(display);
-        }
-
-        leftArrow.moveToIndex(lastPos, 0);
-        rightArrow.moveToIndex(lastPos + 1, 0);
-        updateInfo(display);
-        display.newGroup();
-        display.comparing(lastPos, lastPos + 1);
-
-        if (list.get(lastPos) > list.get(lastPos + 1)) {
-            hasMadeSwap = true;
-            swap(lastPos, lastPos + 1);
-            display.swap(lastPos, lastPos + 1);
-            updateInfo(display);
-        }
-
-        // Increase the position
-        lastPos++;
-    }
-
-    private void updateInfo(AnimatedArrayDisplay display) {
-        display.updateInfoWhenDone("Number sorted", sorted);
-        display.updateInfoWhenDone("Left index", lastPos);
-        display.updateInfoWhenDone("Left value", list.get(lastPos));
-        display.updateInfoWhenDone("Right index", lastPos + 1);
-        display.updateInfoWhenDone("Right value", list.get(lastPos + 1));
-    }
-
-    @Override
     public String getName() {
         return "Bubble Sort";
     }
-
 
 //    void bubbleSort() {
 //        boolean hasSwapped;

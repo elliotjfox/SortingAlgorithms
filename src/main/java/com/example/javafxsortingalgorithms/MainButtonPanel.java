@@ -10,7 +10,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
-import org.controlsfx.control.action.Action;
 
 import java.util.Arrays;
 import java.util.List;
@@ -96,6 +95,9 @@ public class MainButtonPanel extends FlowPane {
                 "Miscellaneous", null,
                 createAlgorithmMenuItem(AlgorithmType.TIM),
                 createAlgorithmMenuItem(AlgorithmType.RADIX),
+                createAlgorithmMenuItem(AlgorithmType.BUCKET),
+                createAlgorithmMenuItem(AlgorithmType.PIGEONHOLE),
+                createAlgorithmMenuItem(AlgorithmType.PATIENCE),
                 createAlgorithmMenuItem(AlgorithmType.ODD_EVEN),
                 createAlgorithmMenuItem(AlgorithmType.EXCHANGE),
                 createAlgorithmMenuItem(AlgorithmType.STRAND),

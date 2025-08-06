@@ -1,6 +1,8 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
+import com.example.javafxsortingalgorithms.animation.position.ScaledIndex;
+import com.example.javafxsortingalgorithms.animation.position.ScaledPosition;
 
 import java.util.*;
 
@@ -14,23 +16,22 @@ public class CycleSort extends SortingAlgorithm {
     protected void runAlgorithm() {
 
         AnimatedArrow cycleStartArrow = animation.createArrow();
+        animation.setItemPosition(cycleStartArrow, new ScaledPosition(0, 0));
+
         AnimatedArrow targetPosArrow = animation.createArrow();
+        animation.setItemPosition(targetPosArrow, new ScaledPosition(0, 0));
+
         AnimatedArrow iArrow = animation.createArrow();
-        animation.setItemIndex(cycleStartArrow, 0);
-        animation.setItemIndex(targetPosArrow, 0);
-        animation.setItemIndex(iArrow, 1);
-        animation.setItemHeight(cycleStartArrow, 0);
-        animation.setItemHeight(targetPosArrow, 0);
-        animation.setItemHeight(iArrow, 0);
+        animation.setItemPosition(targetPosArrow, new ScaledPosition(1, 0));
 
 
         for (int cycleStart = 0; cycleStart < list.size() - 1; cycleStart++) {
-            animation.moveItem(cycleStartArrow, cycleStart);
+            animation.changeItemX(cycleStartArrow, new ScaledIndex(cycleStart));
             while (true) {
                 int targetPos = cycleStart;
                 for (int i = cycleStart + 1; i < list.size(); i++) {
-                    animation.moveItem(targetPosArrow, targetPos);
-                    animation.moveItem(iArrow, i);
+                    animation.changeItemX(targetPosArrow, new ScaledIndex(targetPos));
+                    animation.changeItemX(iArrow, new ScaledIndex(i));
                     animation.addFrame();
                     animation.readIndex(i);
                     animation.readIndex(cycleStart);

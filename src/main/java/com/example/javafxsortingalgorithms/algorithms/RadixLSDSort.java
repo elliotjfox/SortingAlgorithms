@@ -3,6 +3,8 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.*;
 import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
+import com.example.javafxsortingalgorithms.animation.position.ScaledIndex;
+import com.example.javafxsortingalgorithms.animation.position.ScaledPosition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,8 +66,7 @@ public class RadixLSDSort extends SortingAlgorithm {
         ArrayList<Integer> indices = new ArrayList<>();
         for (int i = 0; i < base; i++) {
             AnimatedArrow arrow = animation.createArrow();
-            animation.setItemHeight(arrow, 0);
-            animation.setItemIndex(arrow, 0);
+            animation.setItemPosition(arrow, new ScaledPosition(0, 0));
             arrows.add(arrow);
             indices.add(0);
         }
@@ -74,7 +75,7 @@ public class RadixLSDSort extends SortingAlgorithm {
             for (int i = 0; i < list.size(); i++) {
 
                 for (int j = 0; j < arrows.size(); j++) {
-                    animation.moveItem(arrows.get(j), indices.get(j));
+                    animation.changeItemX(arrows.get(j), new ScaledIndex(indices.get(j)));
                 }
                 animation.addFrame();
                 animation.readIndex(i);

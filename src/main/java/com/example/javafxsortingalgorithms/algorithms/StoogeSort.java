@@ -2,6 +2,8 @@ package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithmupdates.CreateItemUpdate;
+import com.example.javafxsortingalgorithms.animation.position.ScaledIndex;
+import com.example.javafxsortingalgorithms.animation.position.ScaledPosition;
 import com.example.javafxsortingalgorithms.arraydisplay.DisplayMode;
 import com.example.javafxsortingalgorithms.animation.AnimatedSection;
 import com.example.javafxsortingalgorithms.animation.AnimationSectionList;
@@ -21,10 +23,10 @@ public class StoogeSort extends SortingAlgorithm {
         if (mode == DisplayMode.ANIMATED) {
             sectionList = new AnimationSectionList();
             currentChanges.add(new CreateItemUpdate(sectionList));
-            animation.setItemHeight(sectionList, 0);
+            animation.setItemPosition(sectionList, new ScaledPosition(0, 0));
             animation.addFrame();
-            AnimatedSection section = new AnimatedSection(list.size());
-            currentChanges.add(section.setIndex(0));
+            AnimatedSection section = new AnimatedSection(new ScaledIndex(list.size()));
+            currentChanges.add(section.setXPosition(new ScaledIndex(0)));
             currentChanges.add(sectionList.addSectionsToStart(section));
             animation.addFrame();
         }
@@ -47,12 +49,12 @@ public class StoogeSort extends SortingAlgorithm {
         if (to - from + 1 > 2) {
             int third = (to - from + 1) / 3;
             if (sectionList != null) {
-                AnimatedSection section1 = new AnimatedSection((to - third) - from + 1);
-                AnimatedSection section2 = new AnimatedSection(to - (from + third) + 1);
-                AnimatedSection section3 = new AnimatedSection((to - third) - from + 1);
-                currentChanges.add(section1.setIndex(from));
-                currentChanges.add(section2.setIndex(from + third));
-                currentChanges.add(section3.setIndex(from));
+                AnimatedSection section1 = new AnimatedSection(new ScaledIndex((to - third) - from + 1));
+                AnimatedSection section2 = new AnimatedSection(new ScaledIndex(to - (from + third) + 1));
+                AnimatedSection section3 = new AnimatedSection(new ScaledIndex((to - third) - from + 1));
+                currentChanges.add(section1.setXPosition(new ScaledIndex(from)));
+                currentChanges.add(section2.setXPosition(new ScaledIndex(from + third)));
+                currentChanges.add(section3.setXPosition(new ScaledIndex(from)));
                 currentChanges.add(sectionList.addSectionsToStart(section1, section2, section3));
                 animation.addFrame();
             }
@@ -67,12 +69,6 @@ public class StoogeSort extends SortingAlgorithm {
     protected void instantAlgorithm(TestEntry entry) {
 
     }
-
-//    @Override
-//    public void startAnimated(AnimatedArrayDisplay display) {
-//        oldSectionList = new AnimatedSectionList(display);
-//        display.addItem(oldSectionList, 0, 0);
-//    }
 
     @Override
     public String getName() {

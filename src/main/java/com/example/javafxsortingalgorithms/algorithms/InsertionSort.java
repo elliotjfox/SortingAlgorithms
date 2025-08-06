@@ -5,6 +5,8 @@ import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.Algorith
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
 import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
 import com.example.javafxsortingalgorithms.animation.AnimatedSection;
+import com.example.javafxsortingalgorithms.animation.position.ScaledIndex;
+import com.example.javafxsortingalgorithms.animation.position.ScaledPosition;
 
 import java.util.List;
 import java.util.Objects;
@@ -15,19 +17,11 @@ public class InsertionSort extends SortingAlgorithm {
     private static final double ARROW_HEIGHT = 0;
 
     public enum SearchType {
-        LEFT_LINEAR("Left-most index", "Left-most value"),
-        RIGHT_LINEAR("Right-most index", "Right-most value"),
-        BINARY("Index", "Value");
+        LEFT_LINEAR,
+        RIGHT_LINEAR,
+        BINARY;
 
-        private static final String description = "Select which search algorithm this insertion sort will use to insert each element.";
-
-        private final String index;
-        private final String value;
-
-        SearchType(String index, String value) {
-            this.index = index;
-            this.value = value;
-        }
+        private static final String DESCRIPTION = "Select which search algorithm this insertion sort will use to insert each element.";
     }
 
     private final SearchType searchType;
@@ -48,16 +42,16 @@ public class InsertionSort extends SortingAlgorithm {
     }
 
     private void rightSearch() {
-        AnimatedSection searchSection = animation.createSection(0);
+        AnimatedSection searchSection = animation.createSection(new ScaledIndex(0));
+        animation.setItemPosition(searchSection, new ScaledPosition(0, SECTION_HEIGHT));
+
         AnimatedArrow arrow = animation.createArrow();
-        animation.setItemIndex(searchSection, 0);
-        animation.setItemIndex(arrow, 0);
-        animation.setItemHeight(searchSection, SECTION_HEIGHT);
-        animation.setItemHeight(arrow, ARROW_HEIGHT);
+        animation.setItemPosition(arrow, new ScaledPosition(0, ARROW_HEIGHT));
+
         for (int i = 1; i < list.size(); i++) {
             int j = i - 1;
-            animation.moveItem(arrow, i);
-            animation.changeSectionWidth(searchSection, j + 1);
+            animation.changeItemX(arrow, new ScaledIndex(i));
+            animation.changeSectionWidth(searchSection, new ScaledIndex(j + 1));
             animation.addFrame();
 
             while (j >= 0) {
@@ -67,7 +61,7 @@ public class InsertionSort extends SortingAlgorithm {
                 animation.addFrame();
                 if (list.get(j) <= list.get(i)) break;
                 j--;
-                animation.changeSectionWidth(searchSection, j + 1);
+                animation.changeSectionWidth(searchSection, new ScaledIndex(j + 1));
                 addFrame();
             }
             move(i, j + 1);
@@ -76,17 +70,17 @@ public class InsertionSort extends SortingAlgorithm {
     }
 
     private void leftSearch() {
-        AnimatedSection searchSection = animation.createSection(0);
+        AnimatedSection searchSection = animation.createSection(new ScaledIndex(0));
+        animation.setItemPosition(searchSection, new ScaledPosition(0, SECTION_HEIGHT));
+
         AnimatedArrow arrow = animation.createArrow();
-        animation.setItemIndex(searchSection, 0);
-        animation.setItemIndex(arrow, 0);
-        animation.setItemHeight(searchSection, SECTION_HEIGHT);
-        animation.setItemHeight(arrow, ARROW_HEIGHT);
+        animation.setItemPosition(arrow, new ScaledPosition(0, ARROW_HEIGHT));
+
         for (int i = 1; i < list.size(); i++) {
             int j = 0;
-            animation.moveItem(arrow, i);
-            animation.changeSectionWidth(searchSection, i);
-            animation.moveItem(searchSection, 0);
+            animation.changeItemX(arrow, new ScaledIndex(i));
+            animation.changeItemX(searchSection, new ScaledIndex(0));
+            animation.changeSectionWidth(searchSection, new ScaledIndex(i));
             animation.addFrame();
             while (j < i) {
                 animation.readIndex(j);
@@ -94,8 +88,8 @@ public class InsertionSort extends SortingAlgorithm {
                 animation.addFrame();
                 if (list.get(j) >= list.get(i)) break;
                 j++;
-                animation.changeSectionWidth(searchSection, i - j);
-                animation.moveItem(searchSection, j);
+                animation.changeSectionWidth(searchSection, new ScaledIndex(i - j));
+                animation.changeItemX(searchSection, new ScaledIndex(j));
                 addFrame();
             }
             move(i, j);
@@ -104,18 +98,18 @@ public class InsertionSort extends SortingAlgorithm {
     }
 
     private void binarySearch() {
-        AnimatedSection searchSection = animation.createSection(0);
+        AnimatedSection searchSection = animation.createSection(new ScaledIndex(0));
+        animation.setItemPosition(searchSection, new ScaledPosition(0, SECTION_HEIGHT));
+
         AnimatedArrow arrow = animation.createArrow();
-        animation.setItemIndex(searchSection, 0);
-        animation.setItemIndex(arrow, 0);
-        animation.setItemHeight(searchSection, SECTION_HEIGHT);
-        animation.setItemHeight(arrow, ARROW_HEIGHT);
+        animation.setItemPosition(arrow, new ScaledPosition(0, ARROW_HEIGHT));
+
         for (int i = 1; i < list.size(); i++) {
             int left = 0;
             int right = i - 1;
-            animation.moveItem(arrow, i);
-            animation.moveItem(searchSection, left);
-            animation.changeSectionWidth(searchSection, right - left + 1);
+            animation.changeItemX(arrow, new ScaledIndex(i));
+            animation.changeItemX(searchSection, new ScaledIndex(left));
+            animation.changeSectionWidth(searchSection, new ScaledIndex(right - left + 1));
             animation.addFrame();
             int position = left;
             while (left <= right) {
@@ -131,8 +125,8 @@ public class InsertionSort extends SortingAlgorithm {
                 } else {
                     right = mid - 1;
                 }
-                animation.changeSectionWidth(searchSection, right - left + 1);
-                animation.moveItem(searchSection, left);
+                animation.changeSectionWidth(searchSection, new ScaledIndex(right - left + 1));
+                animation.changeItemX(searchSection, new ScaledIndex(left));
                 position = left;
                 addFrame();
             }
@@ -191,7 +185,7 @@ public class InsertionSort extends SortingAlgorithm {
     }
 
     public static AlgorithmSettings<InsertionSort> getSettings() {
-        AlgorithmSettingsComboBox<SearchType> searchSetting = new AlgorithmSettingsComboBox<>("Search Type", SearchType.description, SearchType.values(), SearchType.RIGHT_LINEAR);
+        AlgorithmSettingsComboBox<SearchType> searchSetting = new AlgorithmSettingsComboBox<>("Search Type", SearchType.DESCRIPTION, SearchType.values(), SearchType.RIGHT_LINEAR);
 
         return new AlgorithmSettings<>(
                 "Insertion Sort",

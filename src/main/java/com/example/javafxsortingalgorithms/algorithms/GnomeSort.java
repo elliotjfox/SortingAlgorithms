@@ -2,6 +2,8 @@ package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
+import com.example.javafxsortingalgorithms.animation.position.ScaledIndex;
+import com.example.javafxsortingalgorithms.animation.position.ScaledPosition;
 
 import java.util.List;
 
@@ -14,12 +16,11 @@ public class GnomeSort extends SortingAlgorithm {
     @Override
     protected void runAlgorithm() {
         AnimatedArrow arrow = animation.createArrow();
-        animation.setItemHeight(arrow, 0);
-        animation.setItemIndex(arrow, 0);
+        animation.setItemPosition(arrow, new ScaledPosition(0, 0));
 
         int i = 0;
         while (i + 1 < list.size()) {
-            animation.moveItem(arrow, i);
+            animation.changeItemX(arrow, new ScaledIndex(i));
             // We need to read if we are inside the list
             if (i >= 0) {
                 animation.addFrame();

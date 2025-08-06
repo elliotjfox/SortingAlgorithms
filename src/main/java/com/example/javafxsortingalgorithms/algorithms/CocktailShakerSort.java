@@ -2,6 +2,8 @@ package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
+import com.example.javafxsortingalgorithms.animation.position.ScaledIndex;
+import com.example.javafxsortingalgorithms.animation.position.ScaledPosition;
 
 import java.util.List;
 
@@ -26,18 +28,16 @@ public class CocktailShakerSort extends SortingAlgorithm {
         // Initialize animation items
         AnimatedArrow leftArrow = animation.createArrow();
         AnimatedArrow rightArrow = animation.createArrow();
-        animation.setItemHeight(leftArrow, 0);
-        animation.setItemHeight(rightArrow, 0);
-        animation.setItemIndex(leftArrow, 0);
-        animation.setItemIndex(rightArrow, 1);
+        animation.setItemPosition(leftArrow, new ScaledPosition(0, 0));
+        animation.setItemPosition(rightArrow, new ScaledPosition(1, 0));
 
         int start = 0;
         int end = list.size() - 1;
         while (true) {
             boolean swapped = false;
             for (int i = start; i < end; i++) {
-                animation.moveItem(leftArrow, i);
-                animation.moveItem(rightArrow, i + 1);
+                animation.changeItemX(leftArrow, new ScaledIndex(i));
+                animation.changeItemX(rightArrow, new ScaledIndex(i + 1));
                 animation.addFrame();
                 animation.readIndex(i);
                 animation.readIndex(i + 1);
@@ -56,8 +56,8 @@ public class CocktailShakerSort extends SortingAlgorithm {
 
             swapped = false;
             for (int i = end - 1; i >= start; i--) {
-                animation.moveItem(leftArrow, i);
-                animation.moveItem(rightArrow, i + 1);
+                animation.changeItemX(leftArrow, new ScaledIndex(i));
+                animation.changeItemX(rightArrow, new ScaledIndex(i + 1));
                 animation.addFrame();
                 animation.readIndex(i);
                 animation.readIndex(i + 1);

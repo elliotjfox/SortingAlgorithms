@@ -13,8 +13,8 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-public class AnimatedSection extends AnimatedItem {
-    
+public class AnimatedBucket extends AnimatedItem {
+
     private static final double THICKNESS_FRACTION = 1 / 5.0;
 
     private XPosition width;
@@ -23,7 +23,7 @@ public class AnimatedSection extends AnimatedItem {
     private final Rectangle left;
     private final Rectangle right;
 
-    public AnimatedSection(XPosition width) {
+    public AnimatedBucket(XPosition width) {
         this.width = width;
 
         middle = new Rectangle();
@@ -39,16 +39,18 @@ public class AnimatedSection extends AnimatedItem {
 
         middle.setHeight(thickness);
         middle.setWidth(width.getX(settings));
+        middle.setLayoutX(0);
+        middle.setLayoutY(settings.elementWidth() - thickness);
 
         left.setWidth(thickness);
-        left.setHeight(2 * thickness);
+        left.setHeight(settings.elementWidth());
         left.setLayoutX(0);
-        left.setLayoutY(-thickness);
+        left.setLayoutY(0);
 
         right.setWidth(thickness);
-        right.setHeight(2 * thickness);
+        right.setHeight(settings.elementWidth());
         right.setLayoutX(width.getX(settings) - thickness);
-        right.setLayoutY(-thickness);
+        right.setLayoutY(0);
 
         getChildren().addAll(middle, left, right);
     }
@@ -65,7 +67,6 @@ public class AnimatedSection extends AnimatedItem {
         return new GenerateAnimationUpdate(
                 settings -> new Timeline(new KeyFrame(
                         Duration.millis(AlgorithmController.ANIMATION_LENGTH),
-                        _ -> this.width = width,
                         new KeyValue(middle.widthProperty(), width.getX(settings)),
                         new KeyValue(right.layoutXProperty(), width.getX(settings) - settings.elementWidth() * THICKNESS_FRACTION)
                 )),
@@ -75,20 +76,6 @@ public class AnimatedSection extends AnimatedItem {
 
     @Override
     public AnimationUpdate changeFill(Paint fill) {
-        return new AnimationUpdate(
-                new Timeline(
-                        new KeyFrame(
-                                Duration.millis(AlgorithmController.ANIMATION_LENGTH),
-                                new KeyValue(middle.fillProperty(), fill),
-                                new KeyValue(left.fillProperty(), fill),
-                                new KeyValue(right.fillProperty(), fill)
-                        )
-                ),
-                () -> {
-                    middle.setFill(fill);
-                    left.setFill(fill);
-                    right.setFill(fill);
-                }
-        );
+        return null;
     }
 }

@@ -5,6 +5,8 @@ import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.Algorith
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsInputBox;
 import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
 import com.example.javafxsortingalgorithms.animation.AnimatedSection;
+import com.example.javafxsortingalgorithms.animation.position.ScaledIndex;
+import com.example.javafxsortingalgorithms.animation.position.ScaledPosition;
 
 import java.util.List;
 
@@ -26,22 +28,19 @@ public class CombSort extends SortingAlgorithm {
         int gapSize = (int) (list.size() / shrinkFactor);
 
         AnimatedArrow left = animation.createArrow();
-        animation.setItemHeight(left, ARROW_HEIGHT);
-        animation.setItemIndex(left, 0);
+        animation.setItemPosition(left, new ScaledPosition(0, ARROW_HEIGHT));
 
         AnimatedArrow right = animation.createArrow();
-        animation.setItemHeight(right, ARROW_HEIGHT);
-        animation.setItemIndex(right, gapSize);
+        animation.setItemPosition(right, new ScaledPosition(gapSize, ARROW_HEIGHT));
 
-        AnimatedSection section = animation.createSection(gapSize + 1);
-        animation.setItemHeight(section, SECTION_HEIGHT);
-        animation.setItemIndex(section, 0);
+        AnimatedSection section = animation.createSection(new ScaledIndex(gapSize + 1));
+        animation.setItemPosition(section, new ScaledPosition(0, SECTION_HEIGHT));
 
         while (!isListSorted(list)) {
             for (int i = 0; i + gapSize < list.size(); i++) {
-                animation.moveItem(left, i);
-                animation.moveItem(right, i + gapSize);
-                animation.moveItem(section, i);
+                animation.changeItemX(left, new ScaledIndex(i));
+                animation.changeItemX(right, new ScaledIndex(i + gapSize));
+                animation.changeItemX(section, new ScaledIndex(i));
                 animation.addFrame();
                 animation.readIndex(i);
                 animation.readIndex(i + gapSize);
@@ -51,12 +50,12 @@ public class CombSort extends SortingAlgorithm {
                 }
                 addFrame();
             }
-            animation.moveItem(left, 0);
-            animation.moveItem(right, gapSize);
-            animation.moveItem(section, 0);
+            animation.changeItemX(left, new ScaledIndex(0));
+            animation.changeItemX(right, new ScaledIndex(gapSize));
+            animation.changeItemX(section, new ScaledIndex(0));
             animation.addFrame();
             if (gapSize != 1) gapSize = (int) (gapSize / shrinkFactor);
-            animation.changeSectionWidth(section, gapSize + 1);
+            animation.changeSectionWidth(section, new ScaledIndex(gapSize + 1));
         }
 
     }

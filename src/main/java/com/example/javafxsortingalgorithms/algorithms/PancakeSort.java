@@ -2,8 +2,8 @@ package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.*;
-import com.example.javafxsortingalgorithms.animation.position.ScaledIndex;
-import com.example.javafxsortingalgorithms.animation.position.ScaledPosition;
+import com.example.javafxsortingalgorithms.animation.position.ElementScaledIndex;
+import com.example.javafxsortingalgorithms.animation.position.ElementScaledPosition;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
 
@@ -22,22 +22,22 @@ public class PancakeSort extends SortingAlgorithm {
     @Override
     protected void runAlgorithm() {
         AnimatedArrow arrow = animation.createArrow();
-        animation.setItemPosition(arrow, new ScaledPosition(0, 0));
+        animation.setItemPosition(arrow, new ElementScaledPosition(0, 0));
         AnimatedArrow minArrow = animation.createArrow();
-        animation.setItemPosition(minArrow, new ScaledPosition(0, 0));
+        animation.setItemPosition(minArrow, new ElementScaledPosition(0, 0));
 
         for (int i = 0; i < list.size() - 1; i++) {
             int smallestIndex = i;
             for (int j = i + 1; j < list.size(); j++) {
-                animation.changeItemX(arrow, new ScaledIndex(j));
-                animation.changeItemX(minArrow, new ScaledIndex(smallestIndex));
+                animation.changeItemX(arrow, new ElementScaledIndex(j));
+                animation.changeItemX(minArrow, new ElementScaledIndex(smallestIndex));
                 animation.addFrame();
                 animation.readIndex(j);
                 animation.readIndex(smallestIndex);
                 if (list.get(j) < list.get(smallestIndex)) {
                     smallestIndex = j;
                     animation.addFrame();
-                    animation.changeItemX(minArrow, new ScaledIndex(smallestIndex));
+                    animation.changeItemX(minArrow, new ElementScaledIndex(smallestIndex));
                 }
                 addFrame();
             }

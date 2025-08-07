@@ -32,7 +32,7 @@ public class DisplaySettings extends SettingsSection {
         numberElements = createProperty("Number Elements");
         borderWidth = createProperty("Border Width");
         elementWidth = createProperty("Element Width");
-        height = createProperty("ScaledHeight");
+        height = createProperty("Height");
 
         numberElementsBox = new IntegerInputBox(numberElements::getValue, numberElements::setValue);
         arrayBorderBox = new IntegerInputBox(borderWidth::getValue, borderWidth::setValue);
@@ -43,7 +43,7 @@ public class DisplaySettings extends SettingsSection {
         addSetting(new Label("Number of Elements"), numberElementsBox, numberElementsInfo);
         addSetting(new Label("Array Border"), arrayBorderBox, borderWidthInfo);
         addSetting(new Label("Element Width"), elementWidthBox, elementWidthInfo);
-        addSetting(new Label("ScaledHeight"), heightBox, heightInfo);
+        addSetting(new Label("Height"), heightBox, heightInfo);
         addSetting("Display Type", displayTypeSelector);
 
         addSetting(buildResetButton());

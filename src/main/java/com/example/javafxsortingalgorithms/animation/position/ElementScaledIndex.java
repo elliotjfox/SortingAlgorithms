@@ -2,11 +2,11 @@ package com.example.javafxsortingalgorithms.animation.position;
 
 import com.example.javafxsortingalgorithms.arraydisplay.DisplaySettings;
 
-public class ScaledIndex implements XPosition{
+public class ElementScaledIndex implements XPosition{
 
     private final double index;
 
-    public ScaledIndex(double index) {
+    public ElementScaledIndex(double index) {
         this.index = index;
     }
 

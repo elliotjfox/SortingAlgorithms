@@ -5,9 +5,9 @@ import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.Algorith
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithnSettingsCheckBox;
 import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
 import com.example.javafxsortingalgorithms.animation.AnimatedSection;
-import com.example.javafxsortingalgorithms.animation.position.ScaledHeight;
-import com.example.javafxsortingalgorithms.animation.position.ScaledIndex;
-import com.example.javafxsortingalgorithms.animation.position.ScaledPosition;
+import com.example.javafxsortingalgorithms.animation.position.ElementScaledHeight;
+import com.example.javafxsortingalgorithms.animation.position.ElementScaledIndex;
+import com.example.javafxsortingalgorithms.animation.position.ElementScaledPosition;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
@@ -25,8 +25,8 @@ public class MergeSort extends SortingAlgorithm {
 
     @Override
     protected void runAlgorithm() {
-        AnimatedSection section = animation.createSection(new ScaledIndex(list.size()));
-        animation.setItemPosition(section, new ScaledPosition(0, -SECTION_OFFSET));
+        AnimatedSection section = animation.createSection(new ElementScaledIndex(list.size()));
+        animation.setItemPosition(section, new ElementScaledPosition(0, -SECTION_OFFSET));
         divide(0, list.size(), -SECTION_OFFSET, section);
         animation.removeItem(section);
         animation.addFrame();
@@ -38,13 +38,13 @@ public class MergeSort extends SortingAlgorithm {
         AnimatedSection rightSection = null;
         if (to - from >= 2) {
             int half = (from + to) / 2;
-            leftSection = animation.createSection(new ScaledIndex(half - from));
-            rightSection = animation.createSection(new ScaledIndex(to - half));
-            animation.setItemPosition(leftSection, new ScaledPosition(from, height));
-            animation.setItemPosition(rightSection, new ScaledPosition(from, height));
+            leftSection = animation.createSection(new ElementScaledIndex(half - from));
+            rightSection = animation.createSection(new ElementScaledIndex(to - half));
+            animation.setItemPosition(leftSection, new ElementScaledPosition(from, height));
+            animation.setItemPosition(rightSection, new ElementScaledPosition(from, height));
 
-            animation.changeItemPosition(leftSection, new ScaledPosition(from, height - SECTION_DISTANCE));
-            animation.changeItemPosition(rightSection, new ScaledPosition(half, height - SECTION_DISTANCE));
+            animation.changeItemPosition(leftSection, new ElementScaledPosition(from, height - SECTION_DISTANCE));
+            animation.changeItemPosition(rightSection, new ElementScaledPosition(half, height - SECTION_DISTANCE));
             animation.addFrame();
 
             divide(from, half, height - SECTION_DISTANCE, leftSection);
@@ -52,12 +52,12 @@ public class MergeSort extends SortingAlgorithm {
             // Merge adds frames
             merge(from, to);
 
-            animation.changeSectionWidth(leftSection, new ScaledIndex(to - from));
-            animation.changeSectionWidth(rightSection, new ScaledIndex(to - from));
-            animation.changeItemX(rightSection, new ScaledIndex(from));
+            animation.changeSectionWidth(leftSection, new ElementScaledIndex(to - from));
+            animation.changeSectionWidth(rightSection, new ElementScaledIndex(to - from));
+            animation.changeItemX(rightSection, new ElementScaledIndex(from));
             animation.addFrame();
-            animation.changeItemY(leftSection, new ScaledHeight(height));
-            animation.changeItemY(rightSection, new ScaledHeight(height));
+            animation.changeItemY(leftSection, new ElementScaledHeight(height));
+            animation.changeItemY(rightSection, new ElementScaledHeight(height));
         }
         animation.changeItemFill(parentSection, COMPLETED_COLOUR);
         animation.addFrame();
@@ -70,13 +70,13 @@ public class MergeSort extends SortingAlgorithm {
         int right = (left + end) / 2;
 
         AnimatedArrow leftArrow = animation.createArrow();
-        animation.setItemPosition(leftArrow, new ScaledPosition(left, 0));
+        animation.setItemPosition(leftArrow, new ElementScaledPosition(left, 0));
         AnimatedArrow rightArrow = animation.createArrow();
-        animation.setItemPosition(rightArrow, new ScaledPosition(right, 0));
+        animation.setItemPosition(rightArrow, new ElementScaledPosition(right, 0));
 
         while (right < end && left < right) {
-            animation.changeItemX(leftArrow, new ScaledIndex(left));
-            animation.changeItemX(rightArrow, new ScaledIndex(right));
+            animation.changeItemX(leftArrow, new ElementScaledIndex(left));
+            animation.changeItemX(rightArrow, new ElementScaledIndex(right));
             animation.addFrame();
             animation.readIndex(left);
             animation.readIndex(right);

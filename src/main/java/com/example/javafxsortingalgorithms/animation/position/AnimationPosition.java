@@ -2,7 +2,7 @@ package com.example.javafxsortingalgorithms.animation.position;
 
 import com.example.javafxsortingalgorithms.arraydisplay.DisplaySettings;
 
-public class AnimationPosition {
+public class AnimationPosition implements XPosition, YPosition {
 
     private final XPosition xPosition;
     private final YPosition yPosition;

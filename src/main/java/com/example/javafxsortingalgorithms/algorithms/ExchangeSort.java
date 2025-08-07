@@ -3,8 +3,8 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
 import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
-import com.example.javafxsortingalgorithms.animation.position.ScaledIndex;
-import com.example.javafxsortingalgorithms.animation.position.ScaledPosition;
+import com.example.javafxsortingalgorithms.animation.position.ElementScaledIndex;
+import com.example.javafxsortingalgorithms.animation.position.ElementScaledPosition;
 
 import java.util.List;
 
@@ -34,14 +34,14 @@ public class ExchangeSort extends SortingAlgorithm {
 
     private void runUp() {
         AnimatedArrow outerArrow = animation.createArrow();
-        animation.setItemPosition(outerArrow, new ScaledPosition(0, 0));
+        animation.setItemPosition(outerArrow, new ElementScaledPosition(0, 0));
         AnimatedArrow innerArrow = animation.createArrow();
-        animation.setItemPosition(innerArrow, new ScaledPosition(1, 0));
+        animation.setItemPosition(innerArrow, new ElementScaledPosition(1, 0));
 
         for (int i = 0; i < list.size(); i++) {
             for (int j = i + 1; j < list.size(); j++) {
-                animation.changeItemX(outerArrow, new ScaledIndex(i));
-                animation.changeItemX(innerArrow, new ScaledIndex(j));
+                animation.changeItemX(outerArrow, new ElementScaledIndex(i));
+                animation.changeItemX(innerArrow, new ElementScaledIndex(j));
                 animation.addFrame();
                 animation.readIndex(j);
                 animation.readIndex(i);
@@ -56,14 +56,14 @@ public class ExchangeSort extends SortingAlgorithm {
 
     private void runDown() {
         AnimatedArrow outerArrow = animation.createArrow();
-        animation.setItemPosition(outerArrow, new ScaledPosition(0, 0));
+        animation.setItemPosition(outerArrow, new ElementScaledPosition(0, 0));
         AnimatedArrow innerArrow = animation.createArrow();
-        animation.setItemPosition(innerArrow, new ScaledPosition(list.size() - 1, 0));
+        animation.setItemPosition(innerArrow, new ElementScaledPosition(list.size() - 1, 0));
 
         for (int i = 0; i < list.size(); i++) {
             for (int j = list.size() - 1; j > i; j--) {
-                animation.changeItemX(outerArrow, new ScaledIndex(i));
-                animation.changeItemX(innerArrow, new ScaledIndex(j));
+                animation.changeItemX(outerArrow, new ElementScaledIndex(i));
+                animation.changeItemX(innerArrow, new ElementScaledIndex(j));
                 animation.addFrame();
                 animation.readIndex(j);
                 animation.readIndex(i);

@@ -42,7 +42,7 @@ public abstract class AnimatedItem extends Group {
         return new GenerateAnimationUpdate(
                 settings -> new Timeline(new KeyFrame(
                         Duration.millis(AlgorithmController.ANIMATION_LENGTH),
-                        new KeyValue(layoutYProperty(), xPosition.getX(settings))
+                        new KeyValue(layoutXProperty(), xPosition.getX(settings))
                 )),
                 _ -> {}
         );

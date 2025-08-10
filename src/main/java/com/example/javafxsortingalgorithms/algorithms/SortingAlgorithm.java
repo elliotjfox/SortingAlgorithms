@@ -3,6 +3,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 import com.example.javafxsortingalgorithms.algorithmupdates.*;
 import com.example.javafxsortingalgorithms.TestDisplay;
 import com.example.javafxsortingalgorithms.TestEntry;
+import com.example.javafxsortingalgorithms.animation.ColourableAnimatedItem;
 import com.example.javafxsortingalgorithms.animation.position.*;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
@@ -245,7 +246,7 @@ public abstract class SortingAlgorithm {
             algorithm.currentChanges.add(item.changePosition(position));
         }
 
-        protected void changeItemFill(AnimatedItem item, Paint fill) {
+        protected void changeItemFill(ColourableAnimatedItem item, Paint fill) {
             if (item == null) return;
 
             algorithm.currentChanges.add(item.changeFill(fill));

@@ -21,7 +21,7 @@ public enum AlgorithmType {
     ODD_EVEN("Odd Even Sort", new AlgorithmSettings<>("Odd-Even Sort", OddEvenSort::new)),
     ODD_EVEN_MERGE("Odd Even Merge Sort", new AlgorithmSettings<>("Odd-Even Merge Sort", OddEvenMergeSort::new)),
     PANCAKE("Pancake Sort", PancakeSort.getSettings()),
-    PATIENCE("Patience Sort", new AlgorithmSettings<SortingAlgorithm>("Patience Sort", PatienceSort::new)),
+    PATIENCE("Patience Sort", PatienceSort.getSettings()),
     PIGEONHOLE("Pigeonhole Sort", PigeonholeSort.getSettings()),
     QUANTUM_BOGO("Quantum Bogo Sort", new AlgorithmSettings<>("Quantum Bogo Sort", QuantumBogoSort::new)),
     QUICK("Quick Sort", QuickSort.getSettings()),

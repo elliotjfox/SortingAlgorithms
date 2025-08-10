@@ -2,7 +2,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
-import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithnSettingsCheckBox;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsCheckBox;
 import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
 import com.example.javafxsortingalgorithms.animation.AnimatedSection;
 import com.example.javafxsortingalgorithms.animation.position.ElementScaledHeight;
@@ -137,7 +137,7 @@ public class MergeSort extends SortingAlgorithm {
     }
 
     public static AlgorithmSettings<MergeSort> getSettings() {
-        AlgorithnSettingsCheckBox inPlaceSetting = new AlgorithnSettingsCheckBox("Merge In Place", true);
+        AlgorithmSettingsCheckBox inPlaceSetting = new AlgorithmSettingsCheckBox("Merge In Place", true);
 
         return new AlgorithmSettings<>(
                 "Merge Sort",

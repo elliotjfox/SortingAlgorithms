@@ -12,7 +12,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Polygon;
 import javafx.util.Duration;
 
-public class AnimatedReadArrow extends AnimatedItem {
+public class AnimatedReadArrow extends AnimatedItem implements ColourableAnimatedItem {
 
     private static final Paint READ_ARROW_COLOUR = Color.BLACK;
 

@@ -40,7 +40,6 @@ public class AnimatedBinaryTree extends AnimatedItem {
     @Override
     public void generateVisuals(DisplaySettings settings) {
         getChildren().clear();
-        System.out.println("Generate Vis");
 
         for (int i = 0; i < initialNodes.size(); i++) {
             getChildren().add(initialNodes.get(i));
@@ -86,7 +85,7 @@ public class AnimatedBinaryTree extends AnimatedItem {
                             keyValues
                     ));
                 },
-                settings -> {}
+                _ -> {}
         );
     }
 
@@ -105,32 +104,27 @@ public class AnimatedBinaryTree extends AnimatedItem {
                             new KeyValue(readArrow.layoutYProperty(), getItemLayoutY(index, nodesSize, settings.elementWidth()))
                     ));
                 },
-                settings -> {}
+                _ -> {}
         );
     }
 
-    @Override
-    public AnimationUpdate changeFill(Paint fill) {
-        return null;
-    }
-
-    private double getItemLayoutX(int index, int total, double elementSize) {
+    protected double getItemLayoutX(int index, int total, double elementSize) {
         return elementSize * (1 + HORIZONTAL_PADDING_FRACTION) * getWidth(index, total, elementSize) * (index + 1.5 - Math.pow(2, roundDown(index)));
     }
 
-    private double getItemLayoutY(int index, int total, double elementSize) {
+    protected double getItemLayoutY(int index, int total, double elementSize) {
         return elementSize * (1 + VERTICAL_PADDING_FRACTION) * roundDown(index);
     }
 
-    private double getWidth(int index, int total, double elementSize) {
+    protected double getWidth(int index, int total, double elementSize) {
         return (int) Math.pow(2, roundDown(total - 1) - roundDown(index));
     }
 
-    private double roundDown(int i) {
+    protected double roundDown(int i) {
         return (int) (Math.log(i + 1) / Math.log(2));
     }
 
-    private static class AnimatedBinaryTreeItem extends AnimatedItem {
+    protected static class AnimatedBinaryTreeItem extends AnimatedItem {
 
         private final int value;
         private final StackPane stackPane;
@@ -161,11 +155,6 @@ public class AnimatedBinaryTree extends AnimatedItem {
             rectangle.setHeight(settings.elementWidth());
             // TODO: Fix magic #s
             rectangle.setFill(Color.hsb(360.0 * value / settings.maxValue(), 1.0, 1.0));
-        }
-
-        @Override
-        public AnimationUpdate changeFill(Paint fill) {
-            return new AnimationUpdate(new Timeline(), () -> {});
         }
     }
 }

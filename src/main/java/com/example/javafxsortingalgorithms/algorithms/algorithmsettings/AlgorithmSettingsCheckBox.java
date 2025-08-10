@@ -3,7 +3,7 @@ package com.example.javafxsortingalgorithms.algorithms.algorithmsettings;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 
-public class AlgorithnSettingsCheckBox extends CheckBox implements AlgorithmSettingObject {
+public class AlgorithmSettingsCheckBox extends CheckBox implements AlgorithmSettingObject {
 
     private final String name;
     private final String description;
@@ -11,11 +11,11 @@ public class AlgorithnSettingsCheckBox extends CheckBox implements AlgorithmSett
 
     private boolean value;
 
-    public AlgorithnSettingsCheckBox(String settingName, boolean initialValue) {
+    public AlgorithmSettingsCheckBox(String settingName, boolean initialValue) {
         this(settingName, "", initialValue);
     }
 
-    public AlgorithnSettingsCheckBox(String settingsName, String description, boolean initialValue) {
+    public AlgorithmSettingsCheckBox(String settingsName, String description, boolean initialValue) {
         super();
 
         this.name = settingsName;

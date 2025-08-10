@@ -19,8 +19,22 @@ public abstract class AnimatedItem extends Group {
 
     public abstract void generateVisuals(DisplaySettings settings);
 
-    public DisplayUpdate setIndex(int index) {
-        return display -> setLayoutX(display.getSettings().elementWidth() * index);
+    public DisplayUpdate setPosition(AnimationPosition position) {
+        return display -> {
+            setLayoutX(position.getX(display.getSettings()));
+            setLayoutY(position.getY(display.getSettings()));
+        };
+    }
+
+    public GenerateAnimationUpdate changePosition(AnimationPosition position) {
+        return new GenerateAnimationUpdate(
+                settings -> new Timeline(new KeyFrame(
+                        Duration.millis(AlgorithmController.ANIMATION_LENGTH),
+                        new KeyValue(layoutYProperty(), position.getX(settings)),
+                        new KeyValue(layoutYProperty(), position.getY(settings))
+                )),
+                _ -> {}
+        );
     }
 
     public DisplayUpdate setXPosition(XPosition xPosition) {
@@ -29,13 +43,6 @@ public abstract class AnimatedItem extends Group {
 
     public DisplayUpdate setYPosition(YPosition yPosition) {
         return display -> setLayoutY(yPosition.getY(display.getSettings()));
-    }
-
-    public DisplayUpdate setPosition(AnimationPosition position) {
-        return display -> {
-            setLayoutX(position.getX(display.getSettings()));
-            setLayoutY(position.getY(display.getSettings()));
-        };
     }
 
     public GenerateAnimationUpdate changeXPosition(XPosition xPosition) {
@@ -57,56 +64,4 @@ public abstract class AnimatedItem extends Group {
                 _ -> {}
         );
     }
-
-    public GenerateAnimationUpdate changePosition(AnimationPosition position) {
-        return new GenerateAnimationUpdate(
-                settings -> new Timeline(new KeyFrame(
-                        Duration.millis(AlgorithmController.ANIMATION_LENGTH),
-                        new KeyValue(layoutYProperty(), position.getX(settings)),
-                        new KeyValue(layoutYProperty(), position.getY(settings))
-                )),
-                _ -> {}
-        );
-    }
-
-    // TODO: Reimplement these set position/index methods
-    public DisplayUpdate setPosition(double position) {
-        return display -> setLayoutX(display.getSettings().elementWidth() * position);
-    }
-
-    public DisplayUpdate setHeight(double height) {
-        return display -> setLayoutY(display.getSettings().maxValue() * display.getSettings().heightMultiplier() - height);
-    }
-
-    public GenerateAnimationUpdate moveToIndex(int index) {
-        return new GenerateAnimationUpdate(
-                settings -> new Timeline(new KeyFrame(
-                        Duration.millis(AlgorithmController.ANIMATION_LENGTH),
-                        new KeyValue(layoutXProperty(), settings.elementWidth() * index)
-                )),
-                settings -> setLayoutX(settings.elementWidth() * index)
-        );
-    }
-
-    public GenerateAnimationUpdate moveToPosition(double position) {
-        return new GenerateAnimationUpdate(
-                settings -> new Timeline(new KeyFrame(
-                        Duration.millis(AlgorithmController.ANIMATION_LENGTH),
-                        new KeyValue(layoutXProperty(), settings.elementWidth() * position)
-                )),
-                settings -> setLayoutX(settings.elementWidth() * position)
-        );
-    }
-
-    public GenerateAnimationUpdate moveToHeight(double height) {
-        return new GenerateAnimationUpdate(
-                settings -> new Timeline(new KeyFrame(
-                        Duration.millis(AlgorithmController.ANIMATION_LENGTH),
-                        new KeyValue(layoutYProperty(), settings.maxValue() * settings.heightMultiplier() - height)
-                )),
-                settings -> setLayoutY(settings.maxValue() * settings.heightMultiplier() - height)
-        );
-    }
-
-    public abstract AnimationUpdate changeFill(Paint fill);
 }

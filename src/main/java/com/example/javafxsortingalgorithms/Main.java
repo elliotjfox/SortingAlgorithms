@@ -4,15 +4,13 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 public class Main extends Application {
     private static Stage stage;
 
     @Override
     public void start(Stage stage) {
         Main.stage = stage;
-        MainDisplay display = new MainDisplay();
+        Display display = new Display();
         Scene scene = new Scene(display, 1050, 650);
         stage.setOnCloseRequest(_ -> display.onClose());
 

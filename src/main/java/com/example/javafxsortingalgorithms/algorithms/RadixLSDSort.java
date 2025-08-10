@@ -130,7 +130,7 @@ public class RadixLSDSort extends SortingAlgorithm {
     }
 
     public static AlgorithmSettings<RadixLSDSort> getSettings() {
-        AlgorithnSettingsCheckBox inPlaceSetting = new AlgorithnSettingsCheckBox("In Place", true);
+        AlgorithmSettingsCheckBox inPlaceSetting = new AlgorithmSettingsCheckBox("In Place", true);
         AlgorithmSettingsInputBox<Integer> baseSetting = new AlgorithmSettingsInputBox<>(
                 "Base", 10,
                 Integer::parseInt, i -> i > 1

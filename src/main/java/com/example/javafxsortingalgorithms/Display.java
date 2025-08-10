@@ -9,15 +9,14 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainDisplay extends BorderPane {
+public class Display extends BorderPane {
 
     private AlgorithmController algorithmController;
-    private MainButtonPanel buttonPanel;
+    private ButtonPanel buttonPanel;
     private ArrayDisplayBase arrayDisplay;
     private SettingsPane settingsPane;
     private FlowPane arrayPane;
@@ -26,10 +25,10 @@ public class MainDisplay extends BorderPane {
     private DisplayType displayType;
     private boolean createdAlgorithm;
 
-    public MainDisplay() {
+    public Display() {
         this.algorithmController = new AlgorithmController(this);
 
-        this.buttonPanel = new MainButtonPanel(this);
+        this.buttonPanel = new ButtonPanel(this);
         setTop(buttonPanel);
 
         this.arrayPane = new FlowPane(Orientation.HORIZONTAL);
@@ -112,5 +111,9 @@ public class MainDisplay extends BorderPane {
 
     public DisplayMode getMode() {
         return currentMode;
+    }
+
+    public ButtonPanel getButtonPanel() {
+        return buttonPanel;
     }
 }

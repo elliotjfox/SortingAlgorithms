@@ -85,9 +85,4 @@ public class AnimationSectionList extends AnimatedItem {
                 _ -> {}
         );
     }
-
-    @Override
-    public AnimationUpdate changeFill(Paint fill) {
-        return null;
-    }
 }

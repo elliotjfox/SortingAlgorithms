@@ -14,17 +14,18 @@ import javafx.scene.shape.*;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainButtonPanel extends FlowPane {
+public class ButtonPanel extends FlowPane {
     private final List<Node> normalPane;
     private final List<Node> testPane;
     private final List<Node> animatedPane;
     private final List<Node> comparingPane;
 
-    private final MainDisplay display;
+    private final Display display;
 
     private final Menu algorithmSelector;
+    private final ListSettings listSettings;
 
-    public MainButtonPanel(MainDisplay display) {
+    public ButtonPanel(Display display) {
         setHgap(7);
 
         this.display = display;
@@ -46,10 +47,16 @@ public class MainButtonPanel extends FlowPane {
         Button openDetailedButton = createButton("Open Animated", _ -> display.setMode(DisplayMode.ANIMATED));
         Button openCompareButton = createButton("Open Compare", _ -> display.setMode(DisplayMode.COMPARING));
 
-        normalPane = Arrays.asList(algorithmSelectorBar, settingsButton, playButton, stopButton, stepButton, resetButton, /*reversedButton,*/ openTestButton, openDetailedButton, openCompareButton);
+        listSettings = new ListSettings();
+
+        normalPane = Arrays.asList(algorithmSelectorBar, settingsButton, playButton, stopButton, stepButton, resetButton, listSettings, /*reversedButton,*/ openTestButton, openDetailedButton, openCompareButton);
         testPane = Arrays.asList(algorithmSelectorBar, settingsButton, /*startTestButton,*/ openNormalButton);
-        animatedPane = Arrays.asList(algorithmSelectorBar, settingsButton, playButton, stopButton, stepButton, resetButton, openNormalButton);
-        comparingPane = Arrays.asList(algorithmSelectorBar, settingsButton, playButton, stopButton, stepButton, resetButton, openNormalButton);
+        animatedPane = Arrays.asList(algorithmSelectorBar, settingsButton, playButton, stopButton, stepButton, resetButton, listSettings, openNormalButton);
+        comparingPane = Arrays.asList(algorithmSelectorBar, settingsButton, playButton, stopButton, stepButton, resetButton, listSettings, openNormalButton);
+    }
+
+    public ListSettings getListSettings() {
+        return listSettings;
     }
 
     public void setMode(DisplayMode mode) {

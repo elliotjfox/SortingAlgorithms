@@ -119,9 +119,4 @@ public class AnimatedSortingNetwork extends AnimatedItem {
             lines.get(i).setEndY(settings.height() + visuals.size() * settings.elementWidth());
         }
     }
-
-    @Override
-    public AnimationUpdate changeFill(Paint fill) {
-        return new AnimationUpdate(new Timeline(), () -> {});
-    }
 }

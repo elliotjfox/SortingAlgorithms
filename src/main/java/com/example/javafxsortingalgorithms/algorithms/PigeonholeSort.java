@@ -1,7 +1,7 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
-import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithnSettingsCheckBox;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsCheckBox;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +53,7 @@ public class PigeonholeSort extends SortingAlgorithm {
     }
 
     public static AlgorithmSettings<PigeonholeSort> getSettings() {
-        AlgorithnSettingsCheckBox instantListUpdateSetting = new AlgorithnSettingsCheckBox("Instant List Update", false);
+        AlgorithmSettingsCheckBox instantListUpdateSetting = new AlgorithmSettingsCheckBox("Instant List Update", false);
 
         return new AlgorithmSettings<>(
                 "Bitonic Sort",

@@ -11,7 +11,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Polygon;
 import javafx.util.Duration;
 
-public class AnimatedArrow extends AnimatedItem {
+public class AnimatedArrow extends AnimatedItem implements ColourableAnimatedItem {
 
     private static final Paint DEFAULT_PAINT = Color.BLACK;
     private static final boolean DEFAULT_DIRECTION = true;

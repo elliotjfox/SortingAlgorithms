@@ -17,10 +17,9 @@ import java.util.List;
 public class AlgorithmController {
 
     public static final int ANIMATION_LENGTH = 400;
-    public static final int ANIMATION_COOLDOWN = 75;
-
-
-    private MainDisplay display;
+    public static final int ANIMATION_COOLDOWN = 100;
+    
+    private Display display;
     private ArrayDisplayBase arrayDisplay;
     private SortingAlgorithm algorithm;
     private List<DisplayFrame> frames;
@@ -36,7 +35,7 @@ public class AlgorithmController {
 
     private List<ListUpdate> currentListUpdates;
 
-    public AlgorithmController(MainDisplay display) {
+    public AlgorithmController(Display display) {
         this.display = display;
 
         normalTimeline = new Timeline(
@@ -123,7 +122,8 @@ public class AlgorithmController {
         currentTimeline.stop();
         hasRunAlgorithm = false;
         int listSize = display.getSettings().getDisplaySettings().getNumberElements();
-        list = Settings.getRandomUniformList(listSize);
+//        list = Settings.getRandomUniformList(listSize);
+        list = display.getButtonPanel().getListSettings().generateList(listSize);
 
         int maxValue = list.getFirst();
         for (Integer i : list) {

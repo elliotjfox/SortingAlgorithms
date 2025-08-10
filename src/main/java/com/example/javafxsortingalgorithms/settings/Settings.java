@@ -21,7 +21,7 @@ public class Settings {
 
     public static int defaultTestSize = 5000;
 
-    private static final Random random = new Random();
+    public static final Random random = new Random();
 
     public static List<Integer> getReverseList(int size) {
         List<Integer> list  = new ArrayList<>();

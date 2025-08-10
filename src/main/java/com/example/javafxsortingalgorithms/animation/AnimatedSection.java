@@ -13,7 +13,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-public class AnimatedSection extends AnimatedItem {
+public class AnimatedSection extends AnimatedItem implements ColourableAnimatedItem {
     
     private static final double THICKNESS_FRACTION = 1 / 5.0;
 

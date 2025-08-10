@@ -2,7 +2,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
-import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithnSettingsCheckBox;
+import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsCheckBox;
 
 import java.util.List;
 
@@ -155,7 +155,7 @@ public class TimSort extends SortingAlgorithm {
     }
 
     public static AlgorithmSettings<TimSort> getSettings() {
-        AlgorithnSettingsCheckBox alwaysAscendingSetting = new AlgorithnSettingsCheckBox("Always Ascending", false);
+        AlgorithmSettingsCheckBox alwaysAscendingSetting = new AlgorithmSettingsCheckBox("Always Ascending", false);
 
         return new AlgorithmSettings<>(
                 "Tim Sort",

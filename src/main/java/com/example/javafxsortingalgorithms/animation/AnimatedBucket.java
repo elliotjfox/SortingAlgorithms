@@ -13,7 +13,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-public class AnimatedBucket extends AnimatedItem {
+public class AnimatedBucket extends AnimatedItem implements ColourableAnimatedItem {
 
     private static final double THICKNESS_FRACTION = 1 / 5.0;
 
@@ -76,6 +76,18 @@ public class AnimatedBucket extends AnimatedItem {
 
     @Override
     public AnimationUpdate changeFill(Paint fill) {
-        return null;
+        return new AnimationUpdate(
+                new Timeline(new KeyFrame(
+                        Duration.millis(AlgorithmController.ANIMATION_LENGTH),
+                        new KeyValue(middle.fillProperty(), fill),
+                        new KeyValue(left.fillProperty(), fill),
+                        new KeyValue(right.fillProperty(), fill)
+                )),
+                () -> {
+                    middle.setFill(fill);
+                    left.setFill(fill);
+                    right.setFill(fill);
+                }
+        );
     }
 }

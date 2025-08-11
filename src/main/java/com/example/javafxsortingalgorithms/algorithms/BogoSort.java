@@ -1,7 +1,5 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
-
 import java.util.List;
 import java.util.Random;
 
@@ -23,17 +21,6 @@ public class BogoSort extends SortingAlgorithm {
             }
             addFrame();
         }
-    }
-
-    @Override
-    protected void instantAlgorithm(TestEntry entry) {
-//        Random random = new Random();
-//        while (!isListSorted(list)) {
-//            for (int i = list.size(); i > 1; i--) {
-//                entry.addWrite(2);
-//                swap(i - 1, random.nextInt(i));
-//            }
-//        }
     }
 
     @Override

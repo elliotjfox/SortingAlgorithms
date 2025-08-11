@@ -1,6 +1,5 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithmupdates.CreateItemUpdate;
 import com.example.javafxsortingalgorithms.animation.position.ElementScaledIndex;
 import com.example.javafxsortingalgorithms.animation.position.ElementScaledPosition;
@@ -37,6 +36,8 @@ public class StoogeSort extends SortingAlgorithm {
         animation.readIndex(from);
         animation.readIndex(to);
         animation.addFrame();
+        trial.addRead(2);
+        trial.addComparison();
         if (list.get(from) > list.get(to)) {
             swap(from, to);
             addFrame();
@@ -62,11 +63,6 @@ public class StoogeSort extends SortingAlgorithm {
             stoogeSort(from + third, to);
             stoogeSort(from, to - third);
         }
-
-    }
-
-    @Override
-    protected void instantAlgorithm(TestEntry entry) {
 
     }
 

@@ -28,6 +28,8 @@ public class OddEvenMergeSort extends SortingAlgorithm {
                         int left = i + j;
                         int right = i + j + gapSize;
                         if ((int) ((double) left / (p * 2)) == (int) ((double) right / (p * 2))) {
+                            trial.addRead(2);
+                            trial.addComparison();
                             if (list.get(left) > list.get(right)) {
                                 swap(left, right);
                             }

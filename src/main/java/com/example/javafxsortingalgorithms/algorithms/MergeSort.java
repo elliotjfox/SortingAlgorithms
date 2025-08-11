@@ -1,6 +1,5 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsCheckBox;
 import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
@@ -65,7 +64,6 @@ public class MergeSort extends SortingAlgorithm {
         animation.removeItem(rightSection);
     }
 
-    // TODO: Add inPlace options
     private void merge(int left, int end) {
         int right = (left + end) / 2;
 
@@ -80,7 +78,8 @@ public class MergeSort extends SortingAlgorithm {
             animation.addFrame();
             animation.readIndex(left);
             animation.readIndex(right);
-
+            trial.addRead(2);
+            trial.addComparison();
             if (list.get(left) >= list.get(right)) {
                 animation.addFrame();
                 move(right, left);
@@ -93,43 +92,6 @@ public class MergeSort extends SortingAlgorithm {
         animation.removeItem(leftArrow);
         animation.removeItem(rightArrow);
     }
-
-    @Override
-    protected void instantAlgorithm(TestEntry entry) {
-        divide(0, list.size(), entry);
-    }
-
-    // [from, to)
-    private void divide(int from, int to, TestEntry entry) {
-        if (to - from >= 2) {
-            int half = (from + to) / 2;
-            divide(from, half, entry);
-            divide(half, to, entry);
-            merge(from, to, entry);
-        }
-    }
-
-    private void merge(int left, int end, TestEntry entry) {
-        int right = (left + end) / 2;
-        while (right < end && left < right) {
-            entry.addRead(2);
-            if (list.get(left) < list.get(right)) {
-                left++;
-            } else {
-                entry.addWrite(1);
-                move(right, left);
-                right++;
-            }
-        }
-    }
-
-//    @Override
-//    public void startAnimated(AnimatedArrayDisplay display) {
-//        AnimatedSection currentSection = new ItemBuilder(display)
-//                .at(0, -SECTION_OFFSET)
-//                .buildSection(list.size());
-//        display.addItem(currentSection);
-//    }
 
     @Override
     public String getName() {

@@ -1,10 +1,8 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithmupdates.CreateItemUpdate;
 import com.example.javafxsortingalgorithms.animation.position.AnimationPosition;
 import com.example.javafxsortingalgorithms.animation.position.ElementScaledIndex;
-import com.example.javafxsortingalgorithms.animation.position.ElementScaledPosition;
 import com.example.javafxsortingalgorithms.animation.position.ExactHeight;
 import com.example.javafxsortingalgorithms.arraydisplay.DisplayMode;
 import com.example.javafxsortingalgorithms.animation.AnimatedBinaryTree;
@@ -37,6 +35,7 @@ public class HeapSort extends SortingAlgorithm {
             maxHeapify(i);
         }
         for (int i = 0; i < list.size(); i++) {
+            trial.setProgress(i, list.size());
             swap(0, treeSize - 1);
             treeSize--;
             addFrame();
@@ -55,9 +54,12 @@ public class HeapSort extends SortingAlgorithm {
             animation.readIndex(i * 2 + 1);
             animation.readIndex(i * 2 + 2);
             animation.addFrame();
+            trial.addRead(3);
+            trial.addComparison(2);
             // If the current has a child that is bigger than it,
             if (list.get(i) <= list.get(i * 2 + 1) || list.get(i) <= list.get(i * 2 + 2)) {
                 // We need to swap it with the larger child
+                trial.addComparison();
                 int largestChild = list.get(i * 2 + 1) > list.get(i * 2 + 2) ? i * 2 + 1 : i * 2 + 2;
                 swap(i, largestChild);
                 addFrame();
@@ -69,52 +71,13 @@ public class HeapSort extends SortingAlgorithm {
             animation.addFrame();
             animation.readIndex(i * 2 + 1);
             animation.addFrame();
+            trial.addRead(2);
+            trial.addComparison();
             // One of the children is in range, check if it is bigger
             if (list.get(i) < list.get(i * 2 + 1)) {
                 swap(i, i * 2 + 1);
                 addFrame();
                 // Don't need to recursively call, since we only had one child, that child can't possibly have a child
-            }
-        }
-    }
-
-    @Override
-    protected void instantAlgorithm(TestEntry entry) {
-        // Build the heap
-        for (int i = list.size() / 2; i >= 0; i--) {
-            maxHeapify(i, entry);
-        }
-        for (int i = 0; i < list.size(); i++) {
-            swap(0, treeSize - 1);
-            treeSize--;
-            entry.addWrite(2);
-            maxHeapify(0, entry);
-            entry.updateProgress((double) i / list.size());
-        }
-    }
-
-    // A recursive method that fixes the heap from a given point
-    private void maxHeapify(int i, TestEntry entry) {
-        // If both children are in range
-        if (i * 2 + 2 < treeSize) {
-            // If the current is larger than both children, we're done
-            if (list.get(i) > list.get(i * 2 + 1) && list.get(i) > list.get(i * 2 + 2)) {
-                entry.addRead(3);
-            } else {
-                // Otherwise, swap with the larger child
-                int largestChild = list.get(i * 2 + 1) > list.get(i * 2 + 2) ? i * 2 + 1 : i * 2 + 2;
-                swap(i, largestChild);
-                entry.addRead(3);
-                entry.addWrite(2);
-                maxHeapify(largestChild, entry);
-            }
-        } else if (i * 2 + 1 < treeSize) {
-            // One of the children is in range, check if it is bigger
-            if (list.get(i) < list.get(i * 2 + 1)) {
-                swap(i, i * 2 + 1);
-                entry.addWrite(2);
-                entry.addRead(2);
-                // Don't need to call, since the child was at the edge of the
             }
         }
     }

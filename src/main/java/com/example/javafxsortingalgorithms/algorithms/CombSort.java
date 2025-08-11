@@ -1,6 +1,5 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsInputBox;
 import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
@@ -36,6 +35,7 @@ public class CombSort extends SortingAlgorithm {
         AnimatedSection section = animation.createSection(new ElementScaledIndex(gapSize + 1));
         animation.setItemPosition(section, new ElementScaledPosition(0, SECTION_HEIGHT));
 
+        // TODO: Figure out how to calculate progress
         while (!isListSorted(list)) {
             for (int i = 0; i + gapSize < list.size(); i++) {
                 animation.changeItemX(left, new ElementScaledIndex(i));
@@ -44,6 +44,8 @@ public class CombSort extends SortingAlgorithm {
                 animation.addFrame();
                 animation.readIndex(i);
                 animation.readIndex(i + gapSize);
+                trial.addRead(2);
+                trial.addComparison();
                 if (list.get(i) > list.get(i + gapSize)) {
                     animation.addFrame();
                     swap(i, i + gapSize);
@@ -59,23 +61,6 @@ public class CombSort extends SortingAlgorithm {
         }
 
     }
-
-    // TODO: Figure out how to calculate percentage
-    @Override
-    protected void instantAlgorithm(TestEntry entry) {
-        int gapSize = (int) (list.size() / shrinkFactor);
-        while (!isListSorted(list)) {
-            for (int i = 0; i + gapSize < list.size(); i++) {
-                if (list.get(i) > list.get(i + gapSize)) {
-                    swap(i, i + gapSize);
-                    entry.addWrite(2);
-                }
-                entry.addRead(2);
-            }
-            if (gapSize != 1) gapSize = (int) (gapSize / shrinkFactor);
-        }
-    }
-
 
     @Override
     public String getName() {

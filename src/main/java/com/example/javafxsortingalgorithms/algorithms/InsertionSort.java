@@ -1,6 +1,5 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
 import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
@@ -49,6 +48,7 @@ public class InsertionSort extends SortingAlgorithm {
         animation.setItemPosition(arrow, new ElementScaledPosition(0, ARROW_HEIGHT));
 
         for (int i = 1; i < list.size(); i++) {
+            trial.setProgress(i, list.size());
             int j = i - 1;
             animation.changeItemX(arrow, new ElementScaledIndex(i));
             animation.changeSectionWidth(searchSection, new ElementScaledIndex(j + 1));
@@ -59,6 +59,8 @@ public class InsertionSort extends SortingAlgorithm {
                 animation.readIndex(j);
                 animation.readIndex(i);
                 animation.addFrame();
+                trial.addRead(2);
+                trial.addComparison();
                 if (list.get(j) <= list.get(i)) break;
                 j--;
                 animation.changeSectionWidth(searchSection, new ElementScaledIndex(j + 1));
@@ -77,6 +79,7 @@ public class InsertionSort extends SortingAlgorithm {
         animation.setItemPosition(arrow, new ElementScaledPosition(0, ARROW_HEIGHT));
 
         for (int i = 1; i < list.size(); i++) {
+            trial.setProgress(i, list.size());
             int j = 0;
             animation.changeItemX(arrow, new ElementScaledIndex(i));
             animation.changeItemX(searchSection, new ElementScaledIndex(0));
@@ -86,6 +89,8 @@ public class InsertionSort extends SortingAlgorithm {
                 animation.readIndex(j);
                 animation.readIndex(i);
                 animation.addFrame();
+                trial.addRead(2);
+                trial.addComparison();
                 if (list.get(j) >= list.get(i)) break;
                 j++;
                 animation.changeSectionWidth(searchSection, new ElementScaledIndex(i - j));
@@ -105,6 +110,7 @@ public class InsertionSort extends SortingAlgorithm {
         animation.setItemPosition(arrow, new ElementScaledPosition(0, ARROW_HEIGHT));
 
         for (int i = 1; i < list.size(); i++) {
+            trial.setProgress(i, list.size());
             int left = 0;
             int right = i - 1;
             animation.changeItemX(arrow, new ElementScaledIndex(i));
@@ -117,6 +123,8 @@ public class InsertionSort extends SortingAlgorithm {
                 animation.readIndex(i);
                 animation.readIndex(mid);
                 animation.addFrame();
+                trial.addRead(2);
+                trial.addComparison();
                 if (Objects.equals(list.get(i), list.get(mid))) {
                     position = mid + 1;
                     break;
@@ -133,45 +141,6 @@ public class InsertionSort extends SortingAlgorithm {
 
             move(i, position);
             if (i != position) addFrame();
-        }
-    }
-
-    @Override
-    protected void instantAlgorithm(TestEntry entry) {
-        switch (searchType) {
-            case RIGHT_LINEAR -> instantRight(entry);
-            case LEFT_LINEAR -> instantLeft(entry);
-            case BINARY -> System.out.println("Binary instant not implemented yet");
-        }
-    }
-
-    private void instantRight(TestEntry entry) {
-        // Technically not necessary to start at 0, we could start at 1
-        for (int i = 0; i < list.size(); i++) {
-            int j = i - 1;
-            // I think the > instead of >= makes this stable?
-            while (j >= 0 && list.get(j) > list.get(i)) {
-                entry.addRead(2);
-                j--;
-            }
-            move(i, j + 1);
-            entry.addWrite();
-            entry.updateProgress((double) i / list.size());
-        }
-    }
-
-    private void instantLeft(TestEntry entry) {
-        // Technically not necessary to start at 0, we could start at 1
-        for (int i = 0; i < list.size(); i++) {
-            int j = 0;
-            // I think the <= over the < makes this stable?
-            while (j < i && list.get(j) <= list.get(i)) {
-                entry.addRead(2);
-                j++;
-            }
-            move(i, j);
-            entry.addWrite();
-            entry.updateProgress((double) i / list.size());
         }
     }
 

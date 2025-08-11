@@ -37,6 +37,8 @@ public class BucketSort extends SortingAlgorithm {
 
     @Override
     protected void runAlgorithm() {
+        trial.addRead(list.size());
+        trial.addComparison(list.size() - 1);
         int maxValue = list.getFirst();
         for (int i : list) {
             if (i > maxValue) maxValue = i;
@@ -45,6 +47,7 @@ public class BucketSort extends SortingAlgorithm {
 
         int bucketSize = (int) Math.ceil((double) (maxValue + 1) / numberOfBuckets);
         List<Integer> bucketEnd = new ArrayList<>(numberOfBuckets);
+
         List<AnimatedBucket> buckets = new ArrayList<>();
         for (int i = 0; i < numberOfBuckets; i++) {
             bucketEnd.add(0);
@@ -59,6 +62,9 @@ public class BucketSort extends SortingAlgorithm {
         animation.setItemPosition(arrow, new ElementScaledPosition(0, -1));
 
         for (int i = 0; i < list.size(); i++) {
+            trial.addRead();
+            // TODO: Change
+            trial.setProgress(i, list.size());
             int bucket = list.get(i) / bucketSize;
 
             animation.changeItemX(arrow, new ElementScaledIndex(i));
@@ -118,6 +124,8 @@ public class BucketSort extends SortingAlgorithm {
                 animation.readIndex(j);
                 animation.readIndex(i);
                 animation.addFrame();
+                trial.addRead(2);
+                trial.addComparison();
                 if (list.get(j) <= list.get(i)) break;
                 j--;
                 animation.changeItemX(jArrow, new ElementScaledIndex(j));
@@ -145,6 +153,8 @@ public class BucketSort extends SortingAlgorithm {
                 animation.addFrame();
                 animation.readIndex(j);
                 animation.readIndex(min);
+                trial.addRead(2);
+                trial.addComparison();
                 if (list.get(j) < list.get(min)) {
                     animation.addFrame();
                     animation.changeItemX(minArrow, new ElementScaledIndex(j));

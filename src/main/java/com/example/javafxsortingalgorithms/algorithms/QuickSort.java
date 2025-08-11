@@ -1,6 +1,5 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
 import javafx.scene.paint.Color;
@@ -47,11 +46,15 @@ public class QuickSort extends SortingAlgorithm {
             do {
                 i++;
                 addFrame();
+                trial.addRead(2);
+                trial.addComparison();
             } while (list.get(i) < list.get(from));
 
             do {
                 j--;
                 addFrame();
+                trial.addRead(2);
+                trial.addComparison();
             } while (list.get(j) > list.get(from));
 
             if (i >= j) break;
@@ -67,6 +70,8 @@ public class QuickSort extends SortingAlgorithm {
         if (to <= from) return;
         int k = to;
         for (int i = to; i > from; i--) {
+            trial.addRead(2);
+            trial.addComparison();
             if (list.get(i) > list.get(from)) {
                 swap(i, k);
                 k--;
@@ -83,9 +88,12 @@ public class QuickSort extends SortingAlgorithm {
 
     private void lomutoRightPartition(int from, int to) {
         if (to <= from) return;
+        trial.addRead();
         int pivot = list.get(to);
         int k = from;
         for (int i = from; i < to; i++) {
+            trial.addRead();
+            trial.addComparison();
             if (list.get(i) <= pivot) {
                 swap(k, i);
                 k++;
@@ -97,31 +105,6 @@ public class QuickSort extends SortingAlgorithm {
 
         lomutoRightPartition(from, k - 1);
         lomutoRightPartition(k + 1, to);
-    }
-
-    @Override
-    protected void instantAlgorithm(TestEntry entry) {
-        lomutoPartition(0, list.size() - 1, entry);
-    }
-
-    private void lomutoPartition(int from, int to, TestEntry entry) {
-        int k = to;
-        for (int i = to; i > from; i--) {
-            if (list.get(i) > list.get(from)) {
-                swap(i, k);
-                entry.addWrite(2);
-                k--;
-            }
-            entry.addRead(2);
-        }
-        swap(k, from);
-        entry.addWrite(2);
-        if (from < k - 1) {
-            lomutoPartition(from, k - 1, entry);
-        } else {
-            entry.updateProgress((double) k / list.size());
-        }
-        if (k + 1 < to) lomutoPartition(k + 1, to, entry);
     }
 
     @Override

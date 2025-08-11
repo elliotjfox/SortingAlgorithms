@@ -1,6 +1,5 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsInputBox;
@@ -41,6 +40,8 @@ public class ShellSort extends SortingAlgorithm {
             gapSize = shrinkGap(gapSize);
             for (int i = gapSize; i < list.size(); i++) {
                 int j = i - gapSize;
+                trial.addRead(2);
+                trial.addComparison();
                 while (j >= 0 && list.get(j) > list.get(j + gapSize)) {
                     swap(j, j + gapSize);
                     j -= gapSize;
@@ -57,6 +58,8 @@ public class ShellSort extends SortingAlgorithm {
             for (int offset = 0; offset < gapSize; offset++) {
                 for (int i = offset + gapSize; i < list.size(); i += gapSize) {
                     int j = i - gapSize;
+                    trial.addRead(2);
+                    trial.addComparison();
                     while (j >= 0 && list.get(j) > list.get(j + gapSize)) {
                         swap(j, j + gapSize);
                         j -= gapSize;
@@ -67,23 +70,6 @@ public class ShellSort extends SortingAlgorithm {
             }
         } while (gapSize > 1);
 
-    }
-
-    @Override
-    protected void instantAlgorithm(TestEntry entry) {
-        int gapSize = list.size();
-        do {
-            gapSize = shrinkGap(gapSize);
-            // For each up to the gap size (make sure each element is looked at)
-            for (int i = 0; i < gapSize; i++) {
-                for (int j = i; j < list.size(); j += gapSize) {
-                    while (j >= 0 && list.get(j) > list.get(j + gapSize)) {
-                        swap(j, j + gapSize);
-                        j -= gapSize;
-                    }
-                }
-            }
-        } while (gapSize > 1);
     }
 
     @Override

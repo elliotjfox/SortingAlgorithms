@@ -25,7 +25,7 @@ public class ButtonPanel extends FlowPane {
     private final Menu algorithmSelector;
     private final ListSettings listSettings;
 
-    public ButtonPanel(Display display) {
+    public ButtonPanel(Display display, ControlResponder responder) {
         setHgap(7);
 
         this.display = display;
@@ -33,24 +33,23 @@ public class ButtonPanel extends FlowPane {
         algorithmSelector = createAlgorithmSelector();
         MenuBar algorithmSelectorBar = new MenuBar(algorithmSelector);
 
-        Button playButton = createButton(createPlayIcon(), _ -> display.play());
-        Button stopButton = createButton(createPauseIcon(), _ -> display.stop());
-        Button stepButton = createButton(createStepIcon(), _ -> display.step());
-        Button resetButton = createButton(createResetIcon(), _ -> display.reset());
         Button settingsButton = createButton("Settings", _ -> display.openSettings());
-//        Button reversedButton = createButton("Reversed", event -> algorithmDisplay.reversed());
-//        Button startTestButton = createButton("Start Test", event -> algorithmDisplay.startTest());
+
+        Button playButton = createButton(createPlayIcon(), _ -> responder.play());
+        Button stopButton = createButton(createPauseIcon(), _ -> responder.stop());
+        Button stepButton = createButton(createStepIcon(), _ -> responder.step());
+        Button resetButton = createButton(createResetIcon(), _ -> responder.reset());
 
         // Mode buttons
         Button openNormalButton = createButton(createBackIcon(), _ -> display.setMode(DisplayMode.NORMAL));
-        Button openTestButton = createButton("Open Test", _ -> display.setMode(DisplayMode.TESTING));
+        Button openTestButton = createButton("Open Test", _ -> display.setMode(DisplayMode.TRIAL));
         Button openDetailedButton = createButton("Open Animated", _ -> display.setMode(DisplayMode.ANIMATED));
         Button openCompareButton = createButton("Open Compare", _ -> display.setMode(DisplayMode.COMPARING));
 
         listSettings = new ListSettings();
 
         normalPane = Arrays.asList(algorithmSelectorBar, settingsButton, playButton, stopButton, stepButton, resetButton, listSettings, /*reversedButton,*/ openTestButton, openDetailedButton, openCompareButton);
-        testPane = Arrays.asList(algorithmSelectorBar, settingsButton, /*startTestButton,*/ openNormalButton);
+        testPane = Arrays.asList(algorithmSelectorBar, settingsButton, playButton, openNormalButton);
         animatedPane = Arrays.asList(algorithmSelectorBar, settingsButton, playButton, stopButton, stepButton, resetButton, listSettings, openNormalButton);
         comparingPane = Arrays.asList(algorithmSelectorBar, settingsButton, playButton, stopButton, stepButton, resetButton, listSettings, openNormalButton);
     }
@@ -65,7 +64,7 @@ public class ButtonPanel extends FlowPane {
             case NORMAL -> getChildren().addAll(normalPane);
             case ANIMATED -> getChildren().addAll(animatedPane);
             case COMPARING -> getChildren().addAll(comparingPane);
-            case TESTING -> getChildren().addAll(testPane);
+            case TRIAL -> getChildren().addAll(testPane);
         }
     }
 

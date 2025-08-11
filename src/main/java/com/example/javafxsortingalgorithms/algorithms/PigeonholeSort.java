@@ -18,6 +18,8 @@ public class PigeonholeSort extends SortingAlgorithm {
 
     @Override
     protected void runAlgorithm() {
+        trial.addRead(list.size());
+        trial.addComparison(list.size() - 1);
         int maxValue = list.getFirst();
         for (int i : list) {
             if (i > maxValue) maxValue = i;
@@ -28,6 +30,8 @@ public class PigeonholeSort extends SortingAlgorithm {
         for (int i = 0; i < maxValue + 1; i++) bucketEnd.add(0);
 
         for (int i = 0; i < list.size(); i++) {
+            trial.setProgress(i, list.size());
+            trial.addRead();
             int bucket = list.get(i);
 
             move(i, bucketEnd.get(bucket));

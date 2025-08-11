@@ -1,6 +1,5 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
 import com.example.javafxsortingalgorithms.animation.position.ElementScaledIndex;
 import com.example.javafxsortingalgorithms.animation.position.ElementScaledPosition;
@@ -40,7 +39,8 @@ public class BubbleSort extends SortingAlgorithm {
                 animation.addFrame();
                 animation.readIndex(j);
                 animation.readIndex(j + 1);
-
+                trial.addComparison();
+                trial.addRead(2);
                 if (list.get(j) > list.get(j + 1)) {
                     // If we are going to swap, make an animated frame right before
                     animation.addFrame();
@@ -49,26 +49,8 @@ public class BubbleSort extends SortingAlgorithm {
                 }
                 addFrame();
             }
+            trial.setProgress(i, list.size());
             if (!hasSwapped) return;
-        }
-    }
-
-    @Override
-    protected void instantAlgorithm(TestEntry entry) {
-        boolean hasSwapped;
-        for (int i = 0; i < list.size(); i++) {
-            hasSwapped = false;
-            for (int j = 0; j < list.size() - 1 - i; j++) {
-                entry.addRead(2);
-                if (list.get(j) > list.get(j + 1)) {
-                    entry.addWrite(2);
-                    swap(j, j + 1);
-                    hasSwapped = true;
-                }
-            }
-            if (!hasSwapped) return;
-
-            entry.updateProgress((double) i / list.size());
         }
     }
 

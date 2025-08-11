@@ -1,8 +1,7 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
+import com.example.javafxsortingalgorithms.TrialRow;
 import com.example.javafxsortingalgorithms.algorithmupdates.*;
-import com.example.javafxsortingalgorithms.TestDisplay;
-import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.animation.ColourableAnimatedItem;
 import com.example.javafxsortingalgorithms.animation.position.*;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
@@ -35,6 +34,8 @@ public abstract class SortingAlgorithm {
     protected List<AlgorithmUpdate> currentChanges;
     protected List<AlgorithmUpdate> nextChanges;
     protected SortingAlgorithmAnimation animation;
+    protected SortingAlgorithmTrial trial;
+    private TrialRow trialRow;
 
     private Consumer<List<DisplayFrame>> frameAcceptor;
 
@@ -46,13 +47,37 @@ public abstract class SortingAlgorithm {
         currentChanges = new ArrayList<>();
         nextChanges = new ArrayList<>();
         animation = new SortingAlgorithmAnimation(this);
+        trial = new SortingAlgorithmTrial(this);
     }
 
     public void startAlgorithm(DisplayMode mode, Consumer<List<DisplayFrame>> frameAcceptor) {
         this.mode = mode;
         this.frameAcceptor = frameAcceptor;
 
-        if (usingThread) {
+
+        if (mode == DisplayMode.TRIAL) {
+            Timeline updateTimeline = new Timeline(new KeyFrame(Duration.millis(DisplayMode.TRIAL_REFRESH_TIME), _ -> trialRow.updateLabels()));
+            updateTimeline.setCycleCount(Animation.INDEFINITE);
+
+            runningThread = new Thread(() -> {
+                trialRow.start();
+                runAlgorithm();
+                trialRow.done();
+                if (!isListSorted(list)) {
+                    System.out.println("Not sorted!");
+                }
+                Platform.runLater(() -> {
+                    trialRow.done();
+                    trialRow.updateLabels();
+                });
+                updateTimeline.stop();
+                runningThread = null;
+            });
+
+            runningThread.start();
+            updateTimeline.play();
+
+        } else if (usingThread) {
             stop();
 
             runningThread = new Thread(() -> {
@@ -79,9 +104,15 @@ public abstract class SortingAlgorithm {
         }
     }
 
+    public void linkTrialRow(TrialRow row) {
+        trialRow = row;
+    }
+
     protected abstract void runAlgorithm();
 
     protected void addFrame() {
+        if (mode == DisplayMode.TRIAL) return;
+
         frames.add(new DisplayFrame(currentChanges));
         currentChanges.clear();
         currentChanges.addAll(nextChanges);
@@ -99,43 +130,24 @@ public abstract class SortingAlgorithm {
         frameAcceptor.accept(framesPackage);
     }
 
-    protected void instantAlgorithm(TestEntry entry) {}
-
-    public void solveInstant(TestDisplay display) {
-        solveInstant(display, () -> {});
-    }
-
-    public void solveInstant(TestDisplay display, Runnable whenDone) {
-        display.startTest(getName(), list.size());
-
-        Timeline updateTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> display.getCurrentTest().updateTestInfo()));
-        updateTimeline.setCycleCount(Animation.INDEFINITE);
-
-        Thread thread = new Thread(() -> {
-            instantAlgorithm(display.getCurrentTest());
-            display.getCurrentTest().done();
-            if (!isListSorted(list)) {
-                System.out.println("The algorithm has failed to sort list of size " + list.size());
-            }
-            Platform.runLater(() -> display.getCurrentTest().updateTestInfo());
-            updateTimeline.stop();
-            whenDone.run();
-        });
-
-        thread.start();
-        updateTimeline.play();
-    }
-
     protected void swap(int firstIndex, int secondIndex) {
         if (firstIndex < 0 || firstIndex >= list.size() || secondIndex < 0 || secondIndex >= list.size()) return;
         list.set(firstIndex, list.set(secondIndex, list.get(firstIndex)));
-        currentChanges.add(new SwapUpdate(firstIndex, secondIndex));
+        if (mode != DisplayMode.TRIAL) {
+            currentChanges.add(new SwapUpdate(firstIndex, secondIndex));
+        } else {
+            trial.addWrite(2);
+        }
     }
 
     protected void move(int index, int targetIndex) {
         if (index < 0 || index >= list.size() || targetIndex < 0 || targetIndex >= list.size() || index == targetIndex) return;
         list.add(targetIndex, list.remove(index));
-        currentChanges.add(new MoveUpdate(index, targetIndex));
+        if (mode != DisplayMode.TRIAL) {
+            currentChanges.add(new MoveUpdate(index, targetIndex));
+        } else {
+            trial.addWrite(1);
+        }
     }
 
     public List<Integer> getList() {
@@ -268,6 +280,55 @@ public abstract class SortingAlgorithm {
             try {
                 algorithm.currentChanges.add(createUpdate.get());
             } catch (NullPointerException ignored) {}
+        }
+    }
+
+    // TODO: Make more integrated methods in SortingAlgorithm, such as a compare method, that would automatically call addComparison, or a get that would call addRead
+    protected static class SortingAlgorithmTrial {
+        private final SortingAlgorithm algorithm;
+
+        public SortingAlgorithmTrial(SortingAlgorithm algorithm) {
+            this.algorithm = algorithm;
+        }
+
+        protected void addRead() {
+            addRead(1);
+        }
+
+        protected void addRead(int count) {
+            if (algorithm.mode == DisplayMode.TRIAL) {
+                algorithm.trialRow.addRead(count);
+            }
+        }
+
+        protected void addWrite() {
+            addWrite(1);
+        }
+
+        protected void addWrite(int count) {
+            if (algorithm.mode == DisplayMode.TRIAL) {
+                algorithm.trialRow.addWrite(count);
+            }
+        }
+
+        protected void addComparison() {
+            addComparison(1);
+        }
+
+        protected void addComparison(int count) {
+            if (algorithm.mode == DisplayMode.TRIAL) {
+                algorithm.trialRow.addComparison(count);
+            }
+        }
+
+        protected void setProgress(double progress) {
+            if (algorithm.mode == DisplayMode.TRIAL) {
+                algorithm.trialRow.setProgress(progress);
+            }
+        }
+
+        protected void setProgress(double numerator, double denominator) {
+            setProgress(numerator / denominator);
         }
     }
 }

@@ -5,7 +5,6 @@ import com.example.javafxsortingalgorithms.algorithmupdates.AlgorithmUpdate;
 import com.example.javafxsortingalgorithms.algorithmupdates.DisplayUpdate;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 import com.example.javafxsortingalgorithms.algorithmupdates.ListUpdate;
-import com.example.javafxsortingalgorithms.settings.Settings;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -14,12 +13,12 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AlgorithmController {
+public class AlgorithmController implements ControlResponder {
 
     public static final int ANIMATION_LENGTH = 400;
     public static final int ANIMATION_COOLDOWN = 100;
     
-    private Display display;
+    private final Display display;
     private ArrayDisplayBase arrayDisplay;
     private SortingAlgorithm algorithm;
     private List<DisplayFrame> frames;
@@ -28,6 +27,9 @@ public class AlgorithmController {
 
     private final Timeline normalTimeline;
     private final Timeline animatedTimeline;
+    private final Timeline trialTimeline;
+
+    private boolean createdAlgorithm;
 
     private Timeline currentTimeline;
 
@@ -54,15 +56,19 @@ public class AlgorithmController {
         );
         animatedTimeline.setCycleCount(Animation.INDEFINITE);
 
+        // TODO: Do I need this?
+        trialTimeline = new Timeline(
+                new KeyFrame(
+                        Duration.millis(1),
+                        _ -> {}
+                )
+        );
+
         currentTimeline = normalTimeline;
     }
 
     public void linkToDisplay(ArrayDisplayBase arrayDisplay) {
         this.arrayDisplay = arrayDisplay;
-    }
-
-    public void setAlgorithm(SortingAlgorithm algorithm) {
-        this.algorithm = algorithm;
     }
 
     private void runAlgorithm() {
@@ -83,21 +89,43 @@ public class AlgorithmController {
     }
 
     private void acceptFrames(List<DisplayFrame> newFrames) {
-//        System.out.println("Frames " + frames.size() + " + " + newFrames.size() + " -> " + (frames.size() + newFrames.size()));
         frames.addAll(newFrames);
     }
 
     public void setMode(DisplayMode mode) {
-//        stop();
+        System.out.println("Switching to " + mode);
         switch (mode) {
             case NORMAL -> currentTimeline = normalTimeline;
             case ANIMATED -> currentTimeline = animatedTimeline;
+            case TRIAL -> currentTimeline = trialTimeline;
             default -> currentTimeline = normalTimeline;
         }
     }
 
+    @Override
     public void play() {
-        runAlgorithm();
+        if (display.getMode() == DisplayMode.TRIAL) {
+            createList();
+            createAlgorithm();
+            algorithm.linkTrialRow(display.getTrialDisplay().startTrial(algorithm.getName(), list.size()));
+            runAlgorithm();
+            currentTimeline.play();
+            return;
+        }
+
+        if (hasRunAlgorithm) {
+            resume();
+            return;
+        }
+
+        if (!createdAlgorithm) {
+            createAlgorithm();
+        }
+
+        if (!hasRunAlgorithm) {
+            runAlgorithm();
+        }
+
         currentTimeline.play();
     }
 
@@ -105,30 +133,44 @@ public class AlgorithmController {
         currentTimeline.play();
     }
 
+    @Override
     public void stop() {
         currentTimeline.stop();
         algorithm.stop();
     }
 
+    @Override
     public void step() {
-        currentTimeline.stop();
+        if (!createdAlgorithm) {
+            createAlgorithm();
+        }
         if (!hasRunAlgorithm) {
             runAlgorithm();
         }
+        currentTimeline.stop();
         createNextFrame();
     }
 
+    @Override
     public void reset() {
-        currentTimeline.stop();
+        display.setDisplayType(display.getSettings().getDisplaySettings().getDisplayType());
         hasRunAlgorithm = false;
-        int listSize = display.getSettings().getDisplaySettings().getNumberElements();
-//        list = Settings.getRandomUniformList(listSize);
-        list = display.getButtonPanel().getListSettings().generateList(listSize);
+        createdAlgorithm = false;
+        currentTimeline.stop();
+        createList();
+    }
 
+    private void createAlgorithm() {
+        List<Integer> listCopy = new ArrayList<>(list);
+        algorithm = display.getSettings().getAlgorithmSettings().createAlgorithm(listCopy);
+        createdAlgorithm = true;
+    }
+
+    private void createList() {
+        int listSize = display.getSettings().getDisplaySettings().getNumberElements();
+        list = display.getButtonPanel().getListSettings().generateList(listSize);
         int maxValue = list.getFirst();
-        for (Integer i : list) {
-            maxValue = Math.max(maxValue, i);
-        }
+        for (Integer i : list) maxValue = Math.max(maxValue, i);
 
         arrayDisplay.initializeSettings(
                 new DisplaySettings(

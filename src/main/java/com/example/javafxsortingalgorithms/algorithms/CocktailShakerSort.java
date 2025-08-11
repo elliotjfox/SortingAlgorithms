@@ -1,6 +1,5 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
 import com.example.javafxsortingalgorithms.animation.position.ElementScaledIndex;
 import com.example.javafxsortingalgorithms.animation.position.ElementScaledPosition;
@@ -33,6 +32,7 @@ public class CocktailShakerSort extends SortingAlgorithm {
 
         int start = 0;
         int end = list.size() - 1;
+        // TODO: Figure out how to calculate progress
         while (true) {
             boolean swapped = false;
             for (int i = start; i < end; i++) {
@@ -41,6 +41,8 @@ public class CocktailShakerSort extends SortingAlgorithm {
                 animation.addFrame();
                 animation.readIndex(i);
                 animation.readIndex(i + 1);
+                trial.addRead(2);
+                trial.addComparison();
                 if (list.get(i) > list.get(i + 1)) {
                     animation.addFrame();
                     swap(i, i + 1);
@@ -61,6 +63,8 @@ public class CocktailShakerSort extends SortingAlgorithm {
                 animation.addFrame();
                 animation.readIndex(i);
                 animation.readIndex(i + 1);
+                trial.addRead(2);
+                trial.addComparison();
                 if (list.get(i) > list.get(i + 1)) {
                     animation.addFrame();
                     swap(i, i + 1);
@@ -73,44 +77,6 @@ public class CocktailShakerSort extends SortingAlgorithm {
 
             start++;
         }
-    }
-
-    // TODO: Figure out how to calculate percentage
-    @Override
-    protected void instantAlgorithm(TestEntry entry) {
-        int start = 0;
-        int end = list.size() - 1;
-        while (true) {
-            boolean swapped = false;
-            for (int i = start; i < end; i++) {
-                entry.addRead();
-                if (list.get(i) > list.get(i + 1)) {
-                    entry.addWrite();
-                    swap(i, i + 1);
-                    swapped = true;
-                }
-            }
-
-            // If we didn't swap anything, we are done sorting
-            if (!swapped) break;
-
-            end--;
-
-            swapped = false;
-            for (int i = end - 1; i >= start; i--) {
-                entry.addRead();
-                if (list.get(i) > list.get(i + 1)) {
-                    entry.addWrite();
-                    swap(i, i + 1);
-                    swapped = true;
-                }
-            }
-
-            if (!swapped) break;
-
-            start++;
-        }
-        entry.done();
     }
 
     @Override

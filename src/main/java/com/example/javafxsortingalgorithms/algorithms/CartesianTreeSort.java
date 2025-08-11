@@ -1,7 +1,5 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
-
 import java.util.List;
 
 public class CartesianTreeSort extends SortingAlgorithm {
@@ -26,10 +24,10 @@ public class CartesianTreeSort extends SortingAlgorithm {
 
     }
 
-    @Override
-    protected void instantAlgorithm(TestEntry entry) {
-
-    }
+//    @Override
+//    protected void instantAlgorithm(TestEntry entry) {
+//
+//    }
 
 //    @Override
 //    public void startAnimated(AnimatedArrayDisplay display) {

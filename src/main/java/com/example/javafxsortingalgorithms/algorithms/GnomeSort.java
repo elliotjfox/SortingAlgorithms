@@ -1,6 +1,5 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
 import com.example.javafxsortingalgorithms.animation.position.ElementScaledIndex;
 import com.example.javafxsortingalgorithms.animation.position.ElementScaledPosition;
@@ -19,7 +18,10 @@ public class GnomeSort extends SortingAlgorithm {
         animation.setItemPosition(arrow, new ElementScaledPosition(0, 0));
 
         int i = 0;
+        int trialHighestProgress = 0;
         while (i + 1 < list.size()) {
+            if (i > trialHighestProgress) trialHighestProgress = i;
+            trial.setProgress(trialHighestProgress, list.size());
             animation.changeItemX(arrow, new ElementScaledIndex(i));
             // We need to read if we are inside the list
             if (i >= 0) {
@@ -29,35 +31,17 @@ public class GnomeSort extends SortingAlgorithm {
             }
             if (i < 0) i++;
             else if (list.get(i) <= list.get(i + 1)) {
+                trial.addRead(2);
+                trial.addComparison();
                 i++;
             } else {
+                trial.addRead(2);
+                trial.addComparison();
                 animation.addFrame();
                 swap(i, i + 1);
                 i--;
             }
             addFrame();
-        }
-    }
-
-    @Override
-    protected void instantAlgorithm(TestEntry entry) {
-        int highest = 0;
-        int i = 0;
-        while (true) {
-            if (i > highest) highest = i;
-            entry.updateProgress((double) highest / list.size());
-            if (i + 1 >= list.size()) break;
-            else if (i < 0) i++;
-            else if (list.get(i) <= list.get(i + 1)) {
-                entry.addRead(2);
-                i++;
-            } else {
-                // Because we would have read those values
-                entry.addRead(2);
-                entry.addWrite(2);
-                swap(i, i + 1);
-                i--;
-            }
         }
     }
 
@@ -78,5 +62,4 @@ public class GnomeSort extends SortingAlgorithm {
 //            }
 //        }
 //    }
-
 }

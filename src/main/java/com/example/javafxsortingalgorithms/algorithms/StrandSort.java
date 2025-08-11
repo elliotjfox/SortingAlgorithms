@@ -1,7 +1,5 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
-
 import java.util.List;
 
 public class StrandSort extends SortingAlgorithm {
@@ -16,6 +14,8 @@ public class StrandSort extends SortingAlgorithm {
         while (buffer < list.size()) {
             int pos = -1;
             for (int i = buffer; i < list.size(); i++) {
+                trial.addRead(2);
+                trial.addComparison();
                 if (pos < 0 || list.get(i) > list.get(pos)) {
                     pos++;
                     buffer++;
@@ -30,6 +30,8 @@ public class StrandSort extends SortingAlgorithm {
 
     private void mergeStrand(int left, int mid, int right) {
         while (left < mid && mid < right) {
+            trial.addRead(2);
+            trial.addComparison();
             if (list.get(left) >= list.get(mid)) {
                 move(mid, left);
                 mid++;
@@ -40,12 +42,7 @@ public class StrandSort extends SortingAlgorithm {
     }
 
     @Override
-    protected void instantAlgorithm(TestEntry entry) {
-
-    }
-
-    @Override
     public String getName() {
-        return null;
+        return "Strand Sort";
     }
 }

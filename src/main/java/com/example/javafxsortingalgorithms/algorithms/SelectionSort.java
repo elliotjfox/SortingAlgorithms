@@ -1,6 +1,5 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsComboBox;
 import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
@@ -55,6 +54,7 @@ public class SelectionSort extends SortingAlgorithm {
         animation.setItemPosition(pointer, new ElementScaledPosition(0, 0));
 
         for (int i = 0; i < list.size(); i++) {
+            trial.setProgress(i, list.size());
             int minIndex = i;
             for (int j = i + 1; j < list.size(); j++) {
                 animation.changeItemX(pointer, new ElementScaledIndex(j));
@@ -62,6 +62,8 @@ public class SelectionSort extends SortingAlgorithm {
                 animation.addFrame();
                 animation.readIndex(j);
                 animation.readIndex(minIndex);
+                trial.addRead(2);
+                trial.addComparison();
                 if (list.get(j) < list.get(minIndex)) {
                     animation.addFrame();
                     animation.changeItemX(minPointer, new ElementScaledIndex(j));
@@ -81,6 +83,7 @@ public class SelectionSort extends SortingAlgorithm {
         animation.setItemPosition(pointer, new ElementScaledPosition(0, 0));
 
         for (int i = 0; i < list.size(); i++) {
+            trial.setProgress(i, list.size());
             int maxIndex = 0;
             for (int j = 0; j < list.size() - i; j++) {
                 animation.changeItemX(pointer, new ElementScaledIndex(j));
@@ -88,6 +91,8 @@ public class SelectionSort extends SortingAlgorithm {
                 animation.addFrame();
                 animation.readIndex(j);
                 animation.readIndex(maxIndex);
+                trial.addRead(2);
+                trial.addComparison();
                 if (list.get(j) > list.get(maxIndex)) {
                     animation.addFrame();
                     animation.changeItemX(maxArrow, new ElementScaledIndex(j));
@@ -109,6 +114,7 @@ public class SelectionSort extends SortingAlgorithm {
         animation.setItemPosition(maxPointer, new ElementScaledPosition(0, 0));
 
         for (int i = 0; i < list.size() / 2; i++) {
+            trial.setProgress(i, list.size() / 2.0);
             int minIndex = i;
             int maxIndex = i;
             for (int j = i + 1; j < list.size() - i; j++) {
@@ -118,6 +124,8 @@ public class SelectionSort extends SortingAlgorithm {
                 animation.addFrame();
                 animation.readIndex(j);
                 animation.readIndex(minIndex);
+                trial.addRead(2);
+                trial.addComparison();
                 if (list.get(j) < list.get(minIndex)) {
                     animation.addFrame();
                     animation.changeItemX(minPointer, new ElementScaledIndex(j));
@@ -126,6 +134,8 @@ public class SelectionSort extends SortingAlgorithm {
                 animation.addFrame();
                 animation.readIndex(j);
                 animation.readIndex(maxIndex);
+                trial.addRead(2);
+                trial.addComparison();
                 if (list.get(j) > list.get(maxIndex)) {
                     animation.addFrame();
                     animation.changeItemX(maxPointer, new ElementScaledIndex(j));
@@ -144,25 +154,6 @@ public class SelectionSort extends SortingAlgorithm {
                 swap(maxIndex, list.size() - 1 - i);
             }
             addFrame();
-        }
-    }
-
-
-    /**
-     * Solve the list at top speed (this will be called inside a thread). Currently only uses the min selection type
-     * @param entry The entry to keep track of how many read and write ops we've done
-     */
-    @Override
-    protected void instantAlgorithm(TestEntry entry) {
-        for (int i = 0; i < list.size(); i++) {
-            int minIndex = i;
-            for (int j = i + 1; j < list.size(); j++) {
-                entry.addRead(2);
-                if (list.get(j) < list.get(minIndex)) minIndex = j;
-            }
-            entry.addWrite(2);
-            swap(minIndex, i);
-            entry.updateProgress((float) i / list.size());
         }
     }
 

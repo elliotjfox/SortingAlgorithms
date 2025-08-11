@@ -4,5 +4,7 @@ public enum DisplayMode {
     NORMAL,
     ANIMATED,
     COMPARING,
-    TESTING
+    TRIAL;
+
+    public static final double TRIAL_REFRESH_TIME = 100;
 }

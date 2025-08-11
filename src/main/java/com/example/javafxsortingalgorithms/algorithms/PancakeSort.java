@@ -1,6 +1,5 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.*;
 import com.example.javafxsortingalgorithms.animation.position.ElementScaledIndex;
 import com.example.javafxsortingalgorithms.animation.position.ElementScaledPosition;
@@ -27,6 +26,7 @@ public class PancakeSort extends SortingAlgorithm {
         animation.setItemPosition(minArrow, new ElementScaledPosition(0, 0));
 
         for (int i = 0; i < list.size() - 1; i++) {
+            trial.setProgress(i, list.size());
             int smallestIndex = i;
             for (int j = i + 1; j < list.size(); j++) {
                 animation.changeItemX(arrow, new ElementScaledIndex(j));
@@ -34,6 +34,8 @@ public class PancakeSort extends SortingAlgorithm {
                 animation.addFrame();
                 animation.readIndex(j);
                 animation.readIndex(smallestIndex);
+                trial.addRead(2);
+                trial.addComparison();
                 if (list.get(j) < list.get(smallestIndex)) {
                     smallestIndex = j;
                     animation.addFrame();
@@ -53,29 +55,6 @@ public class PancakeSort extends SortingAlgorithm {
             if (!instantFlips && mode != DisplayMode.ANIMATED) addFrame();
         }
         if (instantFlips || mode == DisplayMode.ANIMATED) addFrame();
-    }
-
-    @Override
-    protected void instantAlgorithm(TestEntry entry) {
-        for (int i = 0; i < list.size() - 1; i++) {
-            // Find smallest
-            int smallest = i;
-            for (int j = i + 1; j < list.size(); j++) {
-                entry.addRead(2);
-                if (list.get(j) < list.get(smallest)) {
-                    smallest = j;
-                }
-            }
-            flip(smallest, list.size() - 1, entry);
-            flip(i, list.size() - 1, entry);
-        }
-    }
-
-    private void flip(int from, int to, TestEntry testEntry) {
-        for (int i = 0; i <= (to - from) / 2; i++) {
-            swap(from + i, to - i);
-            testEntry.addWrite(2);
-        }
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsCheckBox;
 
@@ -50,6 +49,8 @@ public class TimSort extends SortingAlgorithm {
         while (i <= to) {
             int j = i - 1;
 
+            trial.addRead(2);
+            trial.addComparison();
             while (j >= from && list.get(j) > list.get(i)) {
                 j--;
                 addFrame();
@@ -66,6 +67,8 @@ public class TimSort extends SortingAlgorithm {
         while (i <= to) {
             int j = i - 1;
 
+            trial.addRead(2);
+            trial.addComparison();
             while (j >= from && list.get(j) < list.get(i)) {
                 j--;
                 addFrame();
@@ -85,54 +88,14 @@ public class TimSort extends SortingAlgorithm {
     private void merge(int left, int right, int end) {
         if (end > list.size()) end = list.size();
         while (right < end && left < right) {
+            trial.addRead(2);
+            trial.addComparison();
             if (list.get(left) >= list.get(right)) {
                 move(right, left);
                 right++;
             }
             left++;
             addFrame();
-        }
-    }
-
-    @Override
-    protected void instantAlgorithm(TestEntry entry) {
-        for (int i = 0; i < list.size(); i += RUN_SIZE) {
-            insertionSort(i, Math.min(i + RUN_SIZE - 1, list.size() - 1));
-        }
-
-        // Keep combining blocks of the same size
-        for (int size = RUN_SIZE; size < list.size(); size *= 2) {
-            // Merge all blocks of the same size
-            for (int left = 0; left < list.size(); left += 2 * size) {
-                instantMerge(left, left + size, left + 2 * size);
-            }
-        }
-    }
-
-    // TODO: Make this accept nicer inputs
-    private void insertionSort(int left, int right) {
-        int i = left + 1;
-        while (i <= right) {
-            int tmp = list.get(i);
-            int j = i - 1;
-
-            while (j >= left && list.get(j) > tmp) {
-                list.set(j + 1, list.get(j));
-                j--;
-            }
-            list.set(j + 1, tmp);
-            i++;
-        }
-    }
-
-    private void instantMerge(int left, int right, int end) {
-        if (end > list.size()) end = list.size();
-        while (left < right && right < end) {
-            if (list.get(right) < list.get(left)) {
-                move(right, left);
-                right++;
-            }
-            left++;
         }
     }
 

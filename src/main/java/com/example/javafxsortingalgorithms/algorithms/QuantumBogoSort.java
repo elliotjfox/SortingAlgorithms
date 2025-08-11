@@ -1,7 +1,6 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.Main;
-import com.example.javafxsortingalgorithms.TestEntry;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
@@ -44,11 +43,6 @@ public class QuantumBogoSort extends SortingAlgorithm {
 //            catchUpActions();
 //        } while (!currentAction.takesStep);
 //    }
-
-    @Override
-    protected void instantAlgorithm(TestEntry entry) {
-
-    }
 
     @Override
     public String getName() {

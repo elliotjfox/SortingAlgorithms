@@ -35,6 +35,8 @@ public class CycleSort extends SortingAlgorithm {
                     animation.addFrame();
                     animation.readIndex(i);
                     animation.readIndex(cycleStart);
+                    trial.addRead(2);
+                    trial.addComparison();
                     if (list.get(i) < list.get(cycleStart)) {
                         targetPos++;
                     }

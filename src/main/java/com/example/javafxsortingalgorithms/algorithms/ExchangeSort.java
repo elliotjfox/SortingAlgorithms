@@ -39,12 +39,15 @@ public class ExchangeSort extends SortingAlgorithm {
         animation.setItemPosition(innerArrow, new ElementScaledPosition(1, 0));
 
         for (int i = 0; i < list.size(); i++) {
+            trial.setProgress(i, list.size());
             for (int j = i + 1; j < list.size(); j++) {
                 animation.changeItemX(outerArrow, new ElementScaledIndex(i));
                 animation.changeItemX(innerArrow, new ElementScaledIndex(j));
                 animation.addFrame();
                 animation.readIndex(j);
                 animation.readIndex(i);
+                trial.addRead(2);
+                trial.addComparison();
                 if (list.get(j) < list.get(i)) {
                     animation.addFrame();
                     swap(i, j);
@@ -61,12 +64,15 @@ public class ExchangeSort extends SortingAlgorithm {
         animation.setItemPosition(innerArrow, new ElementScaledPosition(list.size() - 1, 0));
 
         for (int i = 0; i < list.size(); i++) {
+            trial.setProgress(i, list.size());
             for (int j = list.size() - 1; j > i; j--) {
                 animation.changeItemX(outerArrow, new ElementScaledIndex(i));
                 animation.changeItemX(innerArrow, new ElementScaledIndex(j));
                 animation.addFrame();
                 animation.readIndex(j);
                 animation.readIndex(i);
+                trial.addRead(2);
+                trial.addComparison();
                 if (list.get(j) < list.get(i)) {
                     animation.addFrame();
                     swap(i, j);

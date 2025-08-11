@@ -1,6 +1,5 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
 import com.example.javafxsortingalgorithms.animation.AnimatedSection;
 import com.example.javafxsortingalgorithms.animation.position.ElementScaledIndex;
@@ -46,6 +45,8 @@ public class OddEvenSort extends SortingAlgorithm {
                 animation.addFrame();
                 animation.readIndex(i);
                 animation.readIndex(i + 1);
+                trial.addRead(2);
+                trial.addComparison();
                 if (list.get(i) > list.get(i + 1)) {
                     animation.addFrame();
                     hasMadeSwap = true;
@@ -64,37 +65,14 @@ public class OddEvenSort extends SortingAlgorithm {
                 animation.addFrame();
                 animation.readIndex(i);
                 animation.readIndex(i + 1);
+                trial.addRead(2);
+                trial.addComparison();
                 if (list.get(i) > list.get(i + 1)) {
                     animation.addFrame();
                     hasMadeSwap = true;
                     swap(i, i + 1);
                 }
                 addFrame();
-            }
-        } while (hasMadeSwap);
-    }
-
-    @Override
-    protected void instantAlgorithm(TestEntry entry) {
-        boolean hasMadeSwap;
-        do {
-            hasMadeSwap = false;
-
-            for (int i = 0; i < list.size() - 1; i += 2) {
-                entry.addRead(2);
-                if (list.get(i) > list.get(i + 1)) {
-                    hasMadeSwap = true;
-                    swap(i, i + 1);
-                    entry.addWrite(2);
-                }
-            }
-            for (int i = 1; i < list.size() - 1; i += 2) {
-                entry.addRead(2);
-                if (list.get(i) > list.get(i + 1)) {
-                    hasMadeSwap = true;
-                    swap(i, i + 1);
-                    entry.addWrite(2);
-                }
             }
         } while (hasMadeSwap);
     }

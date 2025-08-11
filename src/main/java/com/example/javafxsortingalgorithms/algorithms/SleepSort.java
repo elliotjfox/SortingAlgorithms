@@ -1,7 +1,5 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
-
 import java.util.*;
 
 // TODO: Get other modes in
@@ -51,11 +49,6 @@ public class SleepSort extends SortingAlgorithm {
 //            sleepThreads.remove(i);
 //        }
 //    }
-
-    @Override
-    protected void instantAlgorithm(TestEntry entry) {
-
-    }
 
     @Override
     public String getName() {

@@ -1,6 +1,5 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.*;
 import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
 import com.example.javafxsortingalgorithms.animation.position.ElementScaledIndex;
@@ -73,14 +72,13 @@ public class RadixLSDSort extends SortingAlgorithm {
 
         while (!isListSorted(list)) {
             for (int i = 0; i < list.size(); i++) {
-
                 for (int j = 0; j < arrows.size(); j++) {
                     animation.changeItemX(arrows.get(j), new ElementScaledIndex(indices.get(j)));
                 }
                 animation.addFrame();
                 animation.readIndex(i);
                 animation.addFrame();
-
+                trial.addRead();
                 int currentDigit = getDigit(list.get(i), digit);
                 move(i, indices.get(currentDigit));
                 incrementFollowing(indices, currentDigit);
@@ -88,33 +86,6 @@ public class RadixLSDSort extends SortingAlgorithm {
             }
             digit++;
             for (int i = 0; i < base; i++) indices.set(i, 0);
-        }
-    }
-
-    @Override
-    protected void instantAlgorithm(TestEntry entry) {
-        int instantDigit = 0;
-        // Setting up progress keeping ability
-        int maxDigit = list.getFirst();
-        for (Integer i : list) if (i > maxDigit) maxDigit = i;
-        int numPasses = (int) (Math.log10(maxDigit) / Math.log10(base) + 0.5) + 1;
-        System.out.println("num passes for " + maxDigit + " base " + base + " is: " + numPasses);
-
-        ArrayList<Integer> instantIndices = new ArrayList<>();
-        for (int i = 0; i < base; i++) instantIndices.add(0);
-        while (Math.pow(base, instantDigit) < maxDigit) {
-//            System.out.println("Going through " + instantDigit);
-            for (int i = 0; i < list.size(); i++) {
-                entry.addRead();
-                int currentDigit = getDigit(list.get(i), instantDigit);
-                entry.addWrite();
-                move(i, instantIndices.get(currentDigit));
-                incrementFollowing(instantIndices, currentDigit);
-                // TODO: This doesn't work properly
-//                    entry.updateProgress((double) instantDigit / numPasses + (double) i / list.size() / numPasses);
-            }
-            instantDigit++;
-            for (int i = 0; i < base; i++) instantIndices.set(i, 0);
         }
     }
 
@@ -144,13 +115,13 @@ public class RadixLSDSort extends SortingAlgorithm {
         );
     }
 
-    private static void incrementFollowing(ArrayList<Integer> arrayList, int startingIndex) {
+    private static void incrementFollowing(List<Integer> arrayList, int startingIndex) {
         for (int i = startingIndex; i < arrayList.size(); i++) {
             increment(arrayList, i);
         }
     }
 
-    private static void increment(ArrayList<Integer> array, int index) {
+    private static void increment(List<Integer> array, int index) {
         array.set(index, array.get(index) + 1);
     }
 

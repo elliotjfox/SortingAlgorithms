@@ -1,6 +1,5 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsCheckBox;
 import com.example.javafxsortingalgorithms.algorithmupdates.CreateItemUpdate;
@@ -34,6 +33,7 @@ public class BitonicSort extends SortingAlgorithm {
 
         // TODO: This works, but it could be better
         for (int width = 4; width < 2 * list.size(); width *= 2) {
+            trial.setProgress(log2(width / 2.0), log2(roundUpToPowerOf2(list.size())));
             for (int comparisonWidth = width; comparisonWidth > 1; comparisonWidth -= 2) {
                 for (int j = (width - comparisonWidth) / 2; j < list.size(); j += width) {
                     safeCompare(j, j + comparisonWidth - 1);
@@ -63,6 +63,8 @@ public class BitonicSort extends SortingAlgorithm {
         animation.readIndex(index1);
         animation.readIndex(index2);
         animation.addFrame();
+        trial.addRead(2);
+        trial.addComparison();
         if (index1 < list.size() && index2 < list.size() && list.get(index1) > list.get(index2)) {
             swap(index1, index2);
         }
@@ -74,63 +76,6 @@ public class BitonicSort extends SortingAlgorithm {
             safeCompare(i, i + 1);
         }
     }
-
-    private void compareAndSwap(int first, int second, TestEntry testEntry) {
-        if (first < 0 || second < 0 || first >= list.size() || second >= list.size()) return;
-        testEntry.addRead(2);
-        if (list.get(first) > list.get(second)) {
-            swap(first, second);
-            testEntry.addWrite(2);
-        }
-    }
-
-    @Override
-    protected void instantAlgorithm(TestEntry entry) {
-
-        for (int i = 0; i < list.size() - 1; i += 2) {
-            compareAndSwap(i, i + 1, entry);
-        }
-
-        for (int width = 4; width <= roundUpToPowerOf2(list.size()); width *= 2) {
-            entry.updateProgress(log2(width / 2.0) / log2(roundUpToPowerOf2(list.size())));
-            if (width > 1) {
-                for (int i = width; i > 1; i -= 2) {
-                    for (int j = (width - i) / 2; j < list.size(); j += width) {
-                        compareAndSwap(j, j + i - 1, entry);
-                    }
-                }
-            }
-
-            for (int i = width / 2; i >= 4; i /= 2) {
-                int distance = i / 2;
-                for (int j = 0; j < distance; j++) {
-                    for (int k = j; k < list.size(); k += i) {
-                        compareAndSwap(k, k + distance, entry);
-                    }
-                }
-            }
-
-            for (int i = 0; i < list.size() - 1; i += 2) {
-                compareAndSwap(i, i + 1, entry);
-            }
-        }
-    }
-
-//    @Override
-//    public void startAnimated(AnimatedArrayDisplay display) {
-//        sortingNetwork = new AnimatedSortingNetwork(display, list);
-//        display.addItem(sortingNetwork, 0, 0);
-//
-//        // Buffer for the first one
-//        sortingNetwork.addComparisons(new ArrayList<>());
-//        for (AlgorithmAction action : actions) {
-//            if (action instanceof BitonicComparison comparison) {
-//                sortingNetwork.addComparisons(comparison.comparisons);
-//            }
-//        }
-//
-//        display.animate(sortingNetwork.moveUp());
-//    }
 
     @Override
     public String getName() {

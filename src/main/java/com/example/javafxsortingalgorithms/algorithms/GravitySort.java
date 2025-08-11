@@ -1,7 +1,5 @@
 package com.example.javafxsortingalgorithms.algorithms;
 
-import com.example.javafxsortingalgorithms.TestEntry;
-
 import java.util.List;
 
 public class GravitySort extends SortingAlgorithm {
@@ -65,11 +63,6 @@ public class GravitySort extends SortingAlgorithm {
 //            }
 //        }
 //    }
-
-    @Override
-    protected void instantAlgorithm(TestEntry entry) {
-
-    }
 
     @Override
     public String getName() {

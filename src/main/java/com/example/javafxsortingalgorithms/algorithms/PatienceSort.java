@@ -91,7 +91,10 @@ public class PatienceSort extends SortingAlgorithm {
             }
             animation.readIndex(i);
             animation.readIndex(piles.get(j));
+            trial.addRead(2);
+            trial.addComparison();
             if (list.get(i) < list.get(piles.get(j))) {
+                // We've found a pile, insert it and return
                 animation.addFrame();
                 move(i, piles.get(j) + 1);
                 if (deck != null) currentChanges.add(deck.dealTo(j));
@@ -111,8 +114,10 @@ public class PatienceSort extends SortingAlgorithm {
     private void binarySearch(int i) {
         int pile = binarySearch(i, 0, piles.size() - 1);
 
-        // We can add to the pile
+        trial.addRead(2);
+        trial.addComparison();
         if (list.get(piles.get(pile)) >= list.get(i)) {
+            // We can add to the pile
             move(i, piles.get(pile) + 1);
             if (deck != null) currentChanges.add(deck.dealTo(pile));
             incrementFollowing(piles, pile);
@@ -141,6 +146,8 @@ public class PatienceSort extends SortingAlgorithm {
             currentChanges.add(deck.readPile(mid));
         }
         addFrame();
+        trial.addRead(2);
+        trial.addComparison();
         if (list.get(piles.get(mid)) >= list.get(i)) {
             return binarySearch(i, left, mid);
         } else {
@@ -157,6 +164,8 @@ public class PatienceSort extends SortingAlgorithm {
                 animation.readIndex(piles.get(j));
                 animation.readIndex(piles.get(smallest));
             }
+            trial.addRead(2);
+            trial.addComparison();
             if (list.get(piles.get(j)) < list.get(piles.get(smallest))) {
                 smallest = j;
             }

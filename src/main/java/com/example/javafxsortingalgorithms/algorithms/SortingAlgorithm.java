@@ -2,7 +2,7 @@ package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.TrialRow;
 import com.example.javafxsortingalgorithms.algorithmupdates.*;
-import com.example.javafxsortingalgorithms.animation.ColourableAnimatedItem;
+import com.example.javafxsortingalgorithms.animation.ColourItem;
 import com.example.javafxsortingalgorithms.animation.position.*;
 import com.example.javafxsortingalgorithms.arraydisplay.*;
 import com.example.javafxsortingalgorithms.animation.AnimatedArrow;
@@ -192,7 +192,7 @@ public abstract class SortingAlgorithm {
         protected AnimatedArrow createArrow() {
             if (algorithm.mode == DisplayMode.ANIMATED) {
                 AnimatedArrow tmp = new AnimatedArrow();
-                algorithm.currentChanges.add(new CreateItemUpdate(tmp));
+                addItem(tmp);
                 return tmp;
             }
             return null;
@@ -201,10 +201,16 @@ public abstract class SortingAlgorithm {
         protected AnimatedSection createSection(XPosition width) {
             if (algorithm.mode == DisplayMode.ANIMATED) {
                 AnimatedSection section = new AnimatedSection(width);
-                algorithm.currentChanges.add(new CreateItemUpdate(section));
+                addItem(section);
                 return section;
             }
             return null;
+        }
+
+        protected void addItem(AnimatedItem item) {
+            if (item == null) return;
+
+            algorithm.currentChanges.add(new CreateItemUpdate(item));
         }
 
         protected void removeItem(AnimatedItem item) {
@@ -258,7 +264,13 @@ public abstract class SortingAlgorithm {
             algorithm.currentChanges.add(item.changePosition(position));
         }
 
-        protected void changeItemFill(ColourableAnimatedItem item, Paint fill) {
+        protected void setItemFill(ColourItem item, Paint fill) {
+            if (item == null) return;
+
+            algorithm.currentChanges.add(item.setFill(fill));
+        }
+
+        protected void changeItemFill(ColourItem item, Paint fill) {
             if (item == null) return;
 
             algorithm.currentChanges.add(item.changeFill(fill));
@@ -274,12 +286,6 @@ public abstract class SortingAlgorithm {
             if (section == null) return;
 
             algorithm.currentChanges.add(section.changeWidth(width));
-        }
-
-        protected void animateItem(Supplier<AlgorithmUpdate> createUpdate) {
-            try {
-                algorithm.currentChanges.add(createUpdate.get());
-            } catch (NullPointerException ignored) {}
         }
     }
 

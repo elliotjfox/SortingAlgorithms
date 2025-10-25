@@ -15,8 +15,8 @@ import java.util.List;
 
 public class AlgorithmController implements ControlResponder {
 
-    public static final int ANIMATION_LENGTH = 400;
-    public static final int ANIMATION_COOLDOWN = 100;
+    public static final double ANIMATION_LENGTH = 400;
+    public static final double ANIMATION_COOLDOWN = 100;
     
     private final Display display;
     private ArrayDisplayBase arrayDisplay;

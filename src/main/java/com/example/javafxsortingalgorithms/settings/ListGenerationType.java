@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum ListGenerationType {
-    DEFAULT("Default", new FormulaListGenerator((i, _) -> i)),
+    DEFAULT("Default", new FunctionListGenerator((i, _) -> i)),
     REVERSED("Reversed", size -> {
         List<Integer> list = new ArrayList<>();
         for (int i = 0; i < size; i++) {
@@ -12,10 +12,29 @@ public enum ListGenerationType {
         }
         return list.reversed();
     }),
-    RANDOM("Random", new FormulaListGenerator((_, size) -> Settings.random.nextInt(size))),
-    EXPONENTIAL("Exponential", new FormulaListGenerator((i, _) -> i * i)),
-    SQUARE_ROOT("Square Root", new FormulaListGenerator((i, _) -> (int) Math.round(Math.sqrt(i)))),
-    LOGARITHMIC("Logarithmic", new FormulaListGenerator((i, _) -> (int) Math.round(Math.log(i))));
+    RANDOM("Random",
+            new FunctionListGenerator((_, size) -> Settings.random.nextInt(size))
+                    .shuffles(false)
+    ),
+    PYRAMID("Pyramid", new FunctionListGenerator(
+            (i, size) -> {
+                if (i < size / 2) return i;
+                else return size - i;
+            })
+            .shuffles(false)
+    ),
+    EXPONENTIAL("Exponential",
+            new FunctionListGenerator((i, _) -> i * i)
+                    .scales(true)
+    ),
+    SQUARE_ROOT("Square Root",
+            new FunctionListGenerator((i, _) -> Math.sqrt(i))
+                    .scales(true)
+    ),
+    LOGARITHMIC("Logarithmic",
+            new FunctionListGenerator((i, _) -> Math.log(i))
+                    .scales(true)
+    );
 
     private final String name;
     private final ListGenerator generator;

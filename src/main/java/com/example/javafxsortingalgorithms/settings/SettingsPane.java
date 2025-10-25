@@ -10,25 +10,22 @@ import javafx.stage.Stage;
 public class SettingsPane extends Stage {
 
     DisplaySettings displaySettings;
-    TestSettings testSettings;
     AlgorithmSettings<?> algorithmSettings;
     TitledPane algorithmPane;
 
     public SettingsPane() {
         displaySettings = new DisplaySettings();
-        testSettings = new TestSettings();
 
         Accordion accordion = new Accordion();
 
         TitledPane displayPane = new TitledPane("Display Settings", displaySettings);
         algorithmPane = new TitledPane();
         algorithmPane.setText("Algorithm Settings");
-        TitledPane testPane = new TitledPane("Test Settings", testSettings);
 
-        accordion.getPanes().addAll(displayPane, algorithmPane, testPane);
+        accordion.getPanes().addAll(displayPane, algorithmPane);
 
         setTitle("Settings");
-        setScene(new Scene(new VBox(accordion)));
+        setScene(new Scene(new VBox(accordion), 300, 320));
     }
 
     public void setAlgorithmSettings(AlgorithmSettings<?> settings) {
@@ -38,10 +35,6 @@ public class SettingsPane extends Stage {
 
     public DisplaySettings getDisplaySettings() {
         return displaySettings;
-    }
-
-    public TestSettings getTestSettings() {
-        return testSettings;
     }
 
     public AlgorithmSettings<?> getAlgorithmSettings() {

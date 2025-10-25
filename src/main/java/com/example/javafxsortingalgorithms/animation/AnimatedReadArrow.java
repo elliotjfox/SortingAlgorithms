@@ -2,6 +2,7 @@ package com.example.javafxsortingalgorithms.animation;
 
 import com.example.javafxsortingalgorithms.AlgorithmController;
 import com.example.javafxsortingalgorithms.algorithmupdates.AnimationUpdate;
+import com.example.javafxsortingalgorithms.algorithmupdates.DisplayUpdate;
 import com.example.javafxsortingalgorithms.algorithmupdates.GenerateAnimationUpdate;
 import com.example.javafxsortingalgorithms.arraydisplay.DisplaySettings;
 import javafx.animation.KeyFrame;
@@ -12,7 +13,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Polygon;
 import javafx.util.Duration;
 
-public class AnimatedReadArrow extends AnimatedItem implements ColourableAnimatedItem {
+public class AnimatedReadArrow extends AnimatedItem implements ColourItem {
 
     private static final Paint READ_ARROW_COLOUR = Color.BLACK;
 
@@ -62,5 +63,10 @@ public class AnimatedReadArrow extends AnimatedItem implements ColourableAnimate
                 ),
                 () -> polygon.setFill(fill)
         );
+    }
+
+    @Override
+    public DisplayUpdate setFill(Paint fill) {
+        return _ -> polygon.setFill(fill);
     }
 }

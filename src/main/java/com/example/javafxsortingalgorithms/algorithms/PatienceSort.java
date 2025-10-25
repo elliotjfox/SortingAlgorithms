@@ -2,8 +2,6 @@ package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsCheckBox;
-import com.example.javafxsortingalgorithms.algorithmupdates.CreateItemUpdate;
-import com.example.javafxsortingalgorithms.algorithmupdates.ListUpdate;
 import com.example.javafxsortingalgorithms.animation.AnimatedBinaryTree;
 import com.example.javafxsortingalgorithms.animation.AnimatedDeck;
 import com.example.javafxsortingalgorithms.animation.position.*;
@@ -16,21 +14,16 @@ import java.util.Objects;
 public class PatienceSort extends SortingAlgorithm {
 
     private static final boolean DEFAULT_USE_BINARY_SEARCH_SETTING = true;
-    private static final boolean DEFAULT_USE_HEAP_SETTING = true;
 
     private final boolean useBinarySearch;
-//    private final boolean useHeap;
 
     private List<Integer> piles;
     private AnimatedDeck deck;
-    private List<Integer> heap;
-    private AnimatedBinaryTree tree;
 
-    public PatienceSort(List<Integer> list, boolean useBinarySearch/*, boolean useHeap*/) {
+    public PatienceSort(List<Integer> list, boolean useBinarySearch) {
         super(list);
 
         this.useBinarySearch = useBinarySearch;
-//        this.useHeap = useHeap;
     }
 
     @Override
@@ -40,11 +33,11 @@ public class PatienceSort extends SortingAlgorithm {
 
         if (mode == DisplayMode.ANIMATED) {
             deck = new AnimatedDeck(list);
-            currentChanges.add(new CreateItemUpdate(deck));
+            animation.addItem(deck);
             animation.setItemPosition(deck,
                     new AnimationPosition(
-                            new ElementScaledIndex(list.size() + 0.5),
-                            new ExactHeight(0)
+                            XPosition.add(XPosition.RIGHT, new ElementScaledIndex(0.5)),
+                            YPosition.TOP
                     )
             );
         }
@@ -60,25 +53,27 @@ public class PatienceSort extends SortingAlgorithm {
             }
         }
 
-//        if (useHeap) {
-//            heap = new ArrayList<>();
-//            for (int i = 0; i < piles.size(); i++) {
-//                heap.add(i);
-//            }
-//            for (int i = heap.size() / 2; i >= 0; i--) {
-//                maxHeapify(i);
-//            }
-//        }
         for (int i = 0; i < list.size(); i++) {
-            linearMin(i);
-//            System.out.println("Heap:  " + heap);
-//            System.out.println("Piles: " + heap.stream().map(piles::get).toList());
-//            System.out.println("List:  " + heap.stream().map(piles::get).map(list::get).toList());
-//            if (useHeap) {
-//                heapMin(i);
-//            } else {
-//                linearMin(i);
-//            }
+            int smallest = 0;
+            for (int j = 1; j < piles.size(); j++) {
+                if (deck != null) {
+                    currentChanges.add(deck.readPile(j));
+                    currentChanges.add(deck.readPile(smallest));
+                    animation.readIndex(piles.get(j));
+                    animation.readIndex(piles.get(smallest));
+                }
+                trial.addRead(2);
+                trial.addComparison();
+                if (list.get(piles.get(j)) < list.get(piles.get(smallest))) {
+                    smallest = j;
+                }
+                addFrame();
+            }
+            move(piles.get(smallest), i);
+            if (deck != null) currentChanges.add(deck.takeFromPile(smallest));
+            addFrame();
+            incrementPrevious(piles, smallest);
+            removeDuplicates(piles, i);
         }
     }
 
@@ -155,65 +150,6 @@ public class PatienceSort extends SortingAlgorithm {
         }
     }
 
-    private void linearMin(int target) {
-        int smallest = 0;
-        for (int j = 1; j < piles.size(); j++) {
-            if (deck != null) {
-                currentChanges.add(deck.readPile(j));
-                currentChanges.add(deck.readPile(smallest));
-                animation.readIndex(piles.get(j));
-                animation.readIndex(piles.get(smallest));
-            }
-            trial.addRead(2);
-            trial.addComparison();
-            if (list.get(piles.get(j)) < list.get(piles.get(smallest))) {
-                smallest = j;
-            }
-            addFrame();
-        }
-        move(piles.get(smallest), target);
-        if (deck != null) currentChanges.add(deck.takeFromPile(smallest));
-        addFrame();
-        incrementPrevious(piles, smallest);
-        removeDuplicates(piles, target);
-    }
-
-    private void heapMin(int target) {
-        int smallestPile = heap.getFirst();
-        move(piles.get(smallestPile), target);
-        if (deck != null) currentChanges.add(deck.takeFromPile(smallestPile));
-        addFrame();
-        incrementPrevious(piles, smallestPile);
-        removeDuplicates(piles, target);
-        maxHeapify(0);
-    }
-
-    private void maxHeapify(int from) {
-        if (from * 2 + 2 < heap.size()) {
-//            if (tree != null) {
-//                currentChanges.add(tree.readIndex(from));
-//                animation.addFrame();
-//                currentChanges.add(tree.readIndex(from));
-//                currentChanges.add(tree.readIndex(from));
-//            }
-
-            if (
-                    list.get(piles.get(heap.get(from))) >= list.get(piles.get(heap.get(from * 2 + 1))) ||
-                    list.get(piles.get(heap.get(from))) >= list.get(piles.get(heap.get(from * 2 + 2)))
-            ) {
-                int smallestChild = list.get(piles.get(heap.get(from * 2 + 1))) < list.get(piles.get(heap.get(from * 2 + 2))) ? from * 2 + 1 : from * 2 + 2;
-                ListUpdate.swap(heap, from, smallestChild);
-                addFrame();
-                maxHeapify(smallestChild);
-            }
-        } else if (from * 2 + 1 < heap.size()) {
-            if (list.get(piles.get(heap.get(from))) > list.get(piles.get(heap.get(from * 2 + 1)))) {
-                ListUpdate.swap(heap, from, from * 2 + 1);
-                addFrame();
-            }
-        }
-    }
-
     private void removeDuplicates(List<Integer> list, int limit) {
         for (int i = list.size() - 2; i >= 0; i--) {
             if (Objects.equals(list.get(i), list.get(i + 1)) || list.get(i) <= limit) {
@@ -245,12 +181,11 @@ public class PatienceSort extends SortingAlgorithm {
 
     public static AlgorithmSettings<PatienceSort> getSettings() {
         AlgorithmSettingsCheckBox useBinarySearchSetting = new AlgorithmSettingsCheckBox("Use Binary Search", DEFAULT_USE_BINARY_SEARCH_SETTING);
-//        AlgorithmSettingsCheckBox useHeapSetting = new AlgorithmSettingsCheckBox("Use Heap", DEFAULT_USE_HEAP_SETTING);
 
         return new AlgorithmSettings<>(
                 "Patience Sort",
-                list -> new PatienceSort(list, useBinarySearchSetting.getValue()/*, useHeapSetting.getValue()*/),
-                useBinarySearchSetting//, useHeapSetting
+                list -> new PatienceSort(list, useBinarySearchSetting.getValue()),
+                useBinarySearchSetting
         );
     }
 }

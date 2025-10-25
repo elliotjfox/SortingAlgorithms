@@ -67,7 +67,7 @@ public class Display extends BorderPane {
             scrollPane.setContent(trialDisplay);
             setCenter(scrollPane);
         } else {
-            setCenter(arrayDisplay);
+            setCenter(arrayPane);
         }
     }
 

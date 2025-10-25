@@ -48,7 +48,6 @@ public class MergeSort extends SortingAlgorithm {
 
             divide(from, half, height - SECTION_DISTANCE, leftSection);
             divide(half, to, height - SECTION_DISTANCE, rightSection);
-            // Merge adds frames
             merge(from, to);
 
             animation.changeSectionWidth(leftSection, new ElementScaledIndex(to - from));

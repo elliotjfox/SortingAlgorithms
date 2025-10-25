@@ -29,6 +29,7 @@ public class ListSettings extends MenuBar {
                 createMenuItem(ListGenerationType.DEFAULT),
                 createMenuItem(ListGenerationType.REVERSED),
                 createMenuItem(ListGenerationType.RANDOM),
+                createMenuItem(ListGenerationType.PYRAMID),
                 createFormulaMenu()
         );
     }

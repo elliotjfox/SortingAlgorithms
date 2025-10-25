@@ -19,6 +19,7 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: For small sizes, the deck seems to be misaligned???
 public class AnimatedDeck extends AnimatedItem {
 
     private static final double CARD_DIMENSION_RATIO = 1.618;

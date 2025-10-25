@@ -13,7 +13,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-public class AnimatedSection extends AnimatedItem implements ColourableAnimatedItem {
+public class AnimatedSection extends AnimatedItem implements ColourItem {
     
     private static final double THICKNESS_FRACTION = 1 / 5.0;
 
@@ -90,5 +90,14 @@ public class AnimatedSection extends AnimatedItem implements ColourableAnimatedI
                     right.setFill(fill);
                 }
         );
+    }
+
+    @Override
+    public DisplayUpdate setFill(Paint fill) {
+        return _ -> {
+            middle.setFill(fill);
+            left.setFill(fill);
+            right.setFill(fill);
+        };
     }
 }

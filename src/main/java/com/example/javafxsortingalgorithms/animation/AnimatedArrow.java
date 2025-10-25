@@ -2,6 +2,7 @@ package com.example.javafxsortingalgorithms.animation;
 
 import com.example.javafxsortingalgorithms.AlgorithmController;
 import com.example.javafxsortingalgorithms.algorithmupdates.AnimationUpdate;
+import com.example.javafxsortingalgorithms.algorithmupdates.DisplayUpdate;
 import com.example.javafxsortingalgorithms.arraydisplay.DisplaySettings;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -11,7 +12,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Polygon;
 import javafx.util.Duration;
 
-public class AnimatedArrow extends AnimatedItem implements ColourableAnimatedItem {
+public class AnimatedArrow extends AnimatedItem implements ColourItem {
 
     private static final Paint DEFAULT_PAINT = Color.BLACK;
     private static final boolean DEFAULT_DIRECTION = true;
@@ -74,5 +75,10 @@ public class AnimatedArrow extends AnimatedItem implements ColourableAnimatedIte
                 ),
                 () -> arrow.setFill(fill)
         );
+    }
+
+    @Override
+    public DisplayUpdate setFill(Paint fill) {
+        return _ -> arrow.setFill(fill);
     }
 }

@@ -9,7 +9,7 @@ See below for a list of the algorithms and how they work.
 
 ## Implemented Algorithms
 
-- Selection
+- [Selection](AlgorithmDescriptions/Selection.md)
 - Insertion
 - Bubble
 - Gnome

@@ -2,7 +2,6 @@ package com.example.javafxsortingalgorithms.algorithms;
 
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettings;
 import com.example.javafxsortingalgorithms.algorithms.algorithmsettings.AlgorithmSettingsCheckBox;
-import com.example.javafxsortingalgorithms.animation.AnimatedBinaryTree;
 import com.example.javafxsortingalgorithms.animation.AnimatedDeck;
 import com.example.javafxsortingalgorithms.animation.position.*;
 import com.example.javafxsortingalgorithms.arraydisplay.DisplayMode;
@@ -29,6 +28,7 @@ public class PatienceSort extends SortingAlgorithm {
     @Override
     protected void runAlgorithm() {
         piles = new ArrayList<>();
+        // Put the first number into a pile
         piles.add(0);
 
         if (mode == DisplayMode.ANIMATED) {

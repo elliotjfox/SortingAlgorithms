@@ -15,7 +15,7 @@ import java.util.List;
 public abstract class SimpleArrayDisplay<T extends Node> extends ArrayDisplayBase {
 
     private final List<T> elements;
-    private final List<AnimatedReadArrow> arrows;
+    protected final List<AnimatedReadArrow> arrows;
 
     public SimpleArrayDisplay() {
         elements = new ArrayList<>();

@@ -5,7 +5,9 @@ import java.util.function.Supplier;
 public enum DisplayType {
     COLOURFUL(BasicArrayDisplay::new),
     CIRCULAR(CircularDisplay::new),
-    HEATMAP(HeatMapDisplay::new);
+    HEATMAP(HeatMapDisplay::new),
+    LINES(LinesDisplay::new),
+    HILBERT_CURVE(HilbertCurveDisplay::new);
 
     private final Supplier<? extends ArrayDisplayBase> createDisplay;
 

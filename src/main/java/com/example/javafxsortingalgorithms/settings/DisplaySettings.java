@@ -38,7 +38,7 @@ public class DisplaySettings extends SettingsSection {
         arrayBorderBox = new IntegerInputBox(borderWidth::getValue, borderWidth::setValue);
         elementWidthBox = new IntegerInputBox(elementWidth::getValue, elementWidth::setValue);
         heightBox = new IntegerInputBox(height::getValue, height::setValue);
-        displayTypeSelector = new AlgorithmSettingsComboBox<>("Display Type", DisplayType.values(), DisplayType.COLOURFUL);
+        displayTypeSelector = new AlgorithmSettingsComboBox<>("Display Type", DisplayType.values(), Settings.defaultDisplayType);
 
         addSetting(new Label("Number of Elements"), numberElementsBox, numberElementsInfo);
         addSetting(new Label("Array Border"), arrayBorderBox, borderWidthInfo);

@@ -18,12 +18,8 @@ public class BasicArrayDisplay extends SimpleArrayDisplay<Rectangle> {
 
     private static final double COLOUR_RANGE = 360;
 
-    private final List<AnimatedReadArrow> arrows;
-
     public BasicArrayDisplay() {
         super();
-
-        arrows = new ArrayList<>();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.javafxsortingalgorithms.settings;
 
+import com.example.javafxsortingalgorithms.arraydisplay.DisplayType;
 import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -14,10 +15,11 @@ import java.util.function.Function;
 
 public class Settings {
 
-    public static int defaultNumberElements = 250;
+    public static int defaultNumberElements = 256;
     public static int defaultArrayBorder = 15;
     public static int defaultElementWidth = 4;
     public static int defaultHeight = 600;
+    public static DisplayType defaultDisplayType = DisplayType.COLOURFUL;
 
     public static int defaultTestSize = 5000;
 

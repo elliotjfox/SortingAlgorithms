@@ -7,7 +7,8 @@ public enum DisplayType {
     CIRCULAR(CircularDisplay::new),
     HEATMAP(HeatMapDisplay::new),
     LINES(LinesDisplay::new),
-    HILBERT_CURVE(HilbertCurveDisplay::new);
+    HILBERT_CURVE(HilbertCurveDisplay::new),
+    IMAGE(ImageDisplay::new);
 
     private final Supplier<? extends ArrayDisplayBase> createDisplay;
 
